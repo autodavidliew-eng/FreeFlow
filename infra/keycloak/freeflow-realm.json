@@ -2,6 +2,8 @@
   "id": "freeflow",
   "realm": "freeflow",
   "enabled": true,
+  "displayName": "FreeFlow",
+  "displayNameHtml": "<div class=\"kc-logo-text\"><span>FreeFlow</span></div>",
   "sslRequired": "none",
   "registrationAllowed": false,
   "loginWithEmailAllowed": true,
@@ -9,11 +11,27 @@
   "resetPasswordAllowed": true,
   "editUsernameAllowed": false,
   "bruteForceProtected": true,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "waitIncrementSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "failureFactor": 30,
+  "accessTokenLifespan": 300,
+  "accessTokenLifespanForImplicitFlow": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "offlineSessionIdleTimeout": 2592000,
+  "offlineSessionMaxLifespan": 5184000,
+  "accessCodeLifespan": 60,
+  "accessCodeLifespanUserAction": 300,
+  "accessCodeLifespanLogin": 1800,
   "roles": {
     "realm": [
       {
         "name": "Admin",
-        "description": "Administrator role with full access",
+        "description": "Administrator role with full access to all resources",
         "composite": false,
         "clientRole": false
       },
@@ -35,7 +53,7 @@
     {
       "clientId": "freeflow-web",
       "name": "FreeFlow Web Application",
-      "description": "Next.js web application client with PKCE",
+      "description": "Next.js web application with PKCE authentication",
       "enabled": true,
       "publicClient": true,
       "protocol": "openid-connect",
@@ -44,17 +62,57 @@
       "directAccessGrantsEnabled": false,
       "serviceAccountsEnabled": false,
       "authorizationServicesEnabled": false,
+      "frontchannelLogout": true,
       "redirectUris": [
-        "http://localhost:3000/*"
+        "http://localhost:3000/*",
+        "http://localhost:3000/api/auth/callback/keycloak",
+        "http://127.0.0.1:3000/*",
+        "http://dev.freeflow.local:3000/*",
+        "https://dev.freeflow.com/*",
+        "https://dev.freeflow.com/api/auth/callback/keycloak",
+        "https://staging.freeflow.com/*",
+        "https://staging.freeflow.com/api/auth/callback/keycloak",
+        "https://freeflow.com/*",
+        "https://freeflow.com/api/auth/callback/keycloak",
+        "https://www.freeflow.com/*",
+        "https://www.freeflow.com/api/auth/callback/keycloak"
       ],
       "webOrigins": [
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://dev.freeflow.local:3000",
+        "https://dev.freeflow.com",
+        "https://staging.freeflow.com",
+        "https://freeflow.com",
+        "https://www.freeflow.com"
+      ],
+      "postLogoutRedirectUris": [
+        "http://localhost:3000",
+        "http://localhost:3000/",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3000/",
+        "http://dev.freeflow.local:3000",
+        "http://dev.freeflow.local:3000/",
+        "https://dev.freeflow.com",
+        "https://dev.freeflow.com/",
+        "https://staging.freeflow.com",
+        "https://staging.freeflow.com/",
+        "https://freeflow.com",
+        "https://freeflow.com/",
+        "https://www.freeflow.com",
+        "https://www.freeflow.com/"
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
-        "post.logout.redirect.uris": "+"
+        "post.logout.redirect.uris": "+",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "client.secret.creation.time": "0",
+        "display.on.consent.screen": "false"
       },
       "fullScopeAllowed": true,
+      "consentRequired": false,
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -68,6 +126,21 @@
         "offline_access",
         "microprofile-jwt"
       ]
+    },
+    {
+      "clientId": "freeflow-api",
+      "name": "FreeFlow API",
+      "description": "Backend API service for bearer token validation",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "attributes": {}
     }
   ],
   "clientScopes": [],
@@ -102,7 +175,10 @@
       ],
       "realmRoles": [
         "Admin"
-      ]
+      ],
+      "attributes": {
+        "locale": ["en"]
+      }
     },
     {
       "username": "operator",
@@ -120,7 +196,10 @@
       ],
       "realmRoles": [
         "Operator"
-      ]
+      ],
+      "attributes": {
+        "locale": ["en"]
+      }
     },
     {
       "username": "viewer",
@@ -138,7 +217,28 @@
       ],
       "realmRoles": [
         "Viewer"
-      ]
+      ],
+      "attributes": {
+        "locale": ["en"]
+      }
     }
-  ]
+  ],
+  "browserSecurityHeaders": {
+    "contentSecurityPolicyReportOnly": "",
+    "xContentTypeOptions": "nosniff",
+    "xRobotsTag": "none",
+    "xFrameOptions": "SAMEORIGIN",
+    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
+    "xXSSProtection": "1; mode=block",
+    "strictTransportSecurity": "max-age=31536000; includeSubDomains"
+  },
+  "smtpServer": {},
+  "eventsEnabled": false,
+  "eventsListeners": ["jboss-logging"],
+  "enabledEventTypes": [],
+  "adminEventsEnabled": false,
+  "adminEventsDetailsEnabled": false,
+  "internationalizationEnabled": true,
+  "supportedLocales": ["en"],
+  "defaultLocale": "en"
 }

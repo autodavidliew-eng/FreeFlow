@@ -1,0 +1,359 @@
+{
+  "_comment": "Example Google Identity Provider configuration for Keycloak",
+  "_warning": "DO NOT commit real Client ID or Client Secret to version control",
+  "_usage": "Use this as a reference for manual configuration or automation scripts",
+
+  "identityProvider": {
+    "alias": "google",
+    "displayName": "Google",
+    "providerId": "google",
+    "enabled": true,
+    "updateProfileFirstLoginMode": "on",
+    "trustEmail": true,
+    "storeToken": true,
+    "addReadTokenRoleOnCreate": false,
+    "authenticateByDefault": false,
+    "linkOnly": false,
+    "firstBrokerLoginFlowAlias": "first broker login",
+    "config": {
+      "hideOnLoginPage": "false",
+      "clientId": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+      "clientSecret": "YOUR_GOOGLE_CLIENT_SECRET",
+      "defaultScope": "openid profile email",
+      "acceptsPromptNoneForwardFromClient": "false",
+      "disableUserInfo": "false",
+      "filteredByClaim": "false",
+      "guiOrder": "1",
+      "syncMode": "IMPORT",
+      "useJwksUrl": "true",
+      "passLoginHint": "false",
+      "loginHint": "",
+      "uiLocales": "true",
+      "backchannelSupported": "false",
+      "_comment_clientId": "Replace with actual Google Client ID from Google Cloud Console",
+      "_comment_clientSecret": "Replace with actual Client Secret - store securely, never commit",
+      "_comment_syncMode": "IMPORT = update user on each login, LEGACY = only create user once, FORCE = always update user attributes"
+    }
+  },
+
+  "attributeMappers": [
+    {
+      "_comment": "Email Mapper - Maps Google email to Keycloak user email",
+      "name": "google-email",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "google-user-attribute-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "jsonField": "email",
+        "userAttribute": "email"
+      }
+    },
+    {
+      "_comment": "First Name Mapper - Maps Google given_name to Keycloak firstName",
+      "name": "google-first-name",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "google-user-attribute-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "jsonField": "given_name",
+        "userAttribute": "firstName"
+      }
+    },
+    {
+      "_comment": "Last Name Mapper - Maps Google family_name to Keycloak lastName",
+      "name": "google-last-name",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "google-user-attribute-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "jsonField": "family_name",
+        "userAttribute": "lastName"
+      }
+    },
+    {
+      "_comment": "Profile Picture Mapper - Maps Google picture URL to user attribute",
+      "name": "google-picture",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "google-user-attribute-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "jsonField": "picture",
+        "userAttribute": "picture"
+      }
+    },
+    {
+      "_comment": "Locale Mapper - Maps Google locale to user attribute",
+      "name": "google-locale",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "google-user-attribute-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "jsonField": "locale",
+        "userAttribute": "locale"
+      }
+    },
+    {
+      "_comment": "Username Template Mapper - Sets username to email",
+      "name": "google-username",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "oidc-username-idp-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "template": "${CLAIM.email}"
+      }
+    },
+    {
+      "_comment": "Role Mapper - Assigns default role to Google users",
+      "name": "google-default-role",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "oidc-hardcoded-role-idp-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "role": "Viewer"
+      }
+    },
+    {
+      "_comment": "Advanced Role Mapper - Assigns role based on email domain",
+      "name": "google-domain-role-mapper",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "oidc-advanced-role-idp-mapper",
+      "config": {
+        "syncMode": "INHERIT",
+        "claims": "[{\"key\":\"email\",\"value\":\".*@freeflow\\\\.com$\"}]",
+        "are.claim.values.regex": "true",
+        "role": "Operator"
+      }
+    }
+  ],
+
+  "googleClaimsReference": {
+    "_comment": "Reference of claims provided by Google in ID token",
+    "standardClaims": {
+      "sub": {
+        "description": "Unique Google user ID (subject identifier)",
+        "example": "1234567890123456789",
+        "alwaysPresent": true
+      },
+      "email": {
+        "description": "User's email address",
+        "example": "user@gmail.com",
+        "requiresScope": "email",
+        "alwaysPresent": false
+      },
+      "email_verified": {
+        "description": "Whether email has been verified by Google",
+        "example": true,
+        "requiresScope": "email",
+        "alwaysPresent": false
+      },
+      "name": {
+        "description": "User's full name",
+        "example": "John Doe",
+        "requiresScope": "profile",
+        "alwaysPresent": false
+      },
+      "given_name": {
+        "description": "User's first name",
+        "example": "John",
+        "requiresScope": "profile",
+        "alwaysPresent": false
+      },
+      "family_name": {
+        "description": "User's last name",
+        "example": "Doe",
+        "requiresScope": "profile",
+        "alwaysPresent": false
+      },
+      "picture": {
+        "description": "URL of user's profile picture",
+        "example": "https://lh3.googleusercontent.com/a/...",
+        "requiresScope": "profile",
+        "alwaysPresent": false
+      },
+      "locale": {
+        "description": "User's preferred locale",
+        "example": "en",
+        "requiresScope": "profile",
+        "alwaysPresent": false
+      }
+    },
+    "additionalClaimsWithScopes": {
+      "hd": {
+        "description": "Hosted domain (for Google Workspace users)",
+        "example": "freeflow.com",
+        "requiresScope": "profile",
+        "notes": "Only present for Workspace accounts"
+      }
+    }
+  },
+
+  "environmentConfiguration": {
+    "_comment": "Environment-specific settings",
+    "development": {
+      "keycloakUrl": "http://localhost:8080",
+      "realm": "freeflow",
+      "redirectUri": "http://localhost:8080/realms/freeflow/broker/google/endpoint",
+      "authorizedJavaScriptOrigins": [
+        "http://localhost:8080"
+      ],
+      "googleClientIdPattern": "*-dev.apps.googleusercontent.com"
+    },
+    "staging": {
+      "keycloakUrl": "https://auth-staging.freeflow.com",
+      "realm": "freeflow",
+      "redirectUri": "https://auth-staging.freeflow.com/realms/freeflow/broker/google/endpoint",
+      "authorizedJavaScriptOrigins": [
+        "https://auth-staging.freeflow.com"
+      ],
+      "googleClientIdPattern": "*-staging.apps.googleusercontent.com"
+    },
+    "production": {
+      "keycloakUrl": "https://auth.freeflow.com",
+      "realm": "freeflow",
+      "redirectUri": "https://auth.freeflow.com/realms/freeflow/broker/google/endpoint",
+      "authorizedJavaScriptOrigins": [
+        "https://auth.freeflow.com"
+      ],
+      "googleClientIdPattern": "*-prod.apps.googleusercontent.com"
+    }
+  },
+
+  "automationExample": {
+    "_comment": "Example of automating IdP creation via Keycloak Admin REST API",
+    "createIdP": {
+      "method": "POST",
+      "endpoint": "/admin/realms/{realm}/identity-provider/instances",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {ACCESS_TOKEN}"
+      },
+      "body": {
+        "alias": "google",
+        "providerId": "google",
+        "enabled": true,
+        "config": {
+          "clientId": "${GOOGLE_CLIENT_ID}",
+          "clientSecret": "${GOOGLE_CLIENT_SECRET}",
+          "defaultScope": "openid profile email"
+        }
+      }
+    },
+    "createMapper": {
+      "method": "POST",
+      "endpoint": "/admin/realms/{realm}/identity-provider/instances/{alias}/mappers",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {ACCESS_TOKEN}"
+      },
+      "body": {
+        "name": "google-email",
+        "identityProviderMapper": "google-user-attribute-mapper",
+        "config": {
+          "jsonField": "email",
+          "userAttribute": "email"
+        }
+      }
+    }
+  },
+
+  "securityNotes": {
+    "_comment": "Important security considerations",
+    "clientSecretHandling": [
+      "Never commit Client Secret to version control",
+      "Store in environment variables or secret manager",
+      "Use different credentials per environment",
+      "Rotate secrets every 90 days",
+      "Revoke immediately if compromised"
+    ],
+    "scopeMinimization": [
+      "Only request scopes you actually need",
+      "openid, profile, email are sufficient for most cases",
+      "Additional scopes require OAuth consent screen verification"
+    ],
+    "redirectUriSecurity": [
+      "Must be exact match (no wildcards in Google)",
+      "Use HTTPS in production",
+      "Don't use localhost in production config",
+      "Verify all URIs are under your control"
+    ],
+    "tokenStorage": [
+      "Enable 'Store Tokens' only if calling Google APIs",
+      "Tokens give access to user's Google account",
+      "Implement proper token encryption",
+      "Set appropriate token expiration"
+    ]
+  },
+
+  "testingChecklist": {
+    "_comment": "Verification steps after configuration",
+    "steps": [
+      "✓ Verify redirect URI in Google Console matches Keycloak",
+      "✓ Test login flow in incognito mode",
+      "✓ Verify user created in Keycloak",
+      "✓ Check email is populated correctly",
+      "✓ Verify first and last name are mapped",
+      "✓ Confirm email_verified is true",
+      "✓ Test subsequent login (should be instant)",
+      "✓ Verify attribute updates on sync",
+      "✓ Test logout flow",
+      "✓ Check Federated Identity link in user profile",
+      "✓ Verify roles assigned correctly",
+      "✓ Test account linking (if enabled)",
+      "✓ Check events are logged properly"
+    ]
+  },
+
+  "troubleshooting": {
+    "commonErrors": {
+      "redirect_uri_mismatch": {
+        "cause": "Redirect URI in Google Console doesn't match Keycloak",
+        "solution": "Copy exact URI from Keycloak IdP settings and add to Google Console"
+      },
+      "invalid_client": {
+        "cause": "Client ID or Secret is incorrect",
+        "solution": "Verify credentials in Google Console and Keycloak match exactly"
+      },
+      "access_denied": {
+        "cause": "User denied consent or app not approved",
+        "solution": "Check OAuth consent screen configuration and approval status"
+      },
+      "email_already_exists": {
+        "cause": "User with same email already exists in Keycloak",
+        "solution": "Enable account linking in First Broker Login flow or manually link accounts"
+      }
+    }
+  },
+
+  "realmExportSnippet": {
+    "_comment": "Snippet that would appear in full realm export",
+    "_usage": "Include in realm export for version control (without secrets)",
+    "identityProviders": [
+      {
+        "alias": "google",
+        "providerId": "google",
+        "enabled": true,
+        "updateProfileFirstLoginMode": "on",
+        "trustEmail": true,
+        "storeToken": false,
+        "config": {
+          "hideOnLoginPage": "false",
+          "clientId": "",
+          "clientSecret": "**********",
+          "defaultScope": "openid profile email",
+          "syncMode": "IMPORT"
+        }
+      }
+    ],
+    "identityProviderMappers": [
+      {
+        "name": "google-email",
+        "identityProviderAlias": "google",
+        "identityProviderMapper": "google-user-attribute-mapper",
+        "config": {
+          "jsonField": "email",
+          "userAttribute": "email"
+        }
+      }
+    ]
+  }
+}
