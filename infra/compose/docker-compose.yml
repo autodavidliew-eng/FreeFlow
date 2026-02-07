@@ -15,7 +15,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+      - ../../db/postgres:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U freeflow"]
       interval: 10s
@@ -37,7 +37,7 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-      - ./init-scripts/mongodb:/docker-entrypoint-initdb.d
+      - ../../db/mongo:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -73,12 +73,14 @@ services:
       RABBITMQ_DEFAULT_USER: freeflow
       RABBITMQ_DEFAULT_PASS: freeflow_dev_password
       RABBITMQ_DEFAULT_VHOST: /freeflow
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbitmq_management load_definitions "/etc/rabbitmq/definitions.json"
     ports:
       - "5672:5672"   # AMQP port
       - "15672:15672" # Management UI
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
       - ./config/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ../../rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
       interval: 30s
@@ -129,7 +131,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./keycloak/realms:/opt/keycloak/data/import:ro
+      - ../../keycloak/freeflow-realm.json:/opt/keycloak/data/import/freeflow-realm.json:ro
       - keycloak_data:/opt/keycloak/data
     depends_on:
       postgres:

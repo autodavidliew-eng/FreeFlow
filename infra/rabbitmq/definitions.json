@@ -1,0 +1,209 @@
+{
+  "rabbit_version": "3.13.0",
+  "rabbitmq_version": "3.13.0",
+  "product_name": "RabbitMQ",
+  "product_version": "3.13.0",
+  "users": [
+    {
+      "name": "freeflow",
+      "password_hash": "gZLlJrKsNFhOXpH/vJVnVPsLJLy9GhZvVx8x6W3qTEPzX8xD",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": ["administrator"],
+      "limits": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/freeflow"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "freeflow",
+      "vhost": "/freeflow",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [],
+  "global_parameters": [
+    {
+      "name": "internal_cluster_id",
+      "value": "rabbitmq-cluster-freeflow-dev"
+    }
+  ],
+  "policies": [
+    {
+      "vhost": "/freeflow",
+      "name": "ha-all",
+      "pattern": ".*",
+      "apply-to": "all",
+      "definition": {
+        "ha-mode": "all",
+        "ha-sync-mode": "automatic"
+      },
+      "priority": 0
+    },
+    {
+      "vhost": "/freeflow",
+      "name": "dlx-policy",
+      "pattern": "^freeflow\\..*\\.queue$",
+      "apply-to": "queues",
+      "definition": {
+        "dead-letter-exchange": "freeflow.events.dlx",
+        "dead-letter-routing-key": "dlq",
+        "message-ttl": 86400000,
+        "max-length": 10000
+      },
+      "priority": 1
+    }
+  ],
+  "queues": [
+    {
+      "name": "freeflow.events.dlq",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 604800000,
+        "x-max-length": 100000
+      }
+    },
+    {
+      "name": "freeflow.users.queue",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "freeflow.events.dlx",
+        "x-dead-letter-routing-key": "dlq"
+      }
+    },
+    {
+      "name": "freeflow.documents.queue",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "freeflow.events.dlx",
+        "x-dead-letter-routing-key": "dlq"
+      }
+    },
+    {
+      "name": "freeflow.workflows.queue",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "freeflow.events.dlx",
+        "x-dead-letter-routing-key": "dlq"
+      }
+    },
+    {
+      "name": "freeflow.notifications.queue",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "freeflow.events.dlx",
+        "x-dead-letter-routing-key": "dlq"
+      }
+    },
+    {
+      "name": "freeflow.audit.queue",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "freeflow.events.dlx",
+        "x-dead-letter-routing-key": "dlq"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "freeflow.events",
+      "vhost": "/freeflow",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "freeflow.events.dlx",
+      "vhost": "/freeflow",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "freeflow.events",
+      "vhost": "/freeflow",
+      "destination": "freeflow.users.queue",
+      "destination_type": "queue",
+      "routing_key": "user.*",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events",
+      "vhost": "/freeflow",
+      "destination": "freeflow.users.queue",
+      "destination_type": "queue",
+      "routing_key": "auth.*",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events",
+      "vhost": "/freeflow",
+      "destination": "freeflow.documents.queue",
+      "destination_type": "queue",
+      "routing_key": "document.*",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events",
+      "vhost": "/freeflow",
+      "destination": "freeflow.workflows.queue",
+      "destination_type": "queue",
+      "routing_key": "workflow.*",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events",
+      "vhost": "/freeflow",
+      "destination": "freeflow.notifications.queue",
+      "destination_type": "queue",
+      "routing_key": "notification.*",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events",
+      "vhost": "/freeflow",
+      "destination": "freeflow.audit.queue",
+      "destination_type": "queue",
+      "routing_key": "#",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.dlx",
+      "vhost": "/freeflow",
+      "destination": "freeflow.events.dlq",
+      "destination_type": "queue",
+      "routing_key": "dlq",
+      "arguments": {}
+    }
+  ]
+}
