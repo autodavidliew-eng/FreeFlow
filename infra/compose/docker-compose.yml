@@ -1,0 +1,312 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: freeflow-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: freeflow
+      POSTGRES_USER: freeflow
+      POSTGRES_PASSWORD: freeflow_dev_password
+      POSTGRES_MULTIPLE_DATABASES: keycloak,camunda
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U freeflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - freeflow
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:7
+    container_name: freeflow-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: freeflow
+      MONGO_INITDB_ROOT_PASSWORD: freeflow_dev_password
+      MONGO_INITDB_DATABASE: freeflow
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-scripts/mongodb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - freeflow
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: freeflow-redis
+    restart: unless-stopped
+    command: redis-server --requirepass freeflow_dev_password --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - freeflow
+
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: freeflow-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: freeflow
+      RABBITMQ_DEFAULT_PASS: freeflow_dev_password
+      RABBITMQ_DEFAULT_VHOST: /freeflow
+    ports:
+      - "5672:5672"   # AMQP port
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./config/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - freeflow
+
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:v1.7.4
+    container_name: freeflow-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333" # HTTP API
+      - "6334:6334" # gRPC API
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6333/readyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - freeflow
+
+  # Keycloak Identity & Access Management
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    container_name: freeflow-keycloak
+    restart: unless-stopped
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: freeflow
+      KC_DB_PASSWORD: freeflow_dev_password
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HTTP_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import:ro
+      - keycloak_data:/opt/keycloak/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r\nhost: 127.0.0.1\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - freeflow
+
+  # ==========================================
+  # OPTIONAL SERVICES (via profiles)
+  # ==========================================
+
+  # Elasticsearch (required for Camunda 8)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: freeflow-elasticsearch
+    restart: unless-stopped
+    profiles:
+      - camunda
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - freeflow
+
+  # Camunda 8 - Zeebe (Workflow Engine)
+  zeebe:
+    image: camunda/zeebe:8.4.0
+    container_name: freeflow-zeebe
+    restart: unless-stopped
+    profiles:
+      - camunda
+    environment:
+      - ZEEBE_LOG_LEVEL=info
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME=io.camunda.zeebe.exporter.ElasticsearchExporter
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch:9200
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_BULK_SIZE=1
+    ports:
+      - "26500:26500" # Gateway API
+      - "9600:9600"   # Monitoring
+    volumes:
+      - zeebe_data:/usr/local/zeebe/data
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/9600' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - freeflow
+
+  # Camunda 8 - Operate (Workflow Monitoring)
+  operate:
+    image: camunda/operate:8.4.0
+    container_name: freeflow-operate
+    restart: unless-stopped
+    profiles:
+      - camunda
+    environment:
+      - CAMUNDA_OPERATE_ZEEBE_GATEWAYADDRESS=zeebe:26500
+      - CAMUNDA_OPERATE_ELASTICSEARCH_URL=http://elasticsearch:9200
+      - CAMUNDA_OPERATE_ZEEBEELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - "8081:8080"
+    depends_on:
+      zeebe:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api/check || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - freeflow
+
+  # Camunda 8 - Tasklist (User Task Management)
+  tasklist:
+    image: camunda/tasklist:8.4.0
+    container_name: freeflow-tasklist
+    restart: unless-stopped
+    profiles:
+      - camunda
+    environment:
+      - CAMUNDA_TASKLIST_ZEEBE_GATEWAYADDRESS=zeebe:26500
+      - CAMUNDA_TASKLIST_ELASTICSEARCH_URL=http://elasticsearch:9200
+      - CAMUNDA_TASKLIST_ZEEBEELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - "8082:8080"
+    depends_on:
+      zeebe:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api/check || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - freeflow
+
+  # Form.io Server (Form Management)
+  formio:
+    image: formio/formio-enterprise:latest
+    container_name: freeflow-formio
+    restart: unless-stopped
+    profiles:
+      - formio
+    environment:
+      MONGO_URL: mongodb://freeflow:freeflow_dev_password@mongodb:27017/formio?authSource=admin
+      MONGO_HIGH_AVAILABILITY: "false"
+      FORMIO_FILES_SERVER: "https://api.form.io"
+      PORTAL_ENABLED: "true"
+      JWT_SECRET: freeflow_formio_jwt_secret_change_in_production
+      DB_SECRET: freeflow_formio_db_secret_change_in_production
+      PRIMARY: "true"
+      PROJECT_TEMPLATE: ""
+      ROOT_EMAIL: admin@example.com
+      ROOT_PASSWORD: admin
+    ports:
+      - "3001:3001"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - freeflow
+
+volumes:
+  postgres_data:
+    name: freeflow_postgres_data
+  mongodb_data:
+    name: freeflow_mongodb_data
+  redis_data:
+    name: freeflow_redis_data
+  rabbitmq_data:
+    name: freeflow_rabbitmq_data
+  qdrant_data:
+    name: freeflow_qdrant_data
+  keycloak_data:
+    name: freeflow_keycloak_data
+  # Camunda volumes
+  elasticsearch_data:
+    name: freeflow_elasticsearch_data
+  zeebe_data:
+    name: freeflow_zeebe_data
+
+networks:
+  freeflow:
+    name: freeflow_network
+    driver: bridge

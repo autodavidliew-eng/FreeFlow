@@ -1,0 +1,143 @@
+# docker-compose.override.yml
+# This file is automatically loaded by Docker Compose and extends/overrides the main configuration
+# Use this for development-specific settings that shouldn't be in the main docker-compose.yml
+# To disable this file, use: docker compose --file docker-compose.yml up
+
+version: '3.9'
+
+services:
+  # PostgreSQL - Development Overrides
+  postgres:
+    # Enable statement logging for debugging
+    command:
+      - postgres
+      - -c
+      - log_statement=all
+      - -c
+      - log_duration=on
+      - -c
+      - log_connections=on
+      - -c
+      - log_disconnections=on
+    # Expose additional metrics
+    environment:
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8"
+
+  # MongoDB - Development Overrides
+  mongodb:
+    # Enable profiling for slow queries
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: freeflow
+      MONGO_INITDB_ROOT_PASSWORD: freeflow_dev_password
+    # Add local data mount for easy inspection (optional, commented out by default)
+    # volumes:
+    #   - ./data/mongodb:/data/db
+
+  # Redis - Development Overrides
+  redis:
+    # Enable more verbose logging
+    command: >
+      redis-server
+      --requirepass freeflow_dev_password
+      --appendonly yes
+      --loglevel debug
+      --slowlog-log-slower-than 10000
+      --slowlog-max-len 128
+
+  # RabbitMQ - Development Overrides
+  rabbitmq:
+    # Add additional plugins for development
+    environment:
+      RABBITMQ_DEFAULT_USER: freeflow
+      RABBITMQ_DEFAULT_PASS: freeflow_dev_password
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit log_levels [{connection,debug}]"
+
+  # Keycloak - Development Overrides
+  keycloak:
+    # Enable debug logging for troubleshooting
+    environment:
+      KC_LOG_LEVEL: INFO
+      KC_LOG_CONSOLE_COLOR: "true"
+      QUARKUS_LOG_CATEGORY_ORG_KEYCLOAK: INFO
+      QUARKUS_LOG_CATEGORY_ORG_INFINISPAN: INFO
+    # Auto-reload on configuration changes (if needed)
+    # volumes:
+    #   - ./keycloak/themes:/opt/keycloak/themes
+
+  # Qdrant - Development Overrides
+  qdrant:
+    # Enable debug mode and telemetry disabled
+    environment:
+      QDRANT__LOG_LEVEL: INFO
+      QDRANT__TELEMETRY_DISABLED: "true"
+    # Expose snapshot directory for backup testing
+    volumes:
+      - qdrant_data:/qdrant/storage
+      - ./data/qdrant-snapshots:/qdrant/snapshots
+
+  # Elasticsearch (Camunda) - Development Overrides
+  elasticsearch:
+    profiles:
+      - camunda
+    environment:
+      # Increase verbosity for debugging
+      - "ELASTIC_PASSWORD=elastic_dev_password"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m -Dlog4j2.formatMsgNoLookups=true"
+    # Reduce health check frequency for dev
+    healthcheck:
+      interval: 60s
+      timeout: 15s
+
+  # Zeebe - Development Overrides
+  zeebe:
+    profiles:
+      - camunda
+    environment:
+      - ZEEBE_LOG_LEVEL=debug
+      - ZEEBE_DEBUG=true
+    # Enable gateway debug port
+    ports:
+      - "26500:26500"
+      - "9600:9600"
+      - "5005:5005"  # Debug port
+
+  # Operate - Development Overrides
+  operate:
+    profiles:
+      - camunda
+    environment:
+      - LOGGING_LEVEL_IO_CAMUNDA_OPERATE=DEBUG
+      - CAMUNDA_OPERATE_BACKUP_REPOSITORYNAME=operate_backup
+
+  # Tasklist - Development Overrides
+  tasklist:
+    profiles:
+      - camunda
+    environment:
+      - LOGGING_LEVEL_IO_CAMUNDA_TASKLIST=DEBUG
+
+  # Form.io - Development Overrides
+  formio:
+    profiles:
+      - formio
+    environment:
+      # Enable debug mode
+      DEBUG: "formio:*"
+      NODE_ENV: development
+    # Mount forms directory for live editing (optional)
+    # volumes:
+    #   - ./formio/forms:/app/forms
+
+# Development-specific networks configuration
+networks:
+  freeflow:
+    driver: bridge
+    # Enable better DNS resolution
+    driver_opts:
+      com.docker.network.bridge.name: br-freeflow
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+
+# Add labels for easier management
+x-common-labels: &common-labels
+  com.freeflow.environment: "development"
+  com.freeflow.managed-by: "docker-compose"
