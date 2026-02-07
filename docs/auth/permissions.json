@@ -1,0 +1,682 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "FreeFlow RBAC Permissions - Single Source of Truth",
+  "lastUpdated": "2026-02-07",
+
+  "roles": {
+    "Admin": {
+      "displayName": "Administrator",
+      "description": "Full system access with all permissions",
+      "level": 100,
+      "permissions": [
+        "system:*",
+        "users:*",
+        "organizations:*",
+        "documents:*",
+        "workflows:*",
+        "analytics:*",
+        "settings:*",
+        "audit:*",
+        "notifications:*",
+        "alarms:*"
+      ],
+      "inherits": []
+    },
+    "Operator": {
+      "displayName": "Operator",
+      "description": "Operational access with write permissions",
+      "level": 50,
+      "permissions": [
+        "documents:read",
+        "documents:write",
+        "documents:delete",
+        "workflows:read",
+        "workflows:write",
+        "workflows:execute",
+        "analytics:read",
+        "notifications:read",
+        "notifications:write",
+        "alarms:read",
+        "alarms:acknowledge"
+      ],
+      "inherits": []
+    },
+    "Viewer": {
+      "displayName": "Viewer",
+      "description": "Read-only access to content",
+      "level": 10,
+      "permissions": [
+        "documents:read",
+        "workflows:read",
+        "analytics:read",
+        "notifications:read",
+        "alarms:read"
+      ],
+      "inherits": []
+    }
+  },
+
+  "permissions": {
+    "system:*": {
+      "displayName": "System Administration",
+      "description": "Full system administrative access",
+      "category": "system",
+      "actions": ["*"],
+      "resources": ["*"]
+    },
+    "users:*": {
+      "displayName": "User Management",
+      "description": "Full user management capabilities",
+      "category": "users",
+      "actions": ["create", "read", "update", "delete", "invite"],
+      "resources": ["users", "user-profiles", "user-roles"]
+    },
+    "users:read": {
+      "displayName": "View Users",
+      "description": "View user information",
+      "category": "users",
+      "actions": ["read"],
+      "resources": ["users", "user-profiles"]
+    },
+    "organizations:*": {
+      "displayName": "Organization Management",
+      "description": "Full organization management",
+      "category": "organizations",
+      "actions": ["create", "read", "update", "delete", "configure"],
+      "resources": ["organizations", "org-settings", "org-members"]
+    },
+    "documents:*": {
+      "displayName": "Document Management",
+      "description": "Full document access",
+      "category": "documents",
+      "actions": ["create", "read", "update", "delete", "share"],
+      "resources": ["documents", "document-versions", "document-comments"]
+    },
+    "documents:read": {
+      "displayName": "View Documents",
+      "description": "Read-only document access",
+      "category": "documents",
+      "actions": ["read"],
+      "resources": ["documents", "document-versions"]
+    },
+    "documents:write": {
+      "displayName": "Edit Documents",
+      "description": "Create and edit documents",
+      "category": "documents",
+      "actions": ["create", "read", "update"],
+      "resources": ["documents", "document-versions", "document-comments"]
+    },
+    "documents:delete": {
+      "displayName": "Delete Documents",
+      "description": "Delete documents",
+      "category": "documents",
+      "actions": ["delete"],
+      "resources": ["documents"]
+    },
+    "workflows:*": {
+      "displayName": "Workflow Management",
+      "description": "Full workflow access",
+      "category": "workflows",
+      "actions": ["create", "read", "update", "delete", "execute", "abort"],
+      "resources": ["workflows", "workflow-instances", "workflow-tasks"]
+    },
+    "workflows:read": {
+      "displayName": "View Workflows",
+      "description": "View workflows and instances",
+      "category": "workflows",
+      "actions": ["read"],
+      "resources": ["workflows", "workflow-instances", "workflow-tasks"]
+    },
+    "workflows:write": {
+      "displayName": "Edit Workflows",
+      "description": "Create and edit workflows",
+      "category": "workflows",
+      "actions": ["create", "read", "update"],
+      "resources": ["workflows"]
+    },
+    "workflows:execute": {
+      "displayName": "Execute Workflows",
+      "description": "Start and interact with workflow instances",
+      "category": "workflows",
+      "actions": ["execute", "read"],
+      "resources": ["workflow-instances", "workflow-tasks"]
+    },
+    "analytics:*": {
+      "displayName": "Analytics Management",
+      "description": "Full analytics access",
+      "category": "analytics",
+      "actions": ["create", "read", "update", "delete", "export"],
+      "resources": ["dashboards", "reports", "charts", "kpis"]
+    },
+    "analytics:read": {
+      "displayName": "View Analytics",
+      "description": "View dashboards and reports",
+      "category": "analytics",
+      "actions": ["read"],
+      "resources": ["dashboards", "reports", "charts", "kpis"]
+    },
+    "settings:*": {
+      "displayName": "Settings Management",
+      "description": "Manage system settings",
+      "category": "settings",
+      "actions": ["read", "update"],
+      "resources": ["system-settings", "user-preferences", "org-settings"]
+    },
+    "audit:*": {
+      "displayName": "Audit Log Access",
+      "description": "View and manage audit logs",
+      "category": "audit",
+      "actions": ["read", "export"],
+      "resources": ["audit-logs", "security-logs"]
+    },
+    "notifications:*": {
+      "displayName": "Notification Management",
+      "description": "Full notification access",
+      "category": "notifications",
+      "actions": ["create", "read", "update", "delete"],
+      "resources": ["notifications", "notification-settings"]
+    },
+    "notifications:read": {
+      "displayName": "View Notifications",
+      "description": "View notifications",
+      "category": "notifications",
+      "actions": ["read"],
+      "resources": ["notifications"]
+    },
+    "notifications:write": {
+      "displayName": "Send Notifications",
+      "description": "Create and send notifications",
+      "category": "notifications",
+      "actions": ["create", "read"],
+      "resources": ["notifications"]
+    },
+    "alarms:*": {
+      "displayName": "Alarm Management",
+      "description": "Full alarm system access",
+      "category": "alarms",
+      "actions": ["create", "read", "update", "delete", "acknowledge", "resolve"],
+      "resources": ["alarms", "alarm-rules", "alarm-history"]
+    },
+    "alarms:read": {
+      "displayName": "View Alarms",
+      "description": "View active and historical alarms",
+      "category": "alarms",
+      "actions": ["read"],
+      "resources": ["alarms", "alarm-history"]
+    },
+    "alarms:acknowledge": {
+      "displayName": "Acknowledge Alarms",
+      "description": "Acknowledge and resolve alarms",
+      "category": "alarms",
+      "actions": ["read", "acknowledge", "resolve"],
+      "resources": ["alarms"]
+    }
+  },
+
+  "widgets": {
+    "kpi-widget": {
+      "displayName": "KPI Widget",
+      "description": "Display key performance indicators",
+      "type": "visualization",
+      "requiredPermissions": ["analytics:read"],
+      "optionalPermissions": ["analytics:*"],
+      "endpoints": [
+        "/api/analytics/kpis",
+        "/api/analytics/kpis/:id"
+      ],
+      "features": {
+        "view": ["analytics:read"],
+        "configure": ["analytics:*"],
+        "export": ["analytics:*"]
+      }
+    },
+    "chart-widget": {
+      "displayName": "Chart Widget",
+      "description": "Display data visualizations",
+      "type": "visualization",
+      "requiredPermissions": ["analytics:read"],
+      "optionalPermissions": ["analytics:*"],
+      "endpoints": [
+        "/api/analytics/charts",
+        "/api/analytics/charts/:id",
+        "/api/analytics/data"
+      ],
+      "features": {
+        "view": ["analytics:read"],
+        "configure": ["analytics:*"],
+        "export": ["analytics:*"],
+        "drill-down": ["analytics:read"]
+      }
+    },
+    "alarm-widget": {
+      "displayName": "Alarms Widget",
+      "description": "Display active alarms and alerts",
+      "type": "monitoring",
+      "requiredPermissions": ["alarms:read"],
+      "optionalPermissions": ["alarms:acknowledge", "alarms:*"],
+      "endpoints": [
+        "/api/alarms",
+        "/api/alarms/active",
+        "/api/alarms/:id/acknowledge",
+        "/api/alarms/:id/resolve"
+      ],
+      "features": {
+        "view": ["alarms:read"],
+        "acknowledge": ["alarms:acknowledge"],
+        "resolve": ["alarms:acknowledge"],
+        "configure": ["alarms:*"]
+      }
+    },
+    "inbox-widget": {
+      "displayName": "Inbox Widget",
+      "description": "Display notifications and messages",
+      "type": "communication",
+      "requiredPermissions": ["notifications:read"],
+      "optionalPermissions": ["notifications:write", "notifications:*"],
+      "endpoints": [
+        "/api/notifications",
+        "/api/notifications/unread",
+        "/api/notifications/:id/read",
+        "/api/notifications/:id"
+      ],
+      "features": {
+        "view": ["notifications:read"],
+        "mark-read": ["notifications:read"],
+        "delete": ["notifications:write"],
+        "send": ["notifications:write"]
+      }
+    },
+    "workflow-status-widget": {
+      "displayName": "Workflow Status",
+      "description": "Display workflow execution status",
+      "type": "monitoring",
+      "requiredPermissions": ["workflows:read"],
+      "optionalPermissions": ["workflows:execute", "workflows:*"],
+      "endpoints": [
+        "/api/workflows/instances",
+        "/api/workflows/instances/:id",
+        "/api/workflows/instances/:id/tasks"
+      ],
+      "features": {
+        "view": ["workflows:read"],
+        "interact": ["workflows:execute"],
+        "abort": ["workflows:*"]
+      }
+    },
+    "document-list-widget": {
+      "displayName": "Document List",
+      "description": "Display recent documents",
+      "type": "content",
+      "requiredPermissions": ["documents:read"],
+      "optionalPermissions": ["documents:write", "documents:*"],
+      "endpoints": [
+        "/api/documents",
+        "/api/documents/:id",
+        "/api/documents/recent"
+      ],
+      "features": {
+        "view": ["documents:read"],
+        "create": ["documents:write"],
+        "edit": ["documents:write"],
+        "delete": ["documents:delete"]
+      }
+    }
+  },
+
+  "menus": {
+    "dashboard": {
+      "displayName": "Dashboard",
+      "path": "/dashboard",
+      "icon": "dashboard",
+      "requiredPermissions": [],
+      "order": 1
+    },
+    "documents": {
+      "displayName": "Documents",
+      "path": "/documents",
+      "icon": "file-text",
+      "requiredPermissions": ["documents:read"],
+      "order": 2,
+      "children": [
+        {
+          "displayName": "All Documents",
+          "path": "/documents/all",
+          "requiredPermissions": ["documents:read"]
+        },
+        {
+          "displayName": "My Documents",
+          "path": "/documents/mine",
+          "requiredPermissions": ["documents:read"]
+        },
+        {
+          "displayName": "Shared with Me",
+          "path": "/documents/shared",
+          "requiredPermissions": ["documents:read"]
+        },
+        {
+          "displayName": "Create Document",
+          "path": "/documents/new",
+          "requiredPermissions": ["documents:write"]
+        }
+      ]
+    },
+    "workflows": {
+      "displayName": "Workflows",
+      "path": "/workflows",
+      "icon": "workflow",
+      "requiredPermissions": ["workflows:read"],
+      "order": 3,
+      "children": [
+        {
+          "displayName": "All Workflows",
+          "path": "/workflows/all",
+          "requiredPermissions": ["workflows:read"]
+        },
+        {
+          "displayName": "My Tasks",
+          "path": "/workflows/tasks",
+          "requiredPermissions": ["workflows:execute"]
+        },
+        {
+          "displayName": "Workflow Builder",
+          "path": "/workflows/builder",
+          "requiredPermissions": ["workflows:write"]
+        }
+      ]
+    },
+    "analytics": {
+      "displayName": "Analytics",
+      "path": "/analytics",
+      "icon": "chart-line",
+      "requiredPermissions": ["analytics:read"],
+      "order": 4,
+      "children": [
+        {
+          "displayName": "Dashboards",
+          "path": "/analytics/dashboards",
+          "requiredPermissions": ["analytics:read"]
+        },
+        {
+          "displayName": "Reports",
+          "path": "/analytics/reports",
+          "requiredPermissions": ["analytics:read"]
+        },
+        {
+          "displayName": "KPIs",
+          "path": "/analytics/kpis",
+          "requiredPermissions": ["analytics:read"]
+        }
+      ]
+    },
+    "alarms": {
+      "displayName": "Alarms",
+      "path": "/alarms",
+      "icon": "bell",
+      "requiredPermissions": ["alarms:read"],
+      "order": 5,
+      "children": [
+        {
+          "displayName": "Active Alarms",
+          "path": "/alarms/active",
+          "requiredPermissions": ["alarms:read"]
+        },
+        {
+          "displayName": "Alarm History",
+          "path": "/alarms/history",
+          "requiredPermissions": ["alarms:read"]
+        },
+        {
+          "displayName": "Alarm Rules",
+          "path": "/alarms/rules",
+          "requiredPermissions": ["alarms:*"]
+        }
+      ]
+    },
+    "admin": {
+      "displayName": "Administration",
+      "path": "/admin",
+      "icon": "settings",
+      "requiredPermissions": ["system:*"],
+      "order": 100,
+      "children": [
+        {
+          "displayName": "Users",
+          "path": "/admin/users",
+          "requiredPermissions": ["users:*"]
+        },
+        {
+          "displayName": "Organizations",
+          "path": "/admin/organizations",
+          "requiredPermissions": ["organizations:*"]
+        },
+        {
+          "displayName": "System Settings",
+          "path": "/admin/settings",
+          "requiredPermissions": ["settings:*"]
+        },
+        {
+          "displayName": "Audit Logs",
+          "path": "/admin/audit",
+          "requiredPermissions": ["audit:*"]
+        }
+      ]
+    }
+  },
+
+  "endpoints": {
+    "/api/users": {
+      "GET": {
+        "description": "List users",
+        "requiredPermissions": ["users:read", "users:*"]
+      },
+      "POST": {
+        "description": "Create user",
+        "requiredPermissions": ["users:*"]
+      }
+    },
+    "/api/users/:id": {
+      "GET": {
+        "description": "Get user details",
+        "requiredPermissions": ["users:read", "users:*"]
+      },
+      "PUT": {
+        "description": "Update user",
+        "requiredPermissions": ["users:*"]
+      },
+      "PATCH": {
+        "description": "Partial user update",
+        "requiredPermissions": ["users:*"]
+      },
+      "DELETE": {
+        "description": "Delete user",
+        "requiredPermissions": ["users:*"]
+      }
+    },
+    "/api/documents": {
+      "GET": {
+        "description": "List documents",
+        "requiredPermissions": ["documents:read", "documents:write", "documents:*"]
+      },
+      "POST": {
+        "description": "Create document",
+        "requiredPermissions": ["documents:write", "documents:*"]
+      }
+    },
+    "/api/documents/:id": {
+      "GET": {
+        "description": "Get document",
+        "requiredPermissions": ["documents:read", "documents:write", "documents:*"]
+      },
+      "PUT": {
+        "description": "Update document",
+        "requiredPermissions": ["documents:write", "documents:*"]
+      },
+      "DELETE": {
+        "description": "Delete document",
+        "requiredPermissions": ["documents:delete", "documents:*"]
+      }
+    },
+    "/api/workflows": {
+      "GET": {
+        "description": "List workflows",
+        "requiredPermissions": ["workflows:read", "workflows:write", "workflows:*"]
+      },
+      "POST": {
+        "description": "Create workflow",
+        "requiredPermissions": ["workflows:write", "workflows:*"]
+      }
+    },
+    "/api/workflows/:id": {
+      "GET": {
+        "description": "Get workflow",
+        "requiredPermissions": ["workflows:read", "workflows:write", "workflows:*"]
+      },
+      "PUT": {
+        "description": "Update workflow",
+        "requiredPermissions": ["workflows:write", "workflows:*"]
+      },
+      "DELETE": {
+        "description": "Delete workflow",
+        "requiredPermissions": ["workflows:*"]
+      }
+    },
+    "/api/workflows/:id/execute": {
+      "POST": {
+        "description": "Execute workflow",
+        "requiredPermissions": ["workflows:execute", "workflows:*"]
+      }
+    },
+    "/api/analytics/kpis": {
+      "GET": {
+        "description": "Get KPI data",
+        "requiredPermissions": ["analytics:read", "analytics:*"]
+      },
+      "POST": {
+        "description": "Create KPI",
+        "requiredPermissions": ["analytics:*"]
+      }
+    },
+    "/api/analytics/charts": {
+      "GET": {
+        "description": "Get chart data",
+        "requiredPermissions": ["analytics:read", "analytics:*"]
+      },
+      "POST": {
+        "description": "Create chart",
+        "requiredPermissions": ["analytics:*"]
+      }
+    },
+    "/api/analytics/charts/:id": {
+      "GET": {
+        "description": "Get specific chart",
+        "requiredPermissions": ["analytics:read", "analytics:*"]
+      },
+      "PUT": {
+        "description": "Update chart",
+        "requiredPermissions": ["analytics:*"]
+      },
+      "DELETE": {
+        "description": "Delete chart",
+        "requiredPermissions": ["analytics:*"]
+      }
+    },
+    "/api/alarms": {
+      "GET": {
+        "description": "List alarms",
+        "requiredPermissions": ["alarms:read", "alarms:acknowledge", "alarms:*"]
+      },
+      "POST": {
+        "description": "Create alarm rule",
+        "requiredPermissions": ["alarms:*"]
+      }
+    },
+    "/api/alarms/active": {
+      "GET": {
+        "description": "Get active alarms",
+        "requiredPermissions": ["alarms:read", "alarms:acknowledge", "alarms:*"]
+      }
+    },
+    "/api/alarms/:id/acknowledge": {
+      "POST": {
+        "description": "Acknowledge alarm",
+        "requiredPermissions": ["alarms:acknowledge", "alarms:*"]
+      }
+    },
+    "/api/alarms/:id/resolve": {
+      "POST": {
+        "description": "Resolve alarm",
+        "requiredPermissions": ["alarms:acknowledge", "alarms:*"]
+      }
+    },
+    "/api/notifications": {
+      "GET": {
+        "description": "List notifications",
+        "requiredPermissions": ["notifications:read", "notifications:write", "notifications:*"]
+      },
+      "POST": {
+        "description": "Create notification",
+        "requiredPermissions": ["notifications:write", "notifications:*"]
+      }
+    },
+    "/api/notifications/unread": {
+      "GET": {
+        "description": "Get unread notifications",
+        "requiredPermissions": ["notifications:read", "notifications:write", "notifications:*"]
+      }
+    },
+    "/api/notifications/:id": {
+      "GET": {
+        "description": "Get notification",
+        "requiredPermissions": ["notifications:read", "notifications:write", "notifications:*"]
+      },
+      "DELETE": {
+        "description": "Delete notification",
+        "requiredPermissions": ["notifications:write", "notifications:*"]
+      }
+    },
+    "/api/notifications/:id/read": {
+      "POST": {
+        "description": "Mark notification as read",
+        "requiredPermissions": ["notifications:read", "notifications:write", "notifications:*"]
+      }
+    }
+  },
+
+  "permissionMatrix": {
+    "_comment": "Quick reference matrix for role capabilities",
+    "Admin": {
+      "widgets": {
+        "kpi-widget": ["view", "configure", "export"],
+        "chart-widget": ["view", "configure", "export", "drill-down"],
+        "alarm-widget": ["view", "acknowledge", "resolve", "configure"],
+        "inbox-widget": ["view", "mark-read", "delete", "send"],
+        "workflow-status-widget": ["view", "interact", "abort"],
+        "document-list-widget": ["view", "create", "edit", "delete"]
+      },
+      "menus": ["dashboard", "documents", "workflows", "analytics", "alarms", "admin"]
+    },
+    "Operator": {
+      "widgets": {
+        "kpi-widget": ["view"],
+        "chart-widget": ["view", "drill-down"],
+        "alarm-widget": ["view", "acknowledge", "resolve"],
+        "inbox-widget": ["view", "mark-read", "send"],
+        "workflow-status-widget": ["view", "interact"],
+        "document-list-widget": ["view", "create", "edit", "delete"]
+      },
+      "menus": ["dashboard", "documents", "workflows", "analytics", "alarms"]
+    },
+    "Viewer": {
+      "widgets": {
+        "kpi-widget": ["view"],
+        "chart-widget": ["view", "drill-down"],
+        "alarm-widget": ["view"],
+        "inbox-widget": ["view", "mark-read"],
+        "workflow-status-widget": ["view"],
+        "document-list-widget": ["view"]
+      },
+      "menus": ["dashboard", "documents", "workflows", "analytics", "alarms"]
+    }
+  }
+}
