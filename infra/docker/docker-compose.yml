@@ -1,0 +1,69 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.web
+    container_name: freeflow-web
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://api:4000
+    depends_on:
+      - api
+    networks:
+      - freeflow-network
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.api
+    container_name: freeflow-api
+    ports:
+      - '4000:4000'
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - CORS_ORIGIN=http://localhost:3000
+    networks:
+      - freeflow-network
+    restart: unless-stopped
+
+  # Optional: PostgreSQL database
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: freeflow-db
+  #   ports:
+  #     - '5432:5432'
+  #   environment:
+  #     - POSTGRES_USER=freeflow
+  #     - POSTGRES_PASSWORD=freeflow
+  #     - POSTGRES_DB=freeflow
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - freeflow-network
+  #   restart: unless-stopped
+
+  # Optional: Redis cache
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: freeflow-redis
+  #   ports:
+  #     - '6379:6379'
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - freeflow-network
+  #   restart: unless-stopped
+
+networks:
+  freeflow-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:
+#   redis_data:
