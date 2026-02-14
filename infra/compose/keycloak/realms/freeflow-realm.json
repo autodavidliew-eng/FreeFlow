@@ -60,22 +60,22 @@
   "roles": {
     "realm": [
       {
-        "name": "admin",
-        "description": "Administrator role with full access"
+        "name": "Admin",
+        "description": "Administrator role with full access to all resources"
       },
       {
-        "name": "user",
-        "description": "Standard user role"
+        "name": "Operator",
+        "description": "Operator role with operational permissions"
       },
       {
-        "name": "manager",
-        "description": "Manager role with elevated permissions"
+        "name": "Viewer",
+        "description": "Viewer role with read-only access"
       }
     ]
   },
   "users": [
     {
-      "username": "admin@freeflow.dev",
+      "username": "admin",
       "email": "admin@freeflow.dev",
       "emailVerified": true,
       "enabled": true,
@@ -84,41 +84,48 @@
       "credentials": [
         {
           "type": "password",
-          "value": "admin123",
+          "value": "admin",
           "temporary": false
         }
       ],
-      "realmRoles": [
-        "admin",
-        "user"
-      ]
+      "realmRoles": ["Admin"]
     },
     {
-      "username": "user@freeflow.dev",
-      "email": "user@freeflow.dev",
+      "username": "operator",
+      "email": "operator@freeflow.dev",
       "emailVerified": true,
       "enabled": true,
-      "firstName": "Test",
+      "firstName": "Operator",
       "lastName": "User",
       "credentials": [
         {
           "type": "password",
-          "value": "user123",
+          "value": "operator",
           "temporary": false
         }
       ],
-      "realmRoles": [
-        "user"
-      ]
+      "realmRoles": ["Operator"]
+    },
+    {
+      "username": "viewer",
+      "email": "viewer@freeflow.dev",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Viewer",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "viewer",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["Viewer"]
     }
   ],
   "scopeMappings": [],
   "clientScopeMappings": {},
-  "defaultDefaultClientScopes": [
-    "role_list",
-    "profile",
-    "email"
-  ],
+  "defaultDefaultClientScopes": ["role_list", "profile", "email"],
   "defaultOptionalClientScopes": [
     "offline_access",
     "address",
@@ -136,9 +143,7 @@
   },
   "smtpServer": {},
   "eventsEnabled": false,
-  "eventsListeners": [
-    "jboss-logging"
-  ],
+  "eventsListeners": ["jboss-logging"],
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
