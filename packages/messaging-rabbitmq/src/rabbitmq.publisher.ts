@@ -1,9 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy, RmqRecordBuilder } from '@nestjs/microservices';
+import type { ClientProxy } from '@nestjs/microservices';
+import { RmqRecordBuilder } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
+
 import { RABBITMQ_CLIENT } from './rabbitmq.tokens';
 import type { PublishHeaders } from './rabbitmq.types';
-import { withEventHeaders } from './rabbitmq.utils';
+import { normalizeHeaders, withEventHeaders } from './rabbitmq.utils';
 
 @Injectable()
 export class RabbitMqPublisher {
@@ -13,7 +15,7 @@ export class RabbitMqPublisher {
     const enrichedHeaders = withEventHeaders(headers);
     const record = new RmqRecordBuilder(payload)
       .setOptions({
-        headers: enrichedHeaders,
+        headers: normalizeHeaders(enrichedHeaders),
         persistent: true,
         contentType: 'application/json',
       })

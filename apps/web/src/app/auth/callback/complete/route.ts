@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+
 import { getAuthConfig } from '../../../../lib/auth/config';
 import { extractRoles, decodeJwtPayload } from '../../../../lib/auth/jwt';
 import { exchangeCodeForToken } from '../../../../lib/auth/oidc';
@@ -15,8 +16,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Missing code.' }, { status: 400 });
   }
 
-  const storedState = cookies().get(authConfig.pkceStateCookieName)?.value;
-  const verifier = cookies().get(authConfig.pkceVerifierCookieName)?.value;
+  const cookieStore = await cookies();
+  const storedState = cookieStore.get(authConfig.pkceStateCookieName)?.value;
+  const verifier = cookieStore.get(authConfig.pkceVerifierCookieName)?.value;
 
   if (!storedState || !verifier || storedState !== state) {
     return NextResponse.json({ error: 'Invalid state.' }, { status: 400 });
@@ -27,7 +29,7 @@ export async function GET(request: Request) {
   const expiresAt = Math.floor(Date.now() / 1000) + maxAge;
   const roles = extractRoles(decodeJwtPayload(token.access_token));
 
-  setSessionCookie(
+  await setSessionCookie(
     {
       accessToken: token.access_token,
       idToken: token.id_token,
@@ -35,11 +37,11 @@ export async function GET(request: Request) {
       expiresAt,
       roles,
     },
-    maxAge,
+    maxAge
   );
 
-  cookies().delete(authConfig.pkceStateCookieName);
-  cookies().delete(authConfig.pkceVerifierCookieName);
+  cookieStore.delete(authConfig.pkceStateCookieName);
+  cookieStore.delete(authConfig.pkceVerifierCookieName);
 
   return NextResponse.redirect(new URL('/dashboard', request.url));
 }

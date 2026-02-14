@@ -12,12 +12,12 @@ services:
       POSTGRES_PASSWORD: freeflow_dev_password
       POSTGRES_MULTIPLE_DATABASES: keycloak,camunda
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ../../db/postgres:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U freeflow"]
+      test: ['CMD-SHELL', 'pg_isready -U freeflow']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,12 +34,12 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: freeflow_dev_password
       MONGO_INITDB_DATABASE: freeflow
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongodb_data:/data/db
       - ../../db/mongo:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -53,11 +53,11 @@ services:
     restart: unless-stopped
     command: redis-server --requirepass freeflow_dev_password --appendonly yes
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -75,14 +75,14 @@ services:
       RABBITMQ_DEFAULT_VHOST: /freeflow
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbitmq_management load_definitions "/etc/rabbitmq/definitions.json"
     ports:
-      - "5672:5672"   # AMQP port
-      - "15672:15672" # Management UI
+      - '5672:5672' # AMQP port
+      - '15672:15672' # Management UI
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
       - ./config/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
       - ../rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      test: ['CMD', 'rabbitmq-diagnostics', 'ping']
       interval: 30s
       timeout: 10s
       retries: 5
@@ -95,12 +95,20 @@ services:
     container_name: freeflow-qdrant
     restart: unless-stopped
     ports:
-      - "6333:6333" # HTTP API
-      - "6334:6334" # gRPC API
+      - '6333:6333' # HTTP API
+      - '6334:6334' # gRPC API
     volumes:
       - qdrant_data:/qdrant/storage
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:6333/readyz"]
+      test:
+        [
+          'CMD',
+          'wget',
+          '--no-verbose',
+          '--tries=1',
+          '--spider',
+          'http://localhost:6333/readyz',
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -129,15 +137,19 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
-      - ../../keycloak/freeflow-realm.json:/opt/keycloak/data/import/freeflow-realm.json:ro
+      - ./keycloak/realms:/opt/keycloak/data/import:ro
       - keycloak_data:/opt/keycloak/data
     depends_on:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r\nhost: 127.0.0.1\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"]
+      test:
+        [
+          'CMD-SHELL',
+          "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r\nhost: 127.0.0.1\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;",
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -159,14 +171,15 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - '9200:9200'
+      - '9300:9300'
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      test:
+        ['CMD-SHELL', 'curl -f http://localhost:9200/_cluster/health || exit 1']
       interval: 30s
       timeout: 10s
       retries: 5
@@ -187,15 +200,19 @@ services:
       - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch:9200
       - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_BULK_SIZE=1
     ports:
-      - "26500:26500" # Gateway API
-      - "9600:9600"   # Monitoring
+      - '26500:26500' # Gateway API
+      - '9600:9600' # Monitoring
     volumes:
       - zeebe_data:/usr/local/zeebe/data
     depends_on:
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/9600' || exit 1"]
+      test:
+        [
+          'CMD-SHELL',
+          "timeout 10s bash -c ':> /dev/tcp/127.0.0.1/9600' || exit 1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -215,14 +232,18 @@ services:
       - CAMUNDA_OPERATE_ELASTICSEARCH_URL=http://elasticsearch:9200
       - CAMUNDA_OPERATE_ZEEBEELASTICSEARCH_URL=http://elasticsearch:9200
     ports:
-      - "8081:8080"
+      - '8081:8080'
     depends_on:
       zeebe:
         condition: service_healthy
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api/check || exit 1"]
+      test:
+        [
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://localhost:8080/api/check || exit 1',
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -242,14 +263,18 @@ services:
       - CAMUNDA_TASKLIST_ELASTICSEARCH_URL=http://elasticsearch:9200
       - CAMUNDA_TASKLIST_ZEEBEELASTICSEARCH_URL=http://elasticsearch:9200
     ports:
-      - "8082:8080"
+      - '8082:8080'
     depends_on:
       zeebe:
         condition: service_healthy
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api/check || exit 1"]
+      test:
+        [
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://localhost:8080/api/check || exit 1',
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -266,22 +291,26 @@ services:
       - formio
     environment:
       MONGO_URL: mongodb://freeflow:freeflow_dev_password@mongodb:27017/formio?authSource=admin
-      MONGO_HIGH_AVAILABILITY: "false"
-      FORMIO_FILES_SERVER: "https://api.form.io"
-      PORTAL_ENABLED: "true"
+      MONGO_HIGH_AVAILABILITY: 'false'
+      FORMIO_FILES_SERVER: 'https://api.form.io'
+      PORTAL_ENABLED: 'true'
       JWT_SECRET: freeflow_formio_jwt_secret_change_in_production
       DB_SECRET: freeflow_formio_db_secret_change_in_production
-      PRIMARY: "true"
-      PROJECT_TEMPLATE: ""
+      PRIMARY: 'true'
+      PROJECT_TEMPLATE: ''
       ROOT_EMAIL: admin@example.com
       ROOT_PASSWORD: admin
     ports:
-      - "3001:3001"
+      - '3001:3001'
     depends_on:
       mongodb:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001/health || exit 1"]
+      test:
+        [
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://localhost:3001/health || exit 1',
+        ]
       interval: 30s
       timeout: 10s
       retries: 5

@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 
 export default function AuthCallbackPage() {
-  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
     const errorParam = searchParams.get('error');
     if (errorParam) {
       setError(errorParam);
@@ -22,10 +21,10 @@ export default function AuthCallbackPage() {
 
     const state = searchParams.get('state') ?? '';
     const url = `/auth/callback/complete?code=${encodeURIComponent(
-      code,
+      code
     )}&state=${encodeURIComponent(state)}`;
     window.location.replace(url);
-  }, [searchParams]);
+  }, []);
 
   return (
     <div style={{ display: 'grid', gap: '1rem' }}>
@@ -35,9 +34,7 @@ export default function AuthCallbackPage() {
       {error ? (
         <p style={{ color: '#ff8f8f' }}>Auth error: {error}</p>
       ) : (
-        <p style={{ color: 'var(--muted)' }}>
-          Redirecting back to FreeFlow.
-        </p>
+        <p style={{ color: 'var(--muted)' }}>Redirecting back to FreeFlow.</p>
       )}
     </div>
   );

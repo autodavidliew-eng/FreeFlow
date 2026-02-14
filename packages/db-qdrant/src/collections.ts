@@ -1,9 +1,10 @@
-import type {
-  CreateCollection,
-  VectorParams,
-  Distance,
-} from '@qdrant/js-client-rest';
+import type { Schemas } from '@qdrant/js-client-rest';
+
 import { createQdrantClient } from './client';
+
+type CreateCollection = Schemas['CreateCollection'];
+type VectorParams = Schemas['VectorParams'];
+type Distance = Schemas['Distance'];
 
 export type CollectionConfig = {
   name: string;

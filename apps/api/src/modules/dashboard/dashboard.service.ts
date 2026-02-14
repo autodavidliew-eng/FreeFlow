@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
+
 import type { DashboardLayoutDto } from './dto/dashboard-layout.dto';
-import type { WidgetCatalogResponseDto } from './dto/widget-catalog.dto';
+import type {
+  WidgetCatalogResponseDto,
+  WidgetDefinitionDto,
+} from './dto/widget-catalog.dto';
 
 @Injectable()
 export class DashboardService {
@@ -43,7 +47,7 @@ export class DashboardService {
   }
 
   getWidgetCatalog(): WidgetCatalogResponseDto {
-    const data = [
+    const data: WidgetDefinitionDto[] = [
       {
         id: 'kpi-widget',
         name: 'Key Metrics',

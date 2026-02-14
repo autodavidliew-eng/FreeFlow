@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
 import { prisma, type PrismaClient } from '@freeflow/db-postgres';
-import { RabbitMqPublisher } from '@freeflow/messaging-rabbitmq';
+import type { RabbitMqPublisher } from '@freeflow/messaging-rabbitmq';
+import { Injectable, Logger } from '@nestjs/common';
+
 import type { OutboxProcessResult } from './outbox.types';
 
 @Injectable()
@@ -9,12 +10,14 @@ export class OutboxProcessor {
 
   constructor(
     private readonly publisher: RabbitMqPublisher,
-    private readonly client: PrismaClient = prisma,
+    private readonly client: PrismaClient = prisma
   ) {}
 
   async processBatch(batchSize = 20): Promise<OutboxProcessResult> {
     const now = new Date();
-    const events = await this.client.outboxEvent.findMany({
+    const outboxEvent = (this.client as unknown as { outboxEvent: any })
+      .outboxEvent;
+    const events = await outboxEvent.findMany({
       where: {
         status: 'PENDING',
         availableAt: { lte: now },
@@ -28,7 +31,7 @@ export class OutboxProcessor {
     let failed = 0;
 
     for (const event of events) {
-      const claim = await this.client.outboxEvent.updateMany({
+      const claim = await outboxEvent.updateMany({
         where: { id: event.id, status: 'PENDING' },
         data: { status: 'PROCESSING' },
       });
@@ -45,7 +48,7 @@ export class OutboxProcessor {
           eventId: event.id,
         });
 
-        await this.client.outboxEvent.update({
+        await outboxEvent.update({
           where: { id: event.id },
           data: {
             status: 'PUBLISHED',
@@ -61,7 +64,7 @@ export class OutboxProcessor {
         const retryDelayMs = Number(process.env.OUTBOX_RETRY_DELAY_MS ?? 30000);
 
         if (attempts >= maxAttempts) {
-          await this.client.outboxEvent.update({
+          await outboxEvent.update({
             where: { id: event.id },
             data: {
               status: 'FAILED',
@@ -70,7 +73,7 @@ export class OutboxProcessor {
             },
           });
         } else {
-          await this.client.outboxEvent.update({
+          await outboxEvent.update({
             where: { id: event.id },
             data: {
               status: 'PENDING',
@@ -83,7 +86,7 @@ export class OutboxProcessor {
 
         this.logger.error(
           `Failed to publish outbox event ${event.id}`,
-          error as Error,
+          error as Error
         );
       }
     }

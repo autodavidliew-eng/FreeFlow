@@ -1,12 +1,13 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+
 import { getAuthConfig } from '../../../../lib/auth/config';
+import { buildAuthorizationUrl } from '../../../../lib/auth/oidc';
 import {
   generateCodeChallenge,
   generateCodeVerifier,
   generateState,
 } from '../../../../lib/auth/pkce';
-import { buildAuthorizationUrl } from '../../../../lib/auth/oidc';
 
 export async function GET() {
   const authConfig = getAuthConfig();
@@ -22,8 +23,13 @@ export async function GET() {
     maxAge: 10 * 60,
   };
 
-  cookies().set(authConfig.pkceVerifierCookieName, codeVerifier, cookieOptions);
-  cookies().set(authConfig.pkceStateCookieName, state, cookieOptions);
+  const cookieStore = await cookies();
+  cookieStore.set(
+    authConfig.pkceVerifierCookieName,
+    codeVerifier,
+    cookieOptions
+  );
+  cookieStore.set(authConfig.pkceStateCookieName, state, cookieOptions);
 
   const authorizationUrl = await buildAuthorizationUrl(state, codeChallenge);
   return NextResponse.redirect(authorizationUrl);

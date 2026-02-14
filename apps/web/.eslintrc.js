@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['@freeflow/config/eslint/next'],
+  extends: [require.resolve('@freeflow/config/eslint/next')],
 };

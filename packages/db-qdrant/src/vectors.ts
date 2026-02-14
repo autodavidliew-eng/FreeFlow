@@ -1,5 +1,9 @@
-import type { PointStruct, ScoredPoint } from '@qdrant/js-client-rest';
+import type { Schemas } from '@qdrant/js-client-rest';
+
 import { createQdrantClient } from './client';
+
+type PointStruct = Schemas['PointStruct'];
+type ScoredPoint = Schemas['ScoredPoint'];
 
 export type UpsertVectorInput = {
   collection: string;
@@ -22,7 +26,7 @@ export async function upsertVectors(input: UpsertVectorInput) {
 }
 
 export async function searchVectors(
-  input: SearchVectorInput,
+  input: SearchVectorInput
 ): Promise<ScoredPoint[]> {
   const client = createQdrantClient();
 

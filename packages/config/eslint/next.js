@@ -6,13 +6,11 @@ module.exports = {
   extends: [
     'next/core-web-vitals',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'prettier'],
+  plugins: ['@typescript-eslint', 'import', 'prettier'],
   settings: {
     react: {
       version: 'detect',

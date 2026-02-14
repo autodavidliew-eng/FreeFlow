@@ -6,8 +6,12 @@ export type RabbitMqModuleOptions = {
   exchange?: string;
   prefetchCount?: number;
   noAck?: boolean;
-  queueOptions?: RmqOptions['options']['queueOptions'];
+  queueOptions?: NonNullable<RmqOptions['options']>['queueOptions'];
   clientName?: string;
 };
 
-export type PublishHeaders = Record<string, string | number | boolean | undefined>;
+export type PublishHeaders = Record<
+  string,
+  string | number | boolean | undefined
+>;
+export type RmqHeaders = Record<string, string>;

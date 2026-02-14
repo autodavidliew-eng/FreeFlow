@@ -3,9 +3,12 @@
 ## Current State
 
 - All roadmap phases through Phase 11 completed.
-- Latest commit: `6330e57` (`chore: checkpoint`) on `master`.
-- Branch status: `master` is ahead of `origin/master` by 1.
-- Push failed due to no network access to `github.com`.
+- Latest commit: `6605976` (`chore: checkpoint`) on `master`.
+- Branch status: `master` is synced with `origin/master`.
+- Local dev fixes are currently uncommitted.
+- Next.js production build now completes after updating `/auth/callback` to read
+  query params from `window.location.search` instead of `useSearchParams` during
+  prerender.
 
 ## Key Recent Files
 
@@ -19,5 +22,6 @@
 
 ## Next Actions
 
-1. Run `git push` from a networked environment.
-2. Optionally re-run `lint-staged` or formatting and amend if desired.
+1. Align Keycloak role names with `docs/auth/permissions.json` to resolve 403s
+   for protected endpoints (Keycloak roles are lowercase, permissions file uses
+   `Admin`/`Operator`/`Viewer`).

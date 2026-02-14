@@ -39,6 +39,7 @@
     "precommit": "lint-staged"
   },
   "devDependencies": {
+    "@freeflow/config": "workspace:*",
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
     "@types/node": "^20.11.19",

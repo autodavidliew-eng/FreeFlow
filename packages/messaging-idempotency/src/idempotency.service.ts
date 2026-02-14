@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { prisma, type PrismaClient } from '@freeflow/db-postgres';
+import { Injectable, Logger } from '@nestjs/common';
+
 import type { IdempotencyRecord } from './idempotency.types';
 
 @Injectable()
@@ -17,27 +17,20 @@ export class IdempotencyService {
       throw new Error('consumer is required for idempotency');
     }
 
-    try {
-      await this.client.processedEvent.create({
-        data: {
-          eventId: record.eventId,
-          consumer: record.consumer,
-          payloadHash: record.payloadHash,
-        },
-      });
-      return true;
-    } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        this.logger.warn(
-          `Duplicate event detected for ${record.consumer} (${record.eventId})`,
-        );
-        return false;
-      }
-      throw error;
+    const inserted = await this.client.$executeRaw`
+      INSERT INTO "ProcessedEvent" ("eventId", "consumer", "payloadHash")
+      VALUES (${record.eventId}, ${record.consumer}, ${record.payloadHash})
+      ON CONFLICT ("eventId", "consumer") DO NOTHING
+    `;
+
+    if (!inserted) {
+      this.logger.warn(
+        `Duplicate event detected for ${record.consumer} (${record.eventId})`
+      );
+      return false;
     }
+
+    return true;
   }
 
   async release(record: Pick<IdempotencyRecord, 'eventId' | 'consumer'>) {
@@ -45,11 +38,9 @@ export class IdempotencyService {
       return;
     }
 
-    await this.client.processedEvent.deleteMany({
-      where: {
-        eventId: record.eventId,
-        consumer: record.consumer,
-      },
-    });
+    await this.client.$executeRaw`
+      DELETE FROM "ProcessedEvent"
+      WHERE "eventId" = ${record.eventId} AND "consumer" = ${record.consumer}
+    `;
   }
 }

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import type { InboxTasksResponseDto } from './dto/inbox-task.dto';
+
+import type { InboxTaskDto, InboxTasksResponseDto } from './dto/inbox-task.dto';
 
 @Injectable()
 export class InboxService {
   getTasks(): InboxTasksResponseDto {
-    const items = [
+    const items: InboxTaskDto[] = [
       {
         id: 'task_001',
         title: 'Review incident report #1452',

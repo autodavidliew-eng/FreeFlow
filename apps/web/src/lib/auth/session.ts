@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+
 import { getAuthConfig } from './config';
 import { signValue, verifyValue } from './signing';
 
@@ -10,10 +11,14 @@ export type SessionData = {
   roles?: string[];
 };
 
-export function setSessionCookie(data: SessionData, maxAgeSeconds: number) {
+export async function setSessionCookie(
+  data: SessionData,
+  maxAgeSeconds: number
+) {
   const authConfig = getAuthConfig();
   const value = signValue(JSON.stringify(data), authConfig.sessionSecret);
-  cookies().set(authConfig.sessionCookieName, value, {
+  const cookieStore = await cookies();
+  cookieStore.set(authConfig.sessionCookieName, value, {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
@@ -22,14 +27,16 @@ export function setSessionCookie(data: SessionData, maxAgeSeconds: number) {
   });
 }
 
-export function clearSessionCookie() {
+export async function clearSessionCookie() {
   const authConfig = getAuthConfig();
-  cookies().delete(authConfig.sessionCookieName);
+  const cookieStore = await cookies();
+  cookieStore.delete(authConfig.sessionCookieName);
 }
 
-export function readSession(): SessionData | null {
+export async function readSession(): Promise<SessionData | null> {
   const authConfig = getAuthConfig();
-  const value = cookies().get(authConfig.sessionCookieName)?.value;
+  const cookieStore = await cookies();
+  const value = cookieStore.get(authConfig.sessionCookieName)?.value;
   if (!value) {
     return null;
   }

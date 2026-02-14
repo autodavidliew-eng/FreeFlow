@@ -1,11 +1,12 @@
 import { redirect } from 'next/navigation';
+
+import { WidgetRenderer } from '../../components/dashboard/WidgetRenderer';
 import { readSession } from '../../lib/auth/session';
 import { getAllowedWidgetsForRoles, hasKnownRole } from '../../lib/rbac';
-import { WidgetRenderer } from '../../components/dashboard/WidgetRenderer';
 import { getDashboardLayout } from '../../lib/widgets/schema';
 
 export default async function DashboardPage() {
-  const session = readSession();
+  const session = await readSession();
 
   if (!session) {
     redirect('/auth/login');
@@ -21,7 +22,7 @@ export default async function DashboardPage() {
   const layout = await getDashboardLayout();
   const visibleWidgetCount = layout.sections.reduce((count, section) => {
     const visible = section.widgets.filter((widget) =>
-      allowedWidgets.has(widget.widgetId),
+      allowedWidgets.has(widget.widgetId)
     );
     return count + visible.length;
   }, 0);

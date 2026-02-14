@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport, type RmqOptions } from '@nestjs/microservices';
+
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -8,22 +9,22 @@ async function bootstrap() {
   const rabbitmqUrl =
     process.env.RABBITMQ_URL ??
     'amqp://freeflow:freeflow_dev_password@localhost:5672/freeflow';
-  const rabbitmqQueue =
-    process.env.RABBITMQ_QUEUE ?? 'freeflow.alarms.queue';
-  const rabbitmqExchange =
-    process.env.RABBITMQ_EXCHANGE ?? 'freeflow.events';
+  const rabbitmqQueue = process.env.RABBITMQ_QUEUE ?? 'freeflow.alarms.queue';
+  const rabbitmqExchange = process.env.RABBITMQ_EXCHANGE ?? 'freeflow.events';
   const rabbitmqPrefetch = Number(process.env.RABBITMQ_PREFETCH ?? 5);
+
+  const rmqOptions = {
+    urls: [rabbitmqUrl],
+    queue: rabbitmqQueue,
+    queueOptions: { durable: true },
+    exchange: rabbitmqExchange,
+    prefetchCount: rabbitmqPrefetch,
+    noAck: false,
+  } as RmqOptions['options'] & { exchange?: string };
 
   app.connectMicroservice<RmqOptions>({
     transport: Transport.RMQ,
-    options: {
-      urls: [rabbitmqUrl],
-      queue: rabbitmqQueue,
-      queueOptions: { durable: true },
-      exchange: rabbitmqExchange,
-      prefetchCount: rabbitmqPrefetch,
-      noAck: false,
-    },
+    options: rmqOptions,
   });
 
   await app.startAllMicroservices();

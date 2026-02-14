@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import type { AlarmListResponseDto } from './dto/alarm.dto';
+
+import type { AlarmDto, AlarmListResponseDto } from './dto/alarm.dto';
 
 @Injectable()
 export class AlarmsService {
   getAlarms(): AlarmListResponseDto {
-    const items = [
+    const items: AlarmDto[] = [
       {
         id: 'alarm_001',
         label: 'Cooling loop pressure low',
