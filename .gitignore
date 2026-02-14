@@ -42,3 +42,9 @@ Thumbs.db
 # Temporary
 *.tmp
 .cache
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Local Keycloak realm export (root-only)
+/keycloak/

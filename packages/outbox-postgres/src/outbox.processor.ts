@@ -2,7 +2,10 @@ import { prisma, type PrismaClient } from '@freeflow/db-postgres';
 import type { RabbitMqPublisher } from '@freeflow/messaging-rabbitmq';
 import { Injectable, Logger } from '@nestjs/common';
 
-import type { OutboxProcessResult } from './outbox.types';
+import type {
+  OutboxProcessResult,
+  PrismaClientWithOutbox,
+} from './outbox.types';
 
 @Injectable()
 export class OutboxProcessor {
@@ -15,8 +18,7 @@ export class OutboxProcessor {
 
   async processBatch(batchSize = 20): Promise<OutboxProcessResult> {
     const now = new Date();
-    const outboxEvent = (this.client as unknown as { outboxEvent: any })
-      .outboxEvent;
+    const outboxEvent = (this.client as PrismaClientWithOutbox).outboxEvent;
     const events = await outboxEvent.findMany({
       where: {
         status: 'PENDING',
