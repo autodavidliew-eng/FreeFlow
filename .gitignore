@@ -48,3 +48,7 @@ Thumbs.db
 
 # Local Keycloak realm export (root-only)
 /keycloak/
+
+# Local session notes
+docs/codex-session-id.txt
+docs/session-ids.md
