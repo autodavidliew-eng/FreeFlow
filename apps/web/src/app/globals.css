@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0f1517;
+  --bg-elev: #141c1f;
+  --bg-panel: #182124;
+  --accent: #68f0c8;
+  --accent-2: #79a7ff;
+  --text: #e8f1f2;
+  --muted: #9fb3b9;
+  --border: #243036;
+  --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  background: radial-gradient(1200px 800px at 10% -10%, #1c2f31 0%, #0f1517 55%, #0b1012 100%);
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.app-content {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.app-aside {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 1024px) {
+  .app-main {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    align-items: start;
+  }
+}
+
+.pill {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.kpi-card {
+  background: linear-gradient(145deg, rgba(104, 240, 200, 0.12), rgba(121, 167, 255, 0.08));
+  border: 1px solid rgba(104, 240, 200, 0.3);
+  border-radius: 16px;
+  padding: 1rem;
+  min-height: 110px;
+}
+
+.plane-card {
+  background: #10181a;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.25rem;
+  min-height: 220px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}

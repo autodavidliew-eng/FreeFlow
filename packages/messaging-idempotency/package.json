@@ -1,0 +1,21 @@
+{
+  "name": "@freeflow/messaging-idempotency",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@freeflow/db-postgres": "workspace:*",
+    "@nestjs/common": "^10.3.0",
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "@freeflow/config": "workspace:*",
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3"
+  }
+}

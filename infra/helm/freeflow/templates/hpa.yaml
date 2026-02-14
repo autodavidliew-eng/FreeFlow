@@ -1,0 +1,27 @@
+{{- range $name, $component := .Values.components }}
+{{- if and $component.enabled $component.autoscaling $component.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "freeflow.componentFullname" (list $ $name) }}
+  labels:
+    app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ $name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "freeflow.componentFullname" (list $ $name) }}
+  minReplicas: {{ $component.autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ $component.autoscaling.maxReplicas | default 3 }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ $component.autoscaling.targetCPUUtilizationPercentage | default 70 }}
+---
+{{- end }}
+{{- end }}

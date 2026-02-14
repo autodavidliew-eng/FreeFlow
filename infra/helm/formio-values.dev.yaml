@@ -1,0 +1,53 @@
+# Starter values for a minimal Form.io Helm chart (dev).
+# Adjust keys to match your chart implementation.
+
+image:
+  repository: formio/formio-enterprise
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 3001
+
+env:
+  MONGO_URL: mongodb://formio_user:formio_user_password@mongodb:27017/formio?authSource=admin
+  MONGO_HIGH_AVAILABILITY: "false"
+  FORMIO_FILES_SERVER: "https://api.form.io"
+  PORTAL_ENABLED: "true"
+  PRIMARY: "true"
+  PROJECT_TEMPLATE: ""
+  ROOT_EMAIL: admin@example.com
+  ROOT_PASSWORD: admin
+
+secretEnv:
+  JWT_SECRET: change-me
+  DB_SECRET: change-me
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+ingress:
+  enabled: false
+  className: ""
+  host: formio.local
+
+pdfServer:
+  enabled: false
+  image:
+    repository: replace-with-pdf-server-image
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 4005
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"

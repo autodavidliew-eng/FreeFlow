@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://freeflow.local/schemas/task.completed.v1.json",
+  "title": "task.completed",
+  "allOf": [
+    { "$ref": "event-base.json" },
+    {
+      "type": "object",
+      "properties": {
+        "type": { "const": "task.completed" },
+        "version": { "const": 1 },
+        "subject": {
+          "type": "object",
+          "required": ["type", "id"],
+          "properties": {
+            "type": { "const": "task" },
+            "id": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "data": {
+          "type": "object",
+          "required": ["taskId", "completedBy"],
+          "properties": {
+            "taskId": { "type": "string" },
+            "completedBy": { "type": "string" },
+            "completedAt": { "type": "string", "format": "date-time" },
+            "resolution": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

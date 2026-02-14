@@ -1,0 +1,57 @@
+# Starter values for camunda/camunda-platform (dev).
+# Verify keys against the chart version you install.
+
+global:
+  image:
+    tag: "8.4.0"
+  ingress:
+    enabled: false
+
+zeebe:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 10Gi
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "512Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+
+operate:
+  enabled: true
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+tasklist:
+  enabled: true
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+elasticsearch:
+  enabled: true
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 20Gi
+
+optimize:
+  enabled: false
+
+webModeler:
+  enabled: false
+
+identity:
+  enabled: false

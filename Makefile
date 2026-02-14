@@ -1,4 +1,4 @@
-.PHONY: help install up down restart logs ps health reset clean seed test dev prod status backup
+.PHONY: help install up down restart logs ps health reset clean seed test dev prod status backup restore
 
 # Default target
 .DEFAULT_GOAL := help
@@ -186,6 +186,11 @@ backup: ## Backup databases
 	@cd $(COMPOSE_DIR) && $(MAKE) backup-postgres
 	@cd $(COMPOSE_DIR) && $(MAKE) backup-mongodb
 	@echo "$(GREEN)✓ Backups created in infra/compose/backups/$(NC)"
+
+restore: ## Restore databases from latest backups
+	@echo "$(BLUE)Restoring databases...$(NC)"
+	@cd $(COMPOSE_DIR) && $(MAKE) restore
+	@echo "$(GREEN)✓ Databases restored$(NC)"
 
 # ============================================================================
 # Database Shells

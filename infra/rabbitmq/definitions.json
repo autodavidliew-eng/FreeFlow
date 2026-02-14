@@ -6,9 +6,11 @@
   "users": [
     {
       "name": "freeflow",
-      "password_hash": "gZLlJrKsNFhOXpH/vJVnVPsLJLy9GhZvVx8x6W3qTEPzX8xD",
+      "password_hash": "/mcXRFF/HXwF7T2QNi6a6fjvJmQv+/CIpBy/97aAqUETounk",
       "hashing_algorithm": "rabbit_password_hashing_sha256",
-      "tags": ["administrator"],
+      "tags": [
+        "administrator"
+      ],
       "limits": {}
     }
   ],
@@ -126,6 +128,290 @@
         "x-dead-letter-exchange": "freeflow.events.dlx",
         "x-dead-letter-routing-key": "dlq"
       }
+    },
+    {
+      "name": "freeflow.user.retry.30s",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 30000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "user.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.user.retry.5m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 300000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "user.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.user.retry.30m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 1800000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "user.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.auth.retry.30s",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 30000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "auth.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.auth.retry.5m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 300000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "auth.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.auth.retry.30m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 1800000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "auth.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.document.retry.30s",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 30000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "document.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.document.retry.5m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 300000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "document.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.document.retry.30m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 1800000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "document.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.workflow.retry.30s",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 30000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "workflow.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.workflow.retry.5m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 300000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "workflow.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.workflow.retry.30m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 1800000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "workflow.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.notification.retry.30s",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 30000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "notification.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.notification.retry.5m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 300000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "notification.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.notification.retry.30m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 1800000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "notification.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.audit.retry.30s",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 30000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "audit.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.audit.retry.5m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 300000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "audit.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.audit.retry.30m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 1800000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "audit.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.alarms.queue",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "freeflow.events.dlx",
+        "x-dead-letter-routing-key": "dlq"
+      }
+    },
+    {
+      "name": "freeflow.alarm.retry.30s",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 30000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "alarm.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.alarm.retry.5m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 300000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "alarm.retry",
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "freeflow.alarm.retry.30m",
+      "vhost": "/freeflow",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic",
+        "x-message-ttl": 1800000,
+        "x-dead-letter-exchange": "freeflow.events",
+        "x-dead-letter-routing-key": "alarm.retry",
+        "x-max-length": 10000
+      }
     }
   ],
   "exchanges": [
@@ -140,6 +426,15 @@
     },
     {
       "name": "freeflow.events.dlx",
+      "vhost": "/freeflow",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "freeflow.events.retry",
       "vhost": "/freeflow",
       "type": "direct",
       "durable": true,
@@ -203,6 +498,182 @@
       "destination": "freeflow.events.dlq",
       "destination_type": "queue",
       "routing_key": "dlq",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.user.retry.30s",
+      "destination_type": "queue",
+      "routing_key": "user.30s",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.user.retry.5m",
+      "destination_type": "queue",
+      "routing_key": "user.5m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.user.retry.30m",
+      "destination_type": "queue",
+      "routing_key": "user.30m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.auth.retry.30s",
+      "destination_type": "queue",
+      "routing_key": "auth.30s",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.auth.retry.5m",
+      "destination_type": "queue",
+      "routing_key": "auth.5m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.auth.retry.30m",
+      "destination_type": "queue",
+      "routing_key": "auth.30m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.document.retry.30s",
+      "destination_type": "queue",
+      "routing_key": "document.30s",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.document.retry.5m",
+      "destination_type": "queue",
+      "routing_key": "document.5m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.document.retry.30m",
+      "destination_type": "queue",
+      "routing_key": "document.30m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.workflow.retry.30s",
+      "destination_type": "queue",
+      "routing_key": "workflow.30s",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.workflow.retry.5m",
+      "destination_type": "queue",
+      "routing_key": "workflow.5m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.workflow.retry.30m",
+      "destination_type": "queue",
+      "routing_key": "workflow.30m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.notification.retry.30s",
+      "destination_type": "queue",
+      "routing_key": "notification.30s",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.notification.retry.5m",
+      "destination_type": "queue",
+      "routing_key": "notification.5m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.notification.retry.30m",
+      "destination_type": "queue",
+      "routing_key": "notification.30m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.audit.retry.30s",
+      "destination_type": "queue",
+      "routing_key": "audit.30s",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.audit.retry.5m",
+      "destination_type": "queue",
+      "routing_key": "audit.5m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.audit.retry.30m",
+      "destination_type": "queue",
+      "routing_key": "audit.30m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events",
+      "vhost": "/freeflow",
+      "destination": "freeflow.alarms.queue",
+      "destination_type": "queue",
+      "routing_key": "alarm.*",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.alarm.retry.30s",
+      "destination_type": "queue",
+      "routing_key": "alarm.30s",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.alarm.retry.5m",
+      "destination_type": "queue",
+      "routing_key": "alarm.5m",
+      "arguments": {}
+    },
+    {
+      "source": "freeflow.events.retry",
+      "vhost": "/freeflow",
+      "destination": "freeflow.alarm.retry.30m",
+      "destination_type": "queue",
+      "routing_key": "alarm.30m",
       "arguments": {}
     }
   ]

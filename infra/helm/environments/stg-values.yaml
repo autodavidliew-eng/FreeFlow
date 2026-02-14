@@ -1,0 +1,28 @@
+# Staging overrides for FreeFlow (pin to a git-sha tag)
+components:
+  web:
+    image:
+      tag: "<git-sha>"
+  api:
+    image:
+      tag: "<git-sha>"
+    env:
+      DATABASE_URL: "postgresql://<user>:<pass>@<host>:5432/freeflow"
+      MONGODB_URI: "mongodb+srv://<user>:<pass>@<host>/freeflow"
+      RABBITMQ_URL: "amqps://<user>:<pass>@<host>/<vhost>"
+  dashboard:
+    image:
+      tag: "<git-sha>"
+    env:
+      DATABASE_URL: "postgresql://<user>:<pass>@<host>:5432/freeflow"
+      MONGODB_URI: "mongodb+srv://<user>:<pass>@<host>/freeflow"
+  alarm:
+    image:
+      tag: "<git-sha>"
+    env:
+      RABBITMQ_URL: "amqps://<user>:<pass>@<host>/<vhost>"
+  inbox:
+    image:
+      tag: "<git-sha>"
+    env:
+      RABBITMQ_URL: "amqps://<user>:<pass>@<host>/<vhost>"

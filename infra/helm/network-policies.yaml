@@ -1,0 +1,60 @@
+# Starter NetworkPolicy for FreeFlow namespace (ingress-only baseline).
+# Adjust labels and ports to match your Helm chart.
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress: []
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web-to-api
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: web
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: api
+      ports:
+        - protocol: TCP
+          port: 3001
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api-to-services
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: api
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: dashboard
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: alarm
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: inbox
+      ports:
+        - protocol: TCP
+          port: 4101
+        - protocol: TCP
+          port: 4102
+        - protocol: TCP
+          port: 4103

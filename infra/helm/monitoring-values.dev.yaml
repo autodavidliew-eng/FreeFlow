@@ -1,0 +1,22 @@
+# Starter values for kube-prometheus-stack (dev).
+# Adjust keys to match the chart version you install.
+
+prometheus:
+  enabled: true
+  prometheusSpec:
+    retention: 7d
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+
+grafana:
+  enabled: true
+  adminPassword: "change-me"
+
+alertmanager:
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true

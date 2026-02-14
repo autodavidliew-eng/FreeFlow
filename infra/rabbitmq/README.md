@@ -60,6 +60,7 @@ This configuration provides a complete RabbitMQ topology with:
 | Queue | Routing Keys | DLX Enabled | Purpose |
 |-------|--------------|-------------|---------|
 | `freeflow.users.queue` | `user.*`, `auth.*` | ✅ | User & auth events |
+| `freeflow.alarms.queue` | `alarm.*` | ✅ | Alarm events |
 | `freeflow.documents.queue` | `document.*` | ✅ | Document events |
 | `freeflow.workflows.queue` | `workflow.*` | ✅ | Workflow events |
 | `freeflow.notifications.queue` | `notification.*` | ✅ | Notification events |
@@ -165,6 +166,11 @@ rabbitmqadmin -u freeflow -p freeflow_dev_password -V /freeflow \
   declare queue name=freeflow.users.queue durable=true \
   arguments='{"x-dead-letter-exchange":"freeflow.events.dlx","x-dead-letter-routing-key":"dlq"}'
 
+# Alarms queue
+rabbitmqadmin -u freeflow -p freeflow_dev_password -V /freeflow \
+  declare queue name=freeflow.alarms.queue durable=true \
+  arguments='{"x-dead-letter-exchange":"freeflow.events.dlx","x-dead-letter-routing-key":"dlq"}'
+
 # Documents queue
 rabbitmqadmin -u freeflow -p freeflow_dev_password -V /freeflow \
   declare queue name=freeflow.documents.queue durable=true \
@@ -222,6 +228,11 @@ rabbitmqadmin -u freeflow -p freeflow_dev_password -V /freeflow \
 rabbitmqadmin -u freeflow -p freeflow_dev_password -V /freeflow \
   declare binding source=freeflow.events destination=freeflow.audit.queue \
   routing_key="#"
+
+# Bind alarms queue
+rabbitmqadmin -u freeflow -p freeflow_dev_password -V /freeflow \
+  declare binding source=freeflow.events destination=freeflow.alarms.queue \
+  routing_key="alarm.*"
 ```
 
 ## How Dead Letter Exchange (DLX) Works
@@ -500,6 +511,7 @@ Use these routing key patterns when publishing events:
 |---------|---------|--------|
 | `user.*` | `user.created`, `user.updated`, `user.deleted` | users, audit |
 | `auth.*` | `auth.login`, `auth.logout`, `auth.failed` | users, audit |
+| `alarm.*` | `alarm.raised`, `alarm.acknowledged` | alarms, audit |
 | `document.*` | `document.uploaded`, `document.viewed` | documents, audit |
 | `workflow.*` | `workflow.started`, `workflow.completed` | workflows, audit |
 | `notification.*` | `notification.sent`, `notification.failed` | notifications, audit |

@@ -1,0 +1,24 @@
+{
+  "name": "@freeflow/outbox-postgres",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@freeflow/db-postgres": "workspace:*",
+    "@freeflow/messaging-rabbitmq": "workspace:*",
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/microservices": "^10.3.0",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@freeflow/config": "workspace:*",
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3"
+  }
+}

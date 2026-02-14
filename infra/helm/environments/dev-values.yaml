@@ -1,0 +1,22 @@
+# Dev overrides for FreeFlow (uses :latest tags)
+components:
+  web:
+    image:
+      repository: ghcr.io/OWNER/REPO-web
+      tag: latest
+  api:
+    image:
+      repository: ghcr.io/OWNER/REPO-api
+      tag: latest
+  dashboard:
+    image:
+      repository: ghcr.io/OWNER/REPO-dashboard-service
+      tag: latest
+  alarm:
+    image:
+      repository: ghcr.io/OWNER/REPO-alarm-service
+      tag: latest
+  inbox:
+    image:
+      repository: ghcr.io/OWNER/REPO-inbox-service
+      tag: latest

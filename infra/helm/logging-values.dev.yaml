@@ -1,0 +1,22 @@
+# Starter values for a Loki + Promtail Helm chart (dev).
+# Adjust keys to match your chosen chart (loki or loki-stack).
+
+loki:
+  enabled: true
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: filesystem
+  persistence:
+    enabled: true
+    size: 10Gi
+
+promtail:
+  enabled: true
+  config:
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+
+grafana:
+  enabled: false

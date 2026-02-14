@@ -241,6 +241,7 @@ make status       # Show service URLs
 # Database
 make seed         # Seed databases (placeholder)
 make backup       # Backup databases
+make restore      # Restore databases from latest backups
 make db-postgres  # Open PostgreSQL shell
 make db-mongodb   # Open MongoDB shell
 make db-redis     # Open Redis CLI

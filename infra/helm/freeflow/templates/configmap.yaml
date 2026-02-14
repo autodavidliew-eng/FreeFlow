@@ -1,0 +1,17 @@
+{{- range $name, $component := .Values.components }}
+{{- if and $component.enabled $component.config }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "freeflow.componentFullname" (list $ $name) }}
+  labels:
+    app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ $name }}
+data:
+  {{- range $key, $value := $component.config }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}

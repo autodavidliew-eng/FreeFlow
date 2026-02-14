@@ -1,0 +1,96 @@
+{{- range $name, $component := .Values.components }}
+{{- if $component.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "freeflow.componentFullname" (list $ $name) }}
+  labels:
+    app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ $name }}
+spec:
+  replicas: {{ $component.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+      app.kubernetes.io/component: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+        app.kubernetes.io/instance: {{ $.Release.Name }}
+        app.kubernetes.io/component: {{ $name }}
+    spec:
+      serviceAccountName: {{ include "freeflow.componentServiceAccountName" (list $ $name $component) }}
+      {{- with $.Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ $name }}
+          image: "{{ $component.image.repository }}:{{ $component.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $component.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: {{ $component.port }}
+              name: http
+          {{- if and $component.probes $component.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ $component.probes.liveness.path | default "/health" }}
+              port: http
+            initialDelaySeconds: {{ $component.probes.liveness.initialDelaySeconds | default 15 }}
+            periodSeconds: {{ $component.probes.liveness.periodSeconds | default 20 }}
+          readinessProbe:
+            httpGet:
+              path: {{ $component.probes.readiness.path | default "/health" }}
+              port: http
+            initialDelaySeconds: {{ $component.probes.readiness.initialDelaySeconds | default 5 }}
+            periodSeconds: {{ $component.probes.readiness.periodSeconds | default 10 }}
+          startupProbe:
+            httpGet:
+              path: {{ $component.probes.startup.path | default "/health" }}
+              port: http
+            failureThreshold: {{ $component.probes.startup.failureThreshold | default 20 }}
+            periodSeconds: {{ $component.probes.startup.periodSeconds | default 5 }}
+          {{- end }}
+          env:
+            {{- range $key, $value := $.Values.global.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- range $key, $value := $component.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- if or $component.config $component.secretEnv $component.existingSecret }}
+          envFrom:
+            {{- if $component.config }}
+            - configMapRef:
+                name: {{ include "freeflow.componentFullname" (list $ $name) }}
+            {{- end }}
+            {{- if $component.existingSecret }}
+            - secretRef:
+                name: {{ $component.existingSecret }}
+            {{- else if $component.secretEnv }}
+            - secretRef:
+                name: {{ include "freeflow.componentFullname" (list $ $name) }}
+            {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml $component.resources | nindent 12 }}
+      {{- with $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+{{- end }}
+{{- end }}

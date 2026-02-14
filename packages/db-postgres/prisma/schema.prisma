@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id        String            @id @default(uuid())
+  externalId String           @unique
+  email     String?           @unique
+  name      String?
+  roles     String[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  dashboardLayouts DashboardLayout[]
+  widgetConfigs    WidgetConfig[]
+}
+
+model DashboardLayout {
+  id        String       @id @default(uuid())
+  userId    String
+  name      String
+  isDefault Boolean      @default(true)
+  version   Int          @default(1)
+  layout    Json
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  user      UserProfile  @relation(fields: [userId], references: [id])
+  widgets   WidgetConfig[]
+
+  @@index([userId])
+}
+
+model WidgetConfig {
+  id                String          @id @default(uuid())
+  userId            String
+  dashboardLayoutId String?
+  widgetId          String
+  instanceId        String
+  title             String?
+  size              String?
+  options           Json?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  user              UserProfile     @relation(fields: [userId], references: [id])
+  dashboardLayout   DashboardLayout? @relation(fields: [dashboardLayoutId], references: [id])
+
+  @@index([userId])
+  @@index([dashboardLayoutId])
+  @@unique([userId, instanceId])
+}
+
+model ProcessedEvent {
+  id          String   @id @default(uuid())
+  eventId     String
+  consumer    String
+  payloadHash String?
+  processedAt DateTime @default(now())
+
+  @@unique([eventId, consumer])
+  @@index([consumer])
+}
+
+model OutboxEvent {
+  id          String       @id @default(uuid())
+  eventType   String
+  payload     Json
+  headers     Json?
+  status      OutboxStatus @default(PENDING)
+  attempts    Int          @default(0)
+  availableAt DateTime     @default(now())
+  lastError   String?
+  createdAt   DateTime     @default(now())
+  processedAt DateTime?
+
+  @@index([status, availableAt])
+  @@index([createdAt])
+}
+
+enum OutboxStatus {
+  PENDING
+  PROCESSING
+  PUBLISHED
+  FAILED
+}

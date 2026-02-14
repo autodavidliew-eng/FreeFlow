@@ -1,0 +1,253 @@
+global:
+  imagePullSecrets: []
+  env: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+components:
+  web:
+    enabled: true
+    replicas: 1
+    image:
+      repository: ghcr.io/OWNER/REPO-web
+      tag: latest
+      pullPolicy: IfNotPresent
+    port: 3000
+    service:
+      type: ClusterIP
+      port: 3000
+    env:
+      API_URL: http://freeflow-api:3001
+    config: {}
+    secretEnv: {}
+    existingSecret: ""
+    serviceAccount:
+      create: true
+      name: ""
+      annotations: {}
+    probes:
+      enabled: true
+      liveness:
+        path: /
+        initialDelaySeconds: 15
+        periodSeconds: 20
+      readiness:
+        path: /
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      startup:
+        path: /
+        failureThreshold: 20
+        periodSeconds: 5
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      enabled: false
+      minAvailable: 1
+
+  api:
+    enabled: true
+    replicas: 1
+    image:
+      repository: ghcr.io/OWNER/REPO-api
+      tag: latest
+      pullPolicy: IfNotPresent
+    port: 3001
+    service:
+      type: ClusterIP
+      port: 3001
+    env: {}
+    config: {}
+    secretEnv: {}
+    existingSecret: ""
+    serviceAccount:
+      create: true
+      name: ""
+      annotations: {}
+    probes:
+      enabled: true
+      liveness:
+        path: /health
+        initialDelaySeconds: 15
+        periodSeconds: 20
+      readiness:
+        path: /health
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      startup:
+        path: /health
+        failureThreshold: 20
+        periodSeconds: 5
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      enabled: false
+      minAvailable: 1
+
+  dashboard:
+    enabled: true
+    replicas: 1
+    image:
+      repository: ghcr.io/OWNER/REPO-dashboard-service
+      tag: latest
+      pullPolicy: IfNotPresent
+    port: 4101
+    service:
+      type: ClusterIP
+      port: 4101
+    env: {}
+    config: {}
+    secretEnv: {}
+    existingSecret: ""
+    serviceAccount:
+      create: true
+      name: ""
+      annotations: {}
+    probes:
+      enabled: true
+      liveness:
+        path: /health
+        initialDelaySeconds: 15
+        periodSeconds: 20
+      readiness:
+        path: /health
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      startup:
+        path: /health
+        failureThreshold: 20
+        periodSeconds: 5
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      enabled: false
+      minAvailable: 1
+
+  alarm:
+    enabled: true
+    replicas: 1
+    image:
+      repository: ghcr.io/OWNER/REPO-alarm-service
+      tag: latest
+      pullPolicy: IfNotPresent
+    port: 4102
+    service:
+      type: ClusterIP
+      port: 4102
+    env: {}
+    config: {}
+    secretEnv: {}
+    existingSecret: ""
+    serviceAccount:
+      create: true
+      name: ""
+      annotations: {}
+    probes:
+      enabled: true
+      liveness:
+        path: /health
+        initialDelaySeconds: 15
+        periodSeconds: 20
+      readiness:
+        path: /health
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      startup:
+        path: /health
+        failureThreshold: 20
+        periodSeconds: 5
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      enabled: false
+      minAvailable: 1
+
+  inbox:
+    enabled: true
+    replicas: 1
+    image:
+      repository: ghcr.io/OWNER/REPO-inbox-service
+      tag: latest
+      pullPolicy: IfNotPresent
+    port: 4103
+    service:
+      type: ClusterIP
+      port: 4103
+    env: {}
+    config: {}
+    secretEnv: {}
+    existingSecret: ""
+    serviceAccount:
+      create: true
+      name: ""
+      annotations: {}
+    probes:
+      enabled: true
+      liveness:
+        path: /health
+        initialDelaySeconds: 15
+        periodSeconds: 20
+      readiness:
+        path: /health
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      startup:
+        path: /health
+        failureThreshold: 20
+        periodSeconds: 5
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      enabled: false
+      minAvailable: 1
+      limits:
+        cpu: 500m
+        memory: 512Mi

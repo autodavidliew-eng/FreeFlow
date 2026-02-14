@@ -1,0 +1,42 @@
+# Production overrides for FreeFlow (pin to SemVer tags)
+components:
+  web:
+    image:
+      tag: "vX.Y.Z"
+    replicas: 2
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+  api:
+    image:
+      tag: "vX.Y.Z"
+    replicas: 2
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+  dashboard:
+    image:
+      tag: "vX.Y.Z"
+    replicas: 2
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+  alarm:
+    image:
+      tag: "vX.Y.Z"
+    replicas: 2
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+  inbox:
+    image:
+      tag: "vX.Y.Z"
+    replicas: 2
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://freeflow.local/schemas/alarm.raised.v1.json",
+  "title": "alarm.raised",
+  "allOf": [
+    { "$ref": "event-base.json" },
+    {
+      "type": "object",
+      "properties": {
+        "type": { "const": "alarm.raised" },
+        "version": { "const": 1 },
+        "subject": {
+          "type": "object",
+          "required": ["type", "id"],
+          "properties": {
+            "type": { "const": "alarm" },
+            "id": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "data": {
+          "type": "object",
+          "required": ["alarmId", "severity", "message"],
+          "properties": {
+            "alarmId": { "type": "string" },
+            "severity": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "critical"]
+            },
+            "message": { "type": "string" },
+            "assetId": { "type": "string" },
+            "tags": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

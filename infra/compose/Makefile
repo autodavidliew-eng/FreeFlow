@@ -1,4 +1,4 @@
-.PHONY: help up down restart logs ps clean reset health shell-postgres shell-mongo shell-redis backup restore camunda formio all
+.PHONY: help up down restart logs ps clean reset health shell-postgres shell-mongo shell-redis backup restore camunda formio all backup-postgres backup-mongodb restore-postgres restore-mongodb
 
 # Default target
 .DEFAULT_GOAL := help
@@ -150,6 +150,20 @@ restore-postgres: ## Restore PostgreSQL from latest backup
 	fi; \
 	docker compose exec -T postgres psql -U freeflow -d freeflow < $$LATEST
 	@echo "$(GREEN)✓ PostgreSQL restored$(NC)"
+
+restore-mongodb: ## Restore MongoDB from latest backup
+	@echo "$(BLUE)Restoring MongoDB...$(NC)"
+	@LATEST=$$(ls -t ./backups/mongodb_*.dump | head -1); \
+	if [ -z "$$LATEST" ]; then \
+		echo "$(RED)No backup found$(NC)"; \
+		exit 1; \
+	fi; \
+	cat $$LATEST | docker compose exec -T mongodb mongorestore --username=freeflow --password=freeflow_dev_password --authenticationDatabase=admin --db=freeflow --archive
+	@echo "$(GREEN)✓ MongoDB restored$(NC)"
+
+restore: ## Restore PostgreSQL and MongoDB from latest backups
+	@$(MAKE) restore-postgres
+	@$(MAKE) restore-mongodb
 
 # Update images
 pull: ## Pull latest images

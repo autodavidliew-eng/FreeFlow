@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
+import { JwtAuthGuard } from '@freeflow/auth';
+import { PermissionGuard, PermissionsService } from '@freeflow/rbac';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AlarmsModule } from './modules/alarms/alarms.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { InboxModule } from './modules/inbox/inbox.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
-  imports: [],
+  imports: [DashboardModule, AlarmsModule, InboxModule, UserModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtAuthGuard, PermissionGuard, PermissionsService],
 })
 export class AppModule {}

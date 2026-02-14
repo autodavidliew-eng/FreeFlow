@@ -1,0 +1,24 @@
+{{- range $name, $component := .Values.components }}
+{{- if and $component.enabled $component.service }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "freeflow.componentFullname" (list $ $name) }}
+  labels:
+    app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ $name }}
+spec:
+  type: {{ $component.service.type | default "ClusterIP" }}
+  ports:
+    - port: {{ $component.service.port | default $component.port }}
+      targetPort: {{ $component.port }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ $name }}
+---
+{{- end }}
+{{- end }}

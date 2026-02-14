@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://freeflow.local/schemas/task.created.v1.json",
+  "title": "task.created",
+  "allOf": [
+    { "$ref": "event-base.json" },
+    {
+      "type": "object",
+      "properties": {
+        "type": { "const": "task.created" },
+        "version": { "const": 1 },
+        "subject": {
+          "type": "object",
+          "required": ["type", "id"],
+          "properties": {
+            "type": { "const": "task" },
+            "id": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "data": {
+          "type": "object",
+          "required": ["taskId", "title", "priority"],
+          "properties": {
+            "taskId": { "type": "string" },
+            "title": { "type": "string" },
+            "priority": {
+              "type": "string",
+              "enum": ["low", "medium", "high"]
+            },
+            "assignedTo": { "type": "string" },
+            "dueAt": { "type": "string", "format": "date-time" },
+            "source": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

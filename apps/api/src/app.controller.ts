@@ -1,4 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@freeflow/auth';
+import { PermissionGuard, RequirePermission } from '@freeflow/rbac';
+import type { HealthResponse } from '@freeflow/shared';
 import { AppService } from './app.service';
 
 @Controller()
@@ -11,11 +14,21 @@ export class AppController {
   }
 
   @Get('health')
-  getHealth() {
+  getHealth(): HealthResponse {
     return {
       status: 'ok',
-      service: 'api',
+      service: 'api-gateway',
       timestamp: new Date().toISOString(),
+    };
+  }
+
+  @UseGuards(JwtAuthGuard, PermissionGuard)
+  @RequirePermission('documents:read')
+  @Get('documents')
+  getDocuments() {
+    return {
+      items: [],
+      message: 'RBAC-protected endpoint placeholder.',
     };
   }
 }

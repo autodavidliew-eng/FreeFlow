@@ -1,0 +1,20 @@
+{{- range $name, $component := .Values.components }}
+{{- if and $component.enabled $component.pdb $component.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "freeflow.componentFullname" (list $ $name) }}
+  labels:
+    app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ $name }}
+spec:
+  minAvailable: {{ $component.pdb.minAvailable | default 1 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "freeflow.name" $ }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+      app.kubernetes.io/component: {{ $name }}
+---
+{{- end }}
+{{- end }}
