@@ -54,6 +54,89 @@ const widgetCatalog = [
   },
 ];
 
+const appCatalog = [
+  {
+    appKey: 'contractor',
+    name: 'Contractor',
+    icon: 'users',
+    launchUrl: '/apps/contractor',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'electric-meter',
+    name: 'Electric Meter',
+    icon: 'bolt',
+    launchUrl: '/apps/electric-meter',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'equipment-management',
+    name: 'Equipment Management',
+    icon: 'tool',
+    launchUrl: '/apps/equipment-management',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'operation-scheduler',
+    name: 'Operation Scheduler',
+    icon: 'calendar',
+    launchUrl: '/apps/operation-scheduler',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'report',
+    name: 'Report',
+    icon: 'file-text',
+    launchUrl: '/apps/report',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'rule-engine',
+    name: 'Rule Engine',
+    icon: 'sliders',
+    launchUrl: '/apps/rule-engine',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'scene-management',
+    name: 'Scene Management',
+    icon: 'layers',
+    launchUrl: '/apps/scene-management',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'user',
+    name: 'User Management',
+    icon: 'user',
+    launchUrl: '/apps/user',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'water-meter',
+    name: 'Water Meter',
+    icon: 'droplet',
+    launchUrl: '/apps/water-meter',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
+    appKey: 'system-configuration',
+    name: 'System Configuration',
+    icon: 'settings',
+    launchUrl: '/apps/system-configuration',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+];
+
 const baseLayout: LayoutSeed = {
   name: 'Operations Dashboard',
   layout: {
@@ -231,6 +314,29 @@ async function seedWidgetCatalog() {
   }
 }
 
+async function seedAppCatalog() {
+  for (const entry of appCatalog) {
+    await prisma.appCatalog.upsert({
+      where: { appKey: entry.appKey },
+      update: {
+        name: entry.name,
+        icon: entry.icon,
+        launchUrl: entry.launchUrl,
+        integrationMode: entry.integrationMode,
+        enabled: entry.enabled,
+      },
+      create: {
+        appKey: entry.appKey,
+        name: entry.name,
+        icon: entry.icon,
+        launchUrl: entry.launchUrl,
+        integrationMode: entry.integrationMode,
+        enabled: entry.enabled,
+      },
+    });
+  }
+}
+
 async function seedRoleLayouts() {
   const layouts = [
     { role: 'Admin', seed: baseLayout },
@@ -258,6 +364,7 @@ async function seedRoleLayouts() {
 
 async function main() {
   await seedWidgetCatalog();
+  await seedAppCatalog();
   await seedRoleLayouts();
 
   for (const user of users) {

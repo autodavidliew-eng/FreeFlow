@@ -68,6 +68,19 @@ model WidgetCatalog {
   @@index([type])
 }
 
+model AppCatalog {
+  appKey          String   @id
+  name            String
+  icon            String?
+  launchUrl       String
+  integrationMode String
+  enabled         Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([enabled])
+}
+
 model RoleDashboardLayout {
   id        String   @id @default(uuid())
   role      String   @unique
