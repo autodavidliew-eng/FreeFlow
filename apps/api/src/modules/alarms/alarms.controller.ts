@@ -1,8 +1,13 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '@freeflow/auth';
+import {
+  CurrentUser,
+  JwtAuthGuard,
+  type AuthenticatedUser,
+} from '@freeflow/auth';
 import { PermissionGuard, RequirePermission } from '@freeflow/rbac';
-import type { AlarmListResponseDto } from './dto/alarm.dto';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+
 import { AlarmsService } from './alarms.service';
+import type { AlarmListResponseDto } from './dto/alarm.dto';
 
 @Controller('alarms')
 export class AlarmsController {
@@ -11,7 +16,9 @@ export class AlarmsController {
   @UseGuards(JwtAuthGuard, PermissionGuard)
   @RequirePermission('alarms:read')
   @Get()
-  getAlarms(): AlarmListResponseDto {
-    return this.alarmsService.getAlarms();
+  getAlarms(
+    @CurrentUser() user: AuthenticatedUser
+  ): Promise<AlarmListResponseDto> {
+    return this.alarmsService.getAlarms(user);
   }
 }

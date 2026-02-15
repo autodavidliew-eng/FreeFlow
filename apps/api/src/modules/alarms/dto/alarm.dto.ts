@@ -1,5 +1,7 @@
 export type AlarmDto = {
   id: string;
+  siteId: string;
+  siteName: string;
   label: string;
   severity: 'Low' | 'Medium' | 'High';
   status: 'active' | 'acknowledged' | 'resolved';
