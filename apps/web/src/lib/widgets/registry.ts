@@ -2,11 +2,12 @@ import {
   AlarmListWidget,
   ALARM_WIDGET_ID,
 } from '../../components/widgets/AlarmListWidget';
-import {
-  ChartPlaneWidget,
-  CHART_WIDGET_ID,
-} from '../../components/widgets/ChartPlaneWidget';
 import { KpiWidget, KPI_WIDGET_ID } from '../../components/widgets/KpiWidget';
+import {
+  LineChartWidget,
+  LINE_CHART_WIDGET_ID,
+} from '../../components/widgets/LineChartWidget';
+
 import type { WidgetRegistry } from './types';
 
 export const widgetRegistry: WidgetRegistry = {
@@ -17,11 +18,11 @@ export const widgetRegistry: WidgetRegistry = {
     component: KpiWidget,
     defaultSize: 'full',
   },
-  [CHART_WIDGET_ID]: {
-    id: CHART_WIDGET_ID,
+  [LINE_CHART_WIDGET_ID]: {
+    id: LINE_CHART_WIDGET_ID,
     displayName: 'Load Distribution',
-    description: 'Chart view of peak utilization across assets.',
-    component: ChartPlaneWidget,
+    description: 'Chart view of daily energy and water usage.',
+    component: LineChartWidget,
     defaultSize: 'half',
   },
   [ALARM_WIDGET_ID]: {

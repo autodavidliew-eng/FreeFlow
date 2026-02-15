@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-import type { DashboardLayout } from './types';
+import type {
+  DashboardLayout,
+  WidgetCatalogItem,
+  WidgetCatalogResponse,
+} from './types';
 
 const widgetSizeSchema = z.enum(['full', 'half', 'third']);
 
@@ -17,15 +21,53 @@ export const widgetSectionSchema = z.object({
   title: z.string().optional(),
   layout: z.enum(['grid', 'stack']).optional(),
   columns: z.number().int().min(1).max(4).optional(),
-  widgets: z.array(widgetConfigSchema).min(1),
+  widgets: z.array(widgetConfigSchema).default([]),
 });
 
 export const dashboardLayoutSchema = z.object({
   version: z.number().int().min(1),
-  sections: z.array(widgetSectionSchema).min(1),
+  sections: z.array(widgetSectionSchema).default([]),
 });
 
-const mockDashboardLayout: DashboardLayout = {
+export const widgetCatalogItemSchema = z.object({
+  key: z.string().min(1),
+  name: z.string().min(1),
+  type: z.string().min(1),
+  defaultConfig: z.record(z.unknown()).nullable().optional(),
+});
+
+export const widgetCatalogResponseSchema = z.object({
+  items: z.array(widgetCatalogItemSchema).default([]),
+  total: z.number().int().default(0),
+});
+
+export const fallbackWidgetCatalog: WidgetCatalogItem[] = [
+  {
+    key: 'kpi-widget',
+    name: 'Key Metrics',
+    type: 'kpi',
+    defaultConfig: { emphasis: 'summary' },
+  },
+  {
+    key: 'chart-widget',
+    name: 'Load Distribution',
+    type: 'chart',
+    defaultConfig: { series: ['Energy', 'Water'] },
+  },
+  {
+    key: 'alarm-widget',
+    name: 'Active Alarms',
+    type: 'alarm-list',
+    defaultConfig: { severities: ['high', 'medium', 'low'] },
+  },
+];
+
+export const fallbackWidgetCatalogResponse: WidgetCatalogResponse = {
+  items: fallbackWidgetCatalog,
+  total: fallbackWidgetCatalog.length,
+};
+
+export const fallbackDashboardLayout: DashboardLayout = {
   version: 1,
   sections: [
     {
@@ -60,8 +102,3 @@ const mockDashboardLayout: DashboardLayout = {
     },
   ],
 };
-
-export async function getDashboardLayout(): Promise<DashboardLayout> {
-  // TODO: Replace with backend fetch once the gateway endpoint exists.
-  return dashboardLayoutSchema.parse(mockDashboardLayout);
-}

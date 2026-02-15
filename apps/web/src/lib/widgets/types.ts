@@ -38,3 +38,15 @@ export type WidgetRegistryEntry = {
 };
 
 export type WidgetRegistry = Record<string, WidgetRegistryEntry>;
+
+export type WidgetCatalogItem = {
+  key: string;
+  name: string;
+  type: string;
+  defaultConfig?: Record<string, unknown> | null;
+};
+
+export type WidgetCatalogResponse = {
+  items: WidgetCatalogItem[];
+  total: number;
+};

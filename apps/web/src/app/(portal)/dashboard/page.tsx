@@ -1,9 +1,13 @@
+import {
+  ROLE_KEYS,
+  getAllowedWidgets,
+  type RoleKey,
+} from '@freeflow/rbac-config';
 import { redirect } from 'next/navigation';
 
 import { WidgetRenderer } from '../../../components/dashboard/WidgetRenderer';
 import { readSession } from '../../../lib/auth/session';
-import { getAllowedWidgetsForRoles, hasKnownRole } from '../../../lib/rbac';
-import { getDashboardLayout } from '../../../lib/widgets/schema';
+import { getDashboardData } from '../../../lib/widgets/data';
 
 export default async function DashboardPage() {
   const session = await readSession();
@@ -13,41 +17,37 @@ export default async function DashboardPage() {
   }
 
   const roles = session.roles ?? [];
-  const hasRoleAccess = await hasKnownRole(roles);
+  const hasRoleAccess = roles.some((role) =>
+    ROLE_KEYS.includes(role as RoleKey)
+  );
   if (!hasRoleAccess) {
     redirect('/403');
   }
 
-  const allowedWidgets = await getAllowedWidgetsForRoles(roles);
-  const layout = await getDashboardLayout();
-  const visibleWidgetCount = layout.sections.reduce((count, section) => {
-    const visible = section.widgets.filter((widget) =>
-      allowedWidgets.has(widget.widgetId)
-    );
-    return count + visible.length;
-  }, 0);
-  const hasWidgets = visibleWidgetCount > 0;
+  const { layout, catalog, source } = await getDashboardData(
+    session.accessToken
+  );
+  const allowedByRole = new Set<string>(getAllowedWidgets(roles));
+  const catalogKeys = new Set(catalog.map((item) => item.key));
+  const allowedWidgets =
+    catalogKeys.size > 0
+      ? new Set(Array.from(allowedByRole).filter((key) => catalogKeys.has(key)))
+      : allowedByRole;
+
+  const hasWidgets = layout.sections.some((section) =>
+    section.widgets.some((widget) => allowedWidgets.has(widget.widgetId))
+  );
 
   return (
-    <div style={{ display: 'grid', gap: '1.5rem' }}>
-      <section
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+    <div className="ff-dashboard-shell">
+      <section className="ff-dashboard-header">
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 600 }}>
-            Operations Dashboard
-          </h1>
-          <p style={{ color: 'var(--muted)' }}>
-            Role-gated widgets based on your access profile.
-          </p>
+          <div className="ff-dashboard-title">SSA Main Dashboard</div>
+          <div className="ff-dashboard-subtitle">
+            Riverside Primary School • Source: {source}
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <div className="ff-dashboard-roles">
           {roles.length === 0 ? (
             <span className="pill">No roles assigned</span>
           ) : (
@@ -61,10 +61,7 @@ export default async function DashboardPage() {
       </section>
 
       {!hasWidgets ? (
-        <div
-          className="plane-card"
-          style={{ textAlign: 'center', color: 'var(--muted)' }}
-        >
+        <div className="ff-empty-state">
           No dashboard widgets are available for your role set.
         </div>
       ) : (

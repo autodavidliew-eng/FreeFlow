@@ -1,36 +1,48 @@
+import type { WidgetRenderProps } from '../../lib/widgets/types';
+import { WidgetFrame } from '../dashboard/WidgetFrame';
+
 export const ALARM_WIDGET_ID = 'alarm-widget';
 
 const alarms = [
-  { label: 'Cooling loop pressure low', severity: 'High' },
-  { label: 'Generator A maintenance due', severity: 'Medium' },
-  { label: 'Network latency spike', severity: 'Low' },
+  { label: 'Maximum demand current exceeded', severity: 'High', time: '09:42' },
+  {
+    label: 'Power utilization above baseline',
+    severity: 'Medium',
+    time: '10:18',
+  },
+  { label: 'Pump telemetry latency spike', severity: 'Low', time: '11:05' },
 ];
 
-export function AlarmListWidget() {
+const severityClass: Record<string, string> = {
+  High: 'is-high',
+  Medium: 'is-medium',
+  Low: 'is-low',
+};
+
+export function AlarmListWidget({ config }: WidgetRenderProps) {
   return (
-    <section
-      data-widget-id={ALARM_WIDGET_ID}
-      className="plane-card"
-      style={{ display: 'grid', gap: '0.75rem' }}
+    <WidgetFrame
+      title="Active Alarms"
+      subtitle="Alert feed"
+      widgetId={config?.widgetId ?? ALARM_WIDGET_ID}
+      variant="list"
+      footer="Last updated 2 min ago"
     >
-      <div className="section-title">Active Alarms</div>
-      <ul style={{ listStyle: 'none', display: 'grid', gap: '0.5rem' }}>
+      <div className="ff-alarm-list">
         {alarms.map((alarm) => (
-          <li
-            key={alarm.label}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              gap: '0.75rem',
-              paddingBottom: '0.5rem',
-              borderBottom: '1px solid var(--border)',
-            }}
-          >
-            <span>{alarm.label}</span>
-            <span style={{ color: 'var(--accent)' }}>{alarm.severity}</span>
-          </li>
+          <div key={alarm.label} className="ff-alarm-item">
+            <div>
+              <div className="ff-alarm-title">{alarm.label}</div>
+              <div className="ff-alarm-time">{alarm.time}</div>
+            </div>
+            <span
+              className={`ff-alarm-chip ${severityClass[alarm.severity] ?? ''}`}
+            >
+              {alarm.severity}
+            </span>
+          </div>
         ))}
-      </ul>
-    </section>
+      </div>
+    </WidgetFrame>
   );
 }

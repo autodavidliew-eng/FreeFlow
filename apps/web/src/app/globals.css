@@ -38,8 +38,17 @@ body {
 }
 
 body {
-  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  background: radial-gradient(1200px 900px at 10% -15%, #1c2f3f 0%, #0c141b 55%, #0a1016 100%);
+  font-family:
+    'Space Grotesk',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: radial-gradient(
+    1200px 900px at 10% -15%,
+    #1c2f3f 0%,
+    #0c141b 55%,
+    #0a1016 100%
+  );
   color: var(--text);
 }
 
@@ -94,7 +103,11 @@ a {
 }
 
 .kpi-card {
-  background: linear-gradient(145deg, rgba(104, 240, 200, 0.12), rgba(121, 167, 255, 0.08));
+  background: linear-gradient(
+    145deg,
+    rgba(104, 240, 200, 0.12),
+    rgba(121, 167, 255, 0.08)
+  );
   border: 1px solid rgba(104, 240, 200, 0.3);
   border-radius: 16px;
   padding: 1rem;
@@ -180,7 +193,10 @@ a {
   border: 1px solid var(--ff-border);
   background: rgba(14, 24, 34, 0.65);
   color: var(--ff-text);
-  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .ff-icon-button:hover {
@@ -341,7 +357,9 @@ a {
   padding: 0.55rem 0.8rem;
   border-radius: 12px;
   color: var(--ff-muted);
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .ff-sidenav__link.is-active {
@@ -413,6 +431,230 @@ a {
 .ff-icon {
   font-size: 0.95rem;
   line-height: 1;
+}
+
+.ff-dashboard-shell {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.ff-dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.ff-dashboard-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.ff-dashboard-subtitle {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.ff-dashboard-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ff-dashboard {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.ff-dashboard-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.ff-dashboard-section__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ff-dashboard-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.ff-widget {
+  background: #10181a;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.25rem;
+  min-height: 180px;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.ff-widget__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ff-widget__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ff-widget__subtitle {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.ff-widget__meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.ff-widget__body {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.ff-widget__footer {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.ff-empty-state {
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.ff-kpi-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.ff-kpi-card {
+  background: linear-gradient(
+    145deg,
+    rgba(104, 240, 200, 0.12),
+    rgba(121, 167, 255, 0.08)
+  );
+  border: 1px solid rgba(104, 240, 200, 0.3);
+  border-radius: 16px;
+  padding: 1rem;
+  min-height: 110px;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.ff-kpi-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.ff-kpi-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.ff-kpi-delta {
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.ff-alarm-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.ff-alarm-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.ff-alarm-title {
+  font-size: 0.95rem;
+}
+
+.ff-alarm-time {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.ff-alarm-chip {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid transparent;
+}
+
+.ff-alarm-chip.is-high {
+  color: #ff8f7a;
+  border-color: rgba(255, 143, 122, 0.4);
+  background: rgba(255, 143, 122, 0.15);
+}
+
+.ff-alarm-chip.is-medium {
+  color: #f2b05d;
+  border-color: rgba(242, 176, 93, 0.4);
+  background: rgba(242, 176, 93, 0.15);
+}
+
+.ff-alarm-chip.is-low {
+  color: #6ba5ff;
+  border-color: rgba(107, 165, 255, 0.4);
+  background: rgba(107, 165, 255, 0.15);
+}
+
+.ff-chart-shell {
+  position: relative;
+  height: 180px;
+  border-radius: 16px;
+  background: linear-gradient(
+    120deg,
+    rgba(104, 240, 200, 0.15),
+    rgba(121, 167, 255, 0.1)
+  );
+  border: 1px solid rgba(104, 240, 200, 0.25);
+  overflow: hidden;
+}
+
+.ff-chart-svg {
+  position: absolute;
+  inset: 0;
+}
+
+.ff-chart-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+}
+
+.ff-chart-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 @media (max-width: 1024px) {

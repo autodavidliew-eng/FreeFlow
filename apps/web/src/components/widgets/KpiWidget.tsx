@@ -1,40 +1,32 @@
+import type { WidgetRenderProps } from '../../lib/widgets/types';
+import { WidgetFrame } from '../dashboard/WidgetFrame';
+
 export const KPI_WIDGET_ID = 'kpi-widget';
 
 const kpis = [
-  { label: 'Flow Rate', value: '92%', delta: '+4.2%' },
-  { label: 'Energy Use', value: '1.2 MW', delta: '-1.1%' },
-  { label: 'Active Tasks', value: '36', delta: '+8' },
-  { label: 'Alerts', value: '3', delta: '-2' },
+  { label: 'Daily Energy', value: '0.00 kWh', delta: '+0.4%' },
+  { label: 'Water Usage', value: '0.0 L', delta: '+1.1%' },
+  { label: 'Power Factor', value: '0.94', delta: '+0.02' },
+  { label: 'Active Devices', value: '12', delta: '+2' },
 ];
 
-export function KpiWidget() {
+export function KpiWidget({ config }: WidgetRenderProps) {
   return (
-    <section
-      data-widget-id={KPI_WIDGET_ID}
-      style={{ display: 'grid', gap: '0.75rem' }}
+    <WidgetFrame
+      title="Key Metrics"
+      subtitle="Riverside Primary School"
+      widgetId={config?.widgetId ?? KPI_WIDGET_ID}
+      variant="kpi"
     >
-      <div className="section-title">Key Metrics</div>
-      <div
-        style={{
-          display: 'grid',
-          gap: '1rem',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-        }}
-      >
+      <div className="ff-kpi-grid">
         {kpis.map((kpi) => (
-          <div key={kpi.label} className="kpi-card">
-            <div style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-              {kpi.label}
-            </div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 600 }}>
-              {kpi.value}
-            </div>
-            <div style={{ color: 'var(--accent)', fontSize: '0.8rem' }}>
-              {kpi.delta}
-            </div>
+          <div key={kpi.label} className="ff-kpi-card">
+            <div className="ff-kpi-label">{kpi.label}</div>
+            <div className="ff-kpi-value">{kpi.value}</div>
+            <div className="ff-kpi-delta">{kpi.delta}</div>
           </div>
         ))}
       </div>
-    </section>
+    </WidgetFrame>
   );
 }
