@@ -1,17 +1,16 @@
-import { CardPanel } from '../../../components/layout/CardPanel';
+import { AlarmsView } from '../../../components/alarms/AlarmsView';
 import { PageContainer } from '../../../components/layout/PageContainer';
+import { getAlarms } from '../../../lib/alarms/client';
 
-export default function AlarmsPage() {
+export default async function AlarmsPage() {
+  const alarms = await getAlarms();
+
   return (
     <PageContainer
       title="Alarms & Alerts"
-      subtitle="Track critical events across your monitored assets."
+      subtitle="Monitor alarms, acknowledge issues, and track resolution status."
     >
-      <CardPanel>
-        <p style={{ color: 'var(--ff-muted)' }}>
-          Alarm listing UI will be implemented in P6.1.
-        </p>
-      </CardPanel>
+      <AlarmsView alarms={alarms} />
     </PageContainer>
   );
 }
