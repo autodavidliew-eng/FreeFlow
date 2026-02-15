@@ -5,8 +5,8 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 
 ## Status
 
-- Current phase: P2.1 (Keycloak OIDC)
-- Status: P1.2 completed
+- Current phase: P2.2 (JWT RBAC)
+- Status: P2.1 completed
 - Last updated: 2026-02-15
 
 ## Phases
@@ -14,7 +14,7 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 - P0.1 — Import UI reference pack into repo: DONE
 - P1.1 — UI theme + primitives (dark portal style): DONE
 - P1.2 — AppShell (TopBar + SideNav + content layout): DONE
-- P2.1 — Keycloak OIDC integration (Auth Code + PKCE)
+- P2.1 — Keycloak OIDC integration (Auth Code + PKCE): DONE
 - P2.2 — JWT RBAC source-of-truth spec
 - P3.1 — Master tenant database (registry)
 - P3.2 — Provision tenant (create realm + DBs + seed + folders)
