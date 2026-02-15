@@ -20,12 +20,16 @@
   "dependencies": {
     "@freeflow/auth": "workspace:*",
     "@freeflow/db-master": "workspace:*",
+    "@freeflow/db-mongo": "workspace:*",
+    "@freeflow/db-postgres": "workspace:*",
+    "@freeflow/db-qdrant": "workspace:*",
     "@freeflow/tenant-provisioning": "workspace:*",
     "@freeflow/rbac": "workspace:*",
     "@freeflow/shared": "workspace:*",
     "@nestjs/common": "^10.3.0",
     "@nestjs/core": "^10.3.0",
     "@nestjs/platform-express": "^10.3.0",
+    "mongoose": "^8.12.2",
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1"
   },

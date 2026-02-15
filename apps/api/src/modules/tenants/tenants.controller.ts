@@ -1,3 +1,5 @@
+import { JwtAuthGuard } from '@freeflow/auth';
+import { PermissionGuard, RequirePermission } from '@freeflow/rbac';
 import {
   Body,
   Controller,
@@ -6,6 +8,7 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 import { TenantCreateRequestDto } from './dto/tenant.dto';
@@ -13,6 +16,8 @@ import type { TenantDto, TenantListResponseDto } from './dto/tenant.dto';
 import { TenantRegistryService } from './tenant-registry.service';
 
 @Controller('tenants')
+@UseGuards(JwtAuthGuard, PermissionGuard)
+@RequirePermission('system:*')
 export class TenantsController {
   constructor(private readonly tenantRegistry: TenantRegistryService) {}
 

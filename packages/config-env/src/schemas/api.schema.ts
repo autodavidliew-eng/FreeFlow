@@ -35,6 +35,30 @@ export const ApiEnvSchema = BaseEnvSchema.extend({
     .default(10)
     .describe('Database connection pool size'),
 
+  MONGODB_URI: z
+    .string()
+    .regex(/^mongodb(\+srv)?:\/\//, 'Must be a MongoDB connection string')
+    .describe('MongoDB connection string'),
+
+  QDRANT_URL: z.string().url().describe('Qdrant base URL'),
+
+  QDRANT_API_KEY: z.string().optional().describe('Qdrant API key (optional)'),
+
+  TENANT_BASE_DOMAIN: z
+    .string()
+    .optional()
+    .describe('Base domain for tenant subdomain resolution'),
+
+  TENANT_HEADER_NAME: z
+    .string()
+    .default('x-tenant-id')
+    .describe('HTTP header name used for tenant resolution'),
+
+  TENANT_HEADER_ENABLED: z.coerce
+    .boolean()
+    .default(true)
+    .describe('Enable tenant resolution via header'),
+
   // Redis (optional for caching)
   REDIS_URL: z
     .string()

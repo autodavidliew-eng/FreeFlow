@@ -24,7 +24,11 @@ Source prompt: `/home/vapt/Desktop/Vibe-code - FreeFlow Business Workflow MultiT
   - Added `TenantRemovalService` with soft/hard delete modes and safety checks.
   - Exposed `DELETE /tenants/:id?mode=soft|hard&force=true`.
   - Added `scripts/remove-tenant.ts`, `scripts/cleanup-tenants.ts`, and `docs/multitenant-removal.md`.
-- MT-4 (Runtime Tenant Resolution): **NOT STARTED**
+- MT-4 (Runtime Tenant Resolution): **DONE**
+  - Added request middleware to resolve tenant via header, subdomain, or realm.
+  - Added AsyncLocalStorage-backed tenant context.
+  - Added tenant-aware Postgres, Mongo, and Qdrant factories.
+  - Documented runtime resolution in `docs/multitenant-runtime-resolution.md`.
 - MT-5 (Integration Tests): **NOT STARTED**
 - Keycloak Admin Client Package: **DONE**
 
@@ -32,4 +36,4 @@ Source prompt: `/home/vapt/Desktop/Vibe-code - FreeFlow Business Workflow MultiT
 
 - Current architecture doc covers lifecycle states, master DB schema, naming helpers,
   and runtime tenant resolution strategy with ASCII diagrams.
-- Last updated: 2026-02-15. MT-2 and MT-3 implemented with CLI support.
+- Last updated: 2026-02-15. MT-4 implemented with middleware + factories.
