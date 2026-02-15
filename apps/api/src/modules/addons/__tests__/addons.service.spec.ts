@@ -1,5 +1,6 @@
 import type { AuthenticatedUser } from '@freeflow/auth';
 
+import type { TenantContextService } from '../../tenants/tenant-context';
 import type { TenantPostgresFactory } from '../../tenants/tenant-data.factory';
 import { AddonsService } from '../addons.service';
 
@@ -47,7 +48,11 @@ describe('AddonsService', () => {
       getClient: () => prisma,
     } as unknown as TenantPostgresFactory;
 
-    const service = new AddonsService(tenantFactory);
+    const tenantContext = {
+      require: jest.fn(),
+    } as unknown as TenantContextService;
+
+    const service = new AddonsService(tenantFactory, tenantContext);
 
     const user: AuthenticatedUser = {
       sub: 'viewer-1',
