@@ -579,6 +579,106 @@ a {
   gap: 0.75rem;
 }
 
+.ff-apps-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.ff-apps-panel {
+  min-height: 320px;
+}
+
+.ff-apps-loading {
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.ff-apps-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.ff-app-card {
+  width: 100%;
+  font: inherit;
+  appearance: none;
+  border: 1px solid var(--ff-border-strong);
+  background: rgba(11, 19, 28, 0.65);
+  border-radius: 16px;
+  padding: 1.1rem 0.9rem;
+  color: var(--ff-text);
+  display: grid;
+  gap: 0.4rem;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ff-app-card:hover {
+  border-color: rgba(70, 210, 198, 0.6);
+  transform: translateY(-2px);
+  box-shadow: var(--ff-shadow-soft);
+}
+
+.ff-app-card:focus-visible {
+  outline: 2px solid rgba(70, 210, 198, 0.8);
+  outline-offset: 2px;
+}
+
+.ff-app-card:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ff-app-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(70, 210, 198, 0.16);
+  border: 1px solid rgba(70, 210, 198, 0.4);
+  color: var(--ff-accent);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.ff-app-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.ff-app-key {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.ff-app-mode {
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.ff-toast {
+  justify-self: end;
+  padding: 0.55rem 0.9rem;
+  background: rgba(70, 210, 198, 0.15);
+  border: 1px solid rgba(70, 210, 198, 0.4);
+  border-radius: 10px;
+  color: var(--ff-text);
+  box-shadow: var(--ff-shadow-soft);
+}
+
 .ff-alarm-item {
   display: flex;
   align-items: center;

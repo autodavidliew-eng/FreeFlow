@@ -1,17 +1,22 @@
-import { CardPanel } from '../../../components/layout/CardPanel';
-import { PageContainer } from '../../../components/layout/PageContainer';
+import { redirect } from 'next/navigation';
 
-export default function ApplicationsPage() {
+import { ApplicationsView } from '../../../components/applications/ApplicationsView';
+import { PageContainer } from '../../../components/layout/PageContainer';
+import { readSession } from '../../../lib/auth/session';
+
+export default async function ApplicationsPage() {
+  const session = await readSession();
+
+  if (!session) {
+    redirect('/auth/login');
+  }
+
   return (
     <PageContainer
       title="Applications"
-      subtitle="Launch available add-ons and operational tools."
+      subtitle="Launch role-based add-ons and operational tools."
     >
-      <CardPanel>
-        <p style={{ color: 'var(--ff-muted)' }}>
-          Application tiles and handoff flow will be implemented in P7.3.
-        </p>
-      </CardPanel>
+      <ApplicationsView />
     </PageContainer>
   );
 }
