@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 
-import { WidgetRenderer } from '../../components/dashboard/WidgetRenderer';
-import { readSession } from '../../lib/auth/session';
-import { getAllowedWidgetsForRoles, hasKnownRole } from '../../lib/rbac';
-import { getDashboardLayout } from '../../lib/widgets/schema';
+import { WidgetRenderer } from '../../../components/dashboard/WidgetRenderer';
+import { readSession } from '../../../lib/auth/session';
+import { getAllowedWidgetsForRoles, hasKnownRole } from '../../../lib/rbac';
+import { getDashboardLayout } from '../../../lib/widgets/schema';
 
 export default async function DashboardPage() {
   const session = await readSession();

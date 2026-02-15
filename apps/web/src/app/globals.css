@@ -193,3 +193,234 @@ a {
   border-color: var(--ff-accent);
   color: var(--ff-accent);
 }
+
+.ff-portal {
+  min-height: 100vh;
+  background: radial-gradient(900px 600px at 5% -10%, #1d3142 0%, #0c141b 60%);
+  color: var(--ff-text);
+}
+
+.ff-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 1.75rem;
+  background: rgba(12, 20, 27, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--ff-border);
+}
+
+.ff-topbar__left,
+.ff-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ff-topbar__center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.ff-page-chip {
+  padding: 0.4rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(21, 36, 51, 0.9);
+  border: 1px solid var(--ff-border-strong);
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+}
+
+.ff-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ff-brand__badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--ff-accent), var(--ff-accent-cool));
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+  color: #0c141b;
+}
+
+.ff-brand__name {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.ff-brand__meta {
+  font-size: 0.8rem;
+  color: var(--ff-muted);
+}
+
+.ff-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--ff-border);
+  background: rgba(17, 29, 39, 0.85);
+  color: var(--ff-text);
+  font-size: 0.85rem;
+}
+
+.ff-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(70, 210, 198, 0.2);
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  color: var(--ff-accent);
+  font-weight: 600;
+}
+
+.ff-quick-icons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ff-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 1.75rem 2rem;
+}
+
+.ff-shell.is-collapsed {
+  grid-template-columns: 86px 1fr;
+}
+
+.ff-sidenav {
+  background: rgba(12, 22, 31, 0.95);
+  border: 1px solid var(--ff-border);
+  border-radius: 18px;
+  padding: 1.25rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 75vh;
+}
+
+.ff-sidenav__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+}
+
+.ff-sidenav__title {
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ff-muted);
+}
+
+.ff-sidenav__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ff-sidenav__link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 12px;
+  color: var(--ff-muted);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.ff-sidenav__link.is-active {
+  background: rgba(70, 210, 198, 0.12);
+  color: var(--ff-text);
+}
+
+.ff-sidenav__link:hover {
+  background: rgba(21, 36, 51, 0.9);
+  color: var(--ff-text);
+}
+
+.ff-sidenav__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ff-accent);
+  opacity: 0.7;
+}
+
+.ff-sidenav__label {
+  font-size: 0.9rem;
+}
+
+.ff-sidenav.is-collapsed .ff-sidenav__label {
+  display: none;
+}
+
+.ff-sidenav.is-collapsed .ff-sidenav__title {
+  display: none;
+}
+
+.ff-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ff-user-menu {
+  position: relative;
+}
+
+.ff-user-menu__dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  min-width: 160px;
+  background: var(--ff-bg-panel);
+  border: 1px solid var(--ff-border);
+  border-radius: 12px;
+  padding: 0.4rem;
+  box-shadow: var(--ff-shadow-soft);
+}
+
+.ff-user-menu__item {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--ff-text);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.ff-user-menu__item:hover {
+  background: rgba(70, 210, 198, 0.12);
+}
+
+.ff-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+@media (max-width: 1024px) {
+  .ff-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .ff-sidenav {
+    min-height: auto;
+  }
+}
