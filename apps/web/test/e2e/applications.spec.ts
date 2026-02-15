@@ -57,6 +57,8 @@ test.describe('Applications', () => {
     const handoffRequest = page.waitForRequest('**/api/addons/handoff');
 
     await page.goto('/applications');
+    await expect(page.getByText('Report')).toBeVisible();
+    await expect(page.getByText('Rule Engine')).not.toBeVisible();
     await page.getByRole('button', { name: /report/i }).click();
 
     const request = await handoffRequest;

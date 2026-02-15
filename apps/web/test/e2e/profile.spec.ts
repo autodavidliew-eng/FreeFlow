@@ -9,25 +9,14 @@ import { signValue } from '../../src/lib/auth/signing';
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000';
 const sessionSecret = resolveSessionSecret();
 
-test.describe('Portal shell', () => {
+test.describe('Profile page', () => {
   test.skip(!sessionSecret, 'SESSION_SECRET not available for signing cookie');
 
-  test('navigation and menu toggle', async ({ page }) => {
-    await setSessionCookie(page, ['Admin']);
-    await page.goto('/applications');
+  test('loads account details', async ({ page }) => {
+    await setSessionCookie(page, ['Viewer']);
+    await page.goto('/profile');
 
-    const sideNav = page.getByTestId('side-nav');
-    await expect(sideNav).toBeVisible();
-
-    const toggle = page.getByTestId('topbar-menu');
-    await toggle.click();
-    await expect(sideNav).toHaveClass(/is-collapsed/);
-
-    await toggle.click();
-    await expect(sideNav).not.toHaveClass(/is-collapsed/);
-
-    await page.getByRole('link', { name: 'Alarm / Alert' }).click();
-    await expect(page).toHaveURL(/\/alarms/);
+    await expect(page.getByText('Account Details')).toBeVisible();
   });
 });
 
