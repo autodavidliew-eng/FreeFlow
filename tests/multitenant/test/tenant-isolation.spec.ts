@@ -245,18 +245,22 @@ describe('Multi-tenant isolation (MT-5)', () => {
     const tenantAUrl = buildDatabaseUrl(adminPostgresUrl, tenantA.postgresDb);
     const tenantBUrl = buildDatabaseUrl(adminPostgresUrl, tenantB.postgresDb);
 
+    const testExternalId = `test-${tenantAName}`;
+    const testEmail = `${testExternalId}@freeflow.local`;
+
     const tenantAClient = new Client({ connectionString: tenantAUrl });
     await tenantAClient.connect();
     await tenantAClient.query(
-      'INSERT INTO "UserProfile" ("externalId", "email", "name", "roles") VALUES ($1, $2, $3, $4)',
-      ['user-admin', 'admin@freeflow.local', 'Admin', ['Admin']]
+      'INSERT INTO "UserProfile" ("externalId", "email", "name", "roles", "updatedAt") VALUES ($1, $2, $3, $4, NOW())',
+      [testExternalId, testEmail, 'Admin', ['Admin']]
     );
     await tenantAClient.end();
 
     const tenantBClient = new Client({ connectionString: tenantBUrl });
     await tenantBClient.connect();
     const countResult = await tenantBClient.query(
-      'SELECT COUNT(*) FROM "UserProfile"'
+      'SELECT COUNT(*) FROM "UserProfile" WHERE "externalId" = $1',
+      [testExternalId]
     );
     await tenantBClient.end();
 

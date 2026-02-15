@@ -32,6 +32,13 @@ export const runTenantMigrations = async (input: {
 }): Promise<void> => {
   await runCommand(
     'pnpm',
+    ['--filter', '@freeflow/db-postgres', 'db:generate'],
+    { DATABASE_URL: input.databaseUrl },
+    input.repoRoot
+  );
+
+  await runCommand(
+    'pnpm',
     ['--filter', '@freeflow/db-postgres', 'db:deploy'],
     { DATABASE_URL: input.databaseUrl },
     input.repoRoot
