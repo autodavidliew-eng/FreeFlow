@@ -9,7 +9,9 @@ export default function ForbiddenPage() {
           Your account does not have permission to view this page.
         </p>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
+      <div
+        style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}
+      >
         <Link
           href="/auth/login"
           style={{

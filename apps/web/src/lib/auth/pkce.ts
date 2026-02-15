@@ -1,4 +1,5 @@
 import { createHash, randomBytes } from 'crypto';
+
 import { base64UrlEncode } from './encoding';
 
 export function generateCodeVerifier(): string {

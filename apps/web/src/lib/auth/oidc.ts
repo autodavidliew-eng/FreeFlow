@@ -16,7 +16,7 @@ export async function getDiscovery(): Promise<OidcDiscovery> {
   const authConfig = getAuthConfig();
   const res = await fetch(
     `${authConfig.issuer}/.well-known/openid-configuration`,
-    { cache: 'force-cache' },
+    { cache: 'force-cache' }
   );
 
   if (!res.ok) {
@@ -29,7 +29,7 @@ export async function getDiscovery(): Promise<OidcDiscovery> {
 
 export async function buildAuthorizationUrl(
   state: string,
-  codeChallenge: string,
+  codeChallenge: string
 ): Promise<string> {
   const authConfig = getAuthConfig();
   const discovery = await getDiscovery();
@@ -46,10 +46,7 @@ export async function buildAuthorizationUrl(
   return url.toString();
 }
 
-export async function exchangeCodeForToken(
-  code: string,
-  codeVerifier: string,
-) {
+export async function exchangeCodeForToken(code: string, codeVerifier: string) {
   const authConfig = getAuthConfig();
   const discovery = await getDiscovery();
   const body = new URLSearchParams({
@@ -93,7 +90,7 @@ export async function buildLogoutUrl(idTokenHint?: string) {
   }
   url.searchParams.set(
     'post_logout_redirect_uri',
-    authConfig.postLogoutRedirectUri,
+    authConfig.postLogoutRedirectUri
   );
   return url.toString();
 }

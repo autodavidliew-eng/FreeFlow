@@ -13,7 +13,7 @@ let cachedConfig: AuthConfig | null = null;
 
 const missing = (name: string) => {
   throw new Error(
-    `Missing ${name}. Set it in apps/web/.env.local for local development.`,
+    `Missing ${name}. Set it in apps/web/.env.local for local development.`
   );
 };
 
@@ -27,8 +27,7 @@ export function getAuthConfig(): AuthConfig {
   cachedConfig = {
     issuer: process.env.KEYCLOAK_ISSUER ?? missing('KEYCLOAK_ISSUER'),
     clientId: process.env.KEYCLOAK_ID ?? missing('KEYCLOAK_ID'),
-    redirectUri:
-      process.env.KEYCLOAK_REDIRECT_URI ?? `${appUrl}/auth/callback`,
+    redirectUri: process.env.KEYCLOAK_REDIRECT_URI ?? `${appUrl}/auth/callback`,
     postLogoutRedirectUri:
       process.env.KEYCLOAK_POST_LOGOUT_REDIRECT_URI ?? `${appUrl}/`,
     sessionSecret: process.env.SESSION_SECRET ?? missing('SESSION_SECRET'),

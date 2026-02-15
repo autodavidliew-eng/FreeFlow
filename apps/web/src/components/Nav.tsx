@@ -20,7 +20,8 @@ export function Nav() {
             width: 38,
             height: 38,
             borderRadius: 12,
-            background: 'linear-gradient(135deg, var(--accent), var(--accent-2))',
+            background:
+              'linear-gradient(135deg, var(--accent), var(--accent-2))',
           }}
         />
         <div>

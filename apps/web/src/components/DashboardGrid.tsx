@@ -45,7 +45,9 @@ export function DashboardGrid() {
       >
         <div className="plane-card">
           <div className="section-title">System Load</div>
-          <div style={{ height: 140, borderRadius: 12, background: '#0b1214' }} />
+          <div
+            style={{ height: 140, borderRadius: 12, background: '#0b1214' }}
+          />
         </div>
         <div className="plane-card">
           <div className="section-title">Alarm Watch</div>

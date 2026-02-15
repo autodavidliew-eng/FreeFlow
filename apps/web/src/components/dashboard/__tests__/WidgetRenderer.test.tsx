@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { WidgetRenderer } from '../WidgetRenderer';
+
 import type { DashboardLayout } from '../../../lib/widgets/types';
+import { WidgetRenderer } from '../WidgetRenderer';
 
 describe('WidgetRenderer', () => {
   const layout: DashboardLayout = {
@@ -46,6 +47,8 @@ describe('WidgetRenderer', () => {
     };
 
     render(<WidgetRenderer layout={unknownLayout} />);
-    expect(screen.getByText('Unknown widget: unknown-widget')).toBeInTheDocument();
+    expect(
+      screen.getByText('Unknown widget: unknown-widget')
+    ).toBeInTheDocument();
   });
 });

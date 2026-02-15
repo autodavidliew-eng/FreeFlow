@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import 'server-only';
 
 import { readFile } from 'node:fs/promises';
@@ -37,7 +38,7 @@ function mergeActions(target: Set<string>, incoming: string[]) {
 }
 
 export async function getWidgetPermissionsForRoles(
-  roles: string[],
+  roles: string[]
 ): Promise<WidgetPermissions> {
   const permissions = await loadPermissions();
   const matrix = permissions.permissionMatrix ?? {};
@@ -67,7 +68,7 @@ export async function getWidgetPermissionsForRoles(
 }
 
 export async function getAllowedWidgetsForRoles(
-  roles: string[],
+  roles: string[]
 ): Promise<Set<string>> {
   const widgetPermissions = await getWidgetPermissionsForRoles(roles);
   const allowed = new Set<string>();
