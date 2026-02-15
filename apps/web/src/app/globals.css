@@ -1,15 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
 
 :root {
-  --bg: #0f1517;
-  --bg-elev: #141c1f;
-  --bg-panel: #182124;
-  --accent: #68f0c8;
-  --accent-2: #79a7ff;
-  --text: #e8f1f2;
-  --muted: #9fb3b9;
-  --border: #243036;
-  --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  --ff-bg: #0c141b;
+  --ff-bg-elev: #111d27;
+  --ff-bg-panel: #152433;
+  --ff-bg-soft: #1a2b3a;
+  --ff-accent: #46d2c6;
+  --ff-accent-warm: #f2995d;
+  --ff-accent-cool: #6ba5ff;
+  --ff-text: #e6eef6;
+  --ff-muted: #9bb0c4;
+  --ff-border: #223446;
+  --ff-border-strong: #2f4358;
+  --ff-shadow-lg: 0 30px 60px rgba(3, 7, 12, 0.55);
+  --ff-shadow-soft: 0 16px 32px rgba(3, 7, 12, 0.35);
+
+  --bg: var(--ff-bg);
+  --bg-elev: var(--ff-bg-elev);
+  --bg-panel: var(--ff-bg-panel);
+  --accent: var(--ff-accent);
+  --accent-2: var(--ff-accent-cool);
+  --text: var(--ff-text);
+  --muted: var(--ff-muted);
+  --border: var(--ff-border);
+  --shadow: var(--ff-shadow-lg);
 }
 
 * {
@@ -25,7 +39,7 @@ body {
 
 body {
   font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  background: radial-gradient(1200px 800px at 10% -10%, #1c2f31 0%, #0f1517 55%, #0b1012 100%);
+  background: radial-gradient(1200px 900px at 10% -15%, #1c2f3f 0%, #0c141b 55%, #0a1016 100%);
   color: var(--text);
 }
 
@@ -102,4 +116,80 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 0.75rem;
+}
+
+.ff-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: calc(100vh - 120px);
+}
+
+.ff-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ff-page-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.ff-page-subtitle {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.ff-card-panel {
+  background: var(--ff-bg-panel);
+  border: 1px solid var(--ff-border);
+  border-radius: 18px;
+  padding: 1.25rem 1.4rem;
+  box-shadow: var(--ff-shadow-soft);
+}
+
+.ff-card-panel.is-outline {
+  background: transparent;
+  border-color: var(--ff-border-strong);
+}
+
+.ff-card-panel.is-soft {
+  background: var(--ff-bg-soft);
+}
+
+.ff-section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ff-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--ff-border);
+  background: rgba(14, 24, 34, 0.65);
+  color: var(--ff-text);
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.ff-icon-button:hover {
+  border-color: var(--ff-accent);
+  transform: translateY(-1px);
+}
+
+.ff-icon-button.is-active {
+  background: rgba(70, 210, 198, 0.18);
+  border-color: var(--ff-accent);
+  color: var(--ff-accent);
 }
