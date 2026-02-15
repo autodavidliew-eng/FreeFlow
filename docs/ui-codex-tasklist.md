@@ -5,8 +5,8 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 
 ## Status
 
-- Current phase: P2.2 (JWT RBAC)
-- Status: P2.1 completed
+- Current phase: P3.1 (Master tenant database)
+- Status: P2.2 completed
 - Last updated: 2026-02-15
 
 ## Phases
@@ -15,7 +15,7 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 - P1.1 — UI theme + primitives (dark portal style): DONE
 - P1.2 — AppShell (TopBar + SideNav + content layout): DONE
 - P2.1 — Keycloak OIDC integration (Auth Code + PKCE): DONE
-- P2.2 — JWT RBAC source-of-truth spec
+- P2.2 — JWT RBAC source-of-truth spec: DONE
 - P3.1 — Master tenant database (registry)
 - P3.2 — Provision tenant (create realm + DBs + seed + folders)
 - P3.3 — Deprovision tenant (soft/hard delete)

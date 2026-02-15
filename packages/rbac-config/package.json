@@ -1,0 +1,19 @@
+{
+  "name": "@freeflow/rbac-config",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./roles.ts",
+  "types": "./roles.ts",
+  "scripts": {
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@freeflow/config": "workspace:*",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.11.19",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  }
+}
