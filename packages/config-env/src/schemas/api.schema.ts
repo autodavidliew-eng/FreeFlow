@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { BaseEnvSchema } from './base.schema';
 
 /**
@@ -20,6 +21,12 @@ export const ApiEnvSchema = BaseEnvSchema.extend({
     .url()
     .startsWith('postgresql://', 'Must be a PostgreSQL connection string')
     .describe('PostgreSQL connection string'),
+
+  MASTER_DATABASE_URL: z
+    .string()
+    .url()
+    .startsWith('postgresql://', 'Must be a PostgreSQL connection string')
+    .describe('Master tenant registry PostgreSQL connection string'),
 
   DB_POOL_SIZE: z.coerce
     .number()

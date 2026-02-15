@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@freeflow/auth": "workspace:*",
+    "@freeflow/db-master": "workspace:*",
     "@freeflow/rbac": "workspace:*",
     "@freeflow/shared": "workspace:*",
     "@nestjs/common": "^10.3.0",

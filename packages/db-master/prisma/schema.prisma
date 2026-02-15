@@ -1,0 +1,69 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("MASTER_DATABASE_URL")
+}
+
+enum TenantStatus {
+  provisioning
+  active
+  suspended
+  deleting
+  deleted
+}
+
+enum TenantService {
+  postgres
+  mongodb
+  qdrant
+}
+
+model Tenant {
+  id                String               @id @default(uuid())
+  name              String               @unique
+  realmName         String
+  postgresDb        String
+  mongoDb           String
+  qdrantCollection  String
+  status            TenantStatus         @default(provisioning)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  provisioningLogs  TenantProvisionLog[]
+  connections       TenantConnection[]
+}
+
+model TenantProvisionLog {
+  id        String   @id @default(uuid())
+  tenantId  String
+  step      String
+  status    String
+  message   String?
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}
+
+model TenantConnection {
+  id        String        @id @default(uuid())
+  tenantId  String
+  service   TenantService
+  dbName    String
+  host      String?
+  port      Int?
+  username  String?
+  secretRef String?
+  options   Json?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, service])
+  @@index([dbName])
+}

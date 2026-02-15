@@ -1,0 +1,26 @@
+{
+  "name": "@freeflow/db-master",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/client.js",
+  "types": "./dist/client.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "prisma": "prisma",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "@freeflow/config": "workspace:*",
+    "@types/node": "^20.11.19",
+    "prisma": "^5.22.0",
+    "typescript": "^5.3.3"
+  }
+}
