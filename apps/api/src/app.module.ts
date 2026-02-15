@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { AddonsModule } from './modules/addons/addons.module';
 import { AlarmsModule } from './modules/alarms/alarms.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { FormsModule } from './modules/forms/forms.module';
 import { InboxModule } from './modules/inbox/inbox.module';
 import { TenantResolverMiddleware } from './modules/tenants/tenant-resolver.middleware';
 import { TenantsModule } from './modules/tenants/tenants.module';
@@ -20,6 +21,7 @@ import { UserModule } from './modules/user/user.module';
     DashboardModule,
     AddonsModule,
     AlarmsModule,
+    FormsModule,
     InboxModule,
     TenantsModule,
     UiModule,
