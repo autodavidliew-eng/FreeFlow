@@ -99,8 +99,8 @@ export const updateTenantStatus = async (
 ): Promise<void> => {
   await prisma.$executeRaw`
     UPDATE "Tenant"
-    SET "status" = ${status}, "updatedAt" = NOW()
-    WHERE "id" = ${tenantId};
+    SET "status" = CAST(${status} AS "TenantStatus"), "updatedAt" = NOW()
+    WHERE "id" = CAST(${tenantId} AS uuid);
   `;
 };
 
@@ -119,7 +119,7 @@ export const insertProvisionLog = async (input: {
         "message"
       )
       VALUES (
-        ${input.tenantId},
+        CAST(${input.tenantId} AS uuid),
         ${input.step},
         ${input.status},
         ${input.message ?? null}
@@ -151,8 +151,8 @@ export const upsertTenantConnection = async (input: {
       "updatedAt"
     )
     VALUES (
-      ${input.tenantId},
-      ${input.service},
+      CAST(${input.tenantId} AS uuid),
+      CAST(${input.service} AS "TenantService"),
       ${input.dbName},
       ${input.host ?? null},
       ${input.port ?? null},

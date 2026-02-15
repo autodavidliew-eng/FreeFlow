@@ -1,7 +1,9 @@
 import { prisma } from '@freeflow/db-master';
+import { TenantProvisioningService } from '@freeflow/tenant-provisioning';
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 
@@ -13,17 +15,6 @@ import type {
 } from './dto/tenant.dto';
 
 const TENANT_NAME_PATTERN = /^[a-z0-9]{3,30}$/;
-
-const buildTenantNames = (tenantName: string) => {
-  const base = `freeflow_${tenantName}`;
-
-  return {
-    realmName: `freeflow-${tenantName}`,
-    postgresDb: base,
-    mongoDb: base,
-    qdrantCollection: `${base}_vectors`,
-  };
-};
 
 type TenantRecord = {
   id: string;
@@ -51,6 +42,8 @@ const toTenantDto = (tenant: TenantRecord): TenantDto => ({
 
 @Injectable()
 export class TenantRegistryService {
+  private provisioningService?: TenantProvisioningService;
+
   async createTenant(payload: TenantCreateRequestDto): Promise<TenantDto> {
     const rawName = payload?.name?.trim();
 
@@ -66,44 +59,16 @@ export class TenantRegistryService {
       );
     }
 
-    const names = buildTenantNames(tenantKey);
+    try {
+      const provisioningService = this.getProvisioningService();
+      const result = await provisioningService.provisionTenant(tenantKey);
 
-    const tenantRows = await prisma.$queryRaw<TenantRecord[]>`
-      INSERT INTO "Tenant" (
-        "name",
-        "realmName",
-        "postgresDb",
-        "mongoDb",
-        "qdrantCollection",
-        "updatedAt"
-      )
-      VALUES (
-        ${tenantKey},
-        ${names.realmName},
-        ${names.postgresDb},
-        ${names.mongoDb},
-        ${names.qdrantCollection},
-        NOW()
-      )
-      RETURNING
-        "id",
-        "name",
-        "realmName",
-        "postgresDb",
-        "mongoDb",
-        "qdrantCollection",
-        "status",
-        "createdAt",
-        "updatedAt";
-    `;
-
-    const tenant = tenantRows[0];
-
-    if (!tenant) {
-      throw new BadRequestException('Failed to create tenant.');
+      return toTenantDto(result.tenant as TenantRecord);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Tenant provisioning failed.';
+      throw new InternalServerErrorException(message);
     }
-
-    return toTenantDto(tenant);
   }
 
   async listTenants(): Promise<TenantListResponseDto> {
@@ -151,5 +116,13 @@ export class TenantRegistryService {
     }
 
     return toTenantDto(tenant);
+  }
+
+  private getProvisioningService(): TenantProvisioningService {
+    if (!this.provisioningService) {
+      this.provisioningService = new TenantProvisioningService();
+    }
+
+    return this.provisioningService;
   }
 }

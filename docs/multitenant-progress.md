@@ -19,6 +19,7 @@ Source prompt: `/home/vapt/Desktop/Vibe-code - FreeFlow Business Workflow MultiT
   - Added `services/tenant-provisioning` with retry-safe provisioning service.
   - Added `packages/keycloak-admin` for Keycloak realm automation.
   - Added `scripts/provision-tenant.ts` CLI and `docs/multitenant-provisioning.md`.
+  - Wired `POST /tenants` to trigger provisioning via `TenantProvisioningService`.
 - MT-3 (Tenant Removal): **NOT STARTED**
 - MT-4 (Runtime Tenant Resolution): **NOT STARTED**
 - MT-5 (Integration Tests): **NOT STARTED**
