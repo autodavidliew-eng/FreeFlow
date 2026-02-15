@@ -5,8 +5,8 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 
 ## Status
 
-- Current phase: P3.3 (Deprovision tenant)
-- Status: P3.2 completed
+- Current phase: P4.1 (OpenFGA bootstrap)
+- Status: P3.3 completed
 - Last updated: 2026-02-15
 
 ## Phases
@@ -18,7 +18,7 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 - P2.2 — JWT RBAC source-of-truth spec: DONE
 - P3.1 — Master tenant database (registry): DONE
 - P3.2 — Provision tenant (create realm + DBs + seed + folders): DONE
-- P3.3 — Deprovision tenant (soft/hard delete)
+- P3.3 — Deprovision tenant (soft/hard delete): DONE
 - P4.1 — OpenFGA docker compose + bootstrap model
 - P4.2 — OpenFGA client + Nest guard/decorator
 - P5.1 — Widget catalog + layouts (DB config, JWT RBAC gate)
