@@ -5,8 +5,8 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 
 ## Status
 
-- Current phase: P3.2 (Provision tenant)
-- Status: P3.1 completed
+- Current phase: P3.3 (Deprovision tenant)
+- Status: P3.2 completed
 - Last updated: 2026-02-15
 
 ## Phases
@@ -17,7 +17,7 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 - P2.1 — Keycloak OIDC integration (Auth Code + PKCE): DONE
 - P2.2 — JWT RBAC source-of-truth spec: DONE
 - P3.1 — Master tenant database (registry): DONE
-- P3.2 — Provision tenant (create realm + DBs + seed + folders)
+- P3.2 — Provision tenant (create realm + DBs + seed + folders): DONE
 - P3.3 — Deprovision tenant (soft/hard delete)
 - P4.1 — OpenFGA docker compose + bootstrap model
 - P4.2 — OpenFGA client + Nest guard/decorator
