@@ -5,20 +5,18 @@ import { forwardFormsRequest } from '@/lib/forms/api';
 
 export async function GET(
   _request: Request,
-  { params }: { params: { formId: string } }
+  { params }: { params: Promise<{ formId: string }> }
 ) {
+  const { formId } = await params;
   const session = await readSession();
   if (!session?.accessToken) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
-    const response = await forwardFormsRequest(
-      `/forms/${params.formId}/schema`,
-      {
-        token: session.accessToken,
-      }
-    );
+    const response = await forwardFormsRequest(`/forms/${formId}/schema`, {
+      token: session.accessToken,
+    });
     const payload = await response.json();
 
     return NextResponse.json(payload, { status: response.status });

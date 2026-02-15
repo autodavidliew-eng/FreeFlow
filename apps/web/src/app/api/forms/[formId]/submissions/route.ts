@@ -5,8 +5,9 @@ import { forwardFormsRequest } from '@/lib/forms/api';
 
 export async function POST(
   request: Request,
-  { params }: { params: { formId: string } }
+  { params }: { params: Promise<{ formId: string }> }
 ) {
+  const { formId } = await params;
   const session = await readSession();
   if (!session?.accessToken) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -20,14 +21,11 @@ export async function POST(
   }
 
   try {
-    const response = await forwardFormsRequest(
-      `/forms/${params.formId}/submissions`,
-      {
-        method: 'POST',
-        token: session.accessToken,
-        body,
-      }
-    );
+    const response = await forwardFormsRequest(`/forms/${formId}/submissions`, {
+      method: 'POST',
+      token: session.accessToken,
+      body,
+    });
     const payload = await response.json();
 
     return NextResponse.json(payload, { status: response.status });

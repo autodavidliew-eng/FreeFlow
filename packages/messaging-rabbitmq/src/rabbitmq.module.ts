@@ -1,5 +1,7 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import type { Provider, DynamicModule } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+
 import { RabbitMqPublisher } from './rabbitmq.publisher';
 import { RABBITMQ_CLIENT } from './rabbitmq.tokens';
 import type { RabbitMqModuleOptions } from './rabbitmq.types';
@@ -8,6 +10,14 @@ import type { RabbitMqModuleOptions } from './rabbitmq.types';
 export class RabbitMqModule {
   static register(options: RabbitMqModuleOptions): DynamicModule {
     const clientName = options.clientName ?? RABBITMQ_CLIENT;
+    const providers: Provider[] = [RabbitMqPublisher];
+
+    if (clientName !== RABBITMQ_CLIENT) {
+      providers.unshift({
+        provide: RABBITMQ_CLIENT,
+        useExisting: clientName,
+      });
+    }
 
     return {
       module: RabbitMqModule,
@@ -27,13 +37,7 @@ export class RabbitMqModule {
           },
         ]),
       ],
-      providers: [
-        {
-          provide: RABBITMQ_CLIENT,
-          useExisting: clientName,
-        },
-        RabbitMqPublisher,
-      ],
+      providers,
       exports: [RabbitMqPublisher, ClientsModule],
     };
   }
