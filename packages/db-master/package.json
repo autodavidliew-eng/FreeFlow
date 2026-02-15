@@ -12,7 +12,11 @@
     "prisma": "prisma",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:deploy": "prisma migrate deploy"
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "ts-node --transpile-only prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0"
@@ -21,6 +25,7 @@
     "@freeflow/config": "workspace:*",
     "@types/node": "^20.11.19",
     "prisma": "^5.22.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }
