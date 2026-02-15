@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 
 import { TenantCreateRequestDto } from './dto/tenant.dto';
 import type { TenantDto, TenantListResponseDto } from './dto/tenant.dto';
@@ -19,7 +27,14 @@ export class TenantsController {
   }
 
   @Delete(':id')
-  deleteTenant(@Param('id') id: string): Promise<TenantDto> {
-    return this.tenantRegistry.deleteTenant(id);
+  deleteTenant(
+    @Param('id') id: string,
+    @Query('mode') mode?: 'soft' | 'hard',
+    @Query('force') force?: string
+  ): Promise<TenantDto> {
+    const resolvedMode = mode === 'hard' ? 'hard' : 'soft';
+    const resolvedForce = force === 'true' || force === '1';
+
+    return this.tenantRegistry.removeTenant(id, resolvedMode, resolvedForce);
   }
 }

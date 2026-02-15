@@ -48,6 +48,50 @@ export const findTenantByName = async (
   return rows[0] ?? null;
 };
 
+export const findTenantById = async (
+  id: string
+): Promise<TenantRecord | null> => {
+  const rows = await prisma.$queryRaw<TenantRecord[]>`
+    SELECT
+      "id",
+      "name",
+      "realmName",
+      "postgresDb",
+      "mongoDb",
+      "qdrantCollection",
+      "status",
+      "createdAt",
+      "updatedAt"
+    FROM "Tenant"
+    WHERE "id" = CAST(${id} AS uuid)
+    LIMIT 1;
+  `;
+
+  return rows[0] ?? null;
+};
+
+export const listTenantsByNamePrefix = async (
+  prefix: string
+): Promise<TenantRecord[]> => {
+  const like = `${prefix}%`;
+
+  return prisma.$queryRaw<TenantRecord[]>`
+    SELECT
+      "id",
+      "name",
+      "realmName",
+      "postgresDb",
+      "mongoDb",
+      "qdrantCollection",
+      "status",
+      "createdAt",
+      "updatedAt"
+    FROM "Tenant"
+    WHERE "name" LIKE ${like}
+    ORDER BY "createdAt" DESC;
+  `;
+};
+
 export const createTenant = async (data: {
   name: string;
   realmName: string;
@@ -102,6 +146,27 @@ export const updateTenantStatus = async (
     SET "status" = CAST(${status} AS "TenantStatus"), "updatedAt" = NOW()
     WHERE "id" = CAST(${tenantId} AS uuid);
   `;
+};
+
+export const deleteTenantById = async (
+  tenantId: string
+): Promise<TenantRecord | null> => {
+  const rows = await prisma.$queryRaw<TenantRecord[]>`
+    DELETE FROM "Tenant"
+    WHERE "id" = CAST(${tenantId} AS uuid)
+    RETURNING
+      "id",
+      "name",
+      "realmName",
+      "postgresDb",
+      "mongoDb",
+      "qdrantCollection",
+      "status",
+      "createdAt",
+      "updatedAt";
+  `;
+
+  return rows[0] ?? null;
 };
 
 export const insertProvisionLog = async (input: {

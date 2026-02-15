@@ -1,5 +1,9 @@
 import { prisma } from '@freeflow/db-master';
-import { TenantProvisioningService } from '@freeflow/tenant-provisioning';
+import {
+  TenantProvisioningService,
+  TenantRemovalService,
+  type TenantRemovalMode,
+} from '@freeflow/tenant-provisioning';
 import {
   BadRequestException,
   Injectable,
@@ -43,6 +47,7 @@ const toTenantDto = (tenant: TenantRecord): TenantDto => ({
 @Injectable()
 export class TenantRegistryService {
   private provisioningService?: TenantProvisioningService;
+  private removalService?: TenantRemovalService;
 
   async createTenant(payload: TenantCreateRequestDto): Promise<TenantDto> {
     const rawName = payload?.name?.trim();
@@ -95,9 +100,7 @@ export class TenantRegistryService {
 
   async deleteTenant(id: string): Promise<TenantDto> {
     const tenantRows = await prisma.$queryRaw<TenantRecord[]>`
-      DELETE FROM "Tenant"
-      WHERE "id" = ${id}
-      RETURNING
+      SELECT
         "id",
         "name",
         "realmName",
@@ -106,7 +109,10 @@ export class TenantRegistryService {
         "qdrantCollection",
         "status",
         "createdAt",
-        "updatedAt";
+        "updatedAt"
+      FROM "Tenant"
+      WHERE "id" = ${id}
+      LIMIT 1;
     `;
 
     const tenant = tenantRows[0];
@@ -118,11 +124,36 @@ export class TenantRegistryService {
     return toTenantDto(tenant);
   }
 
+  async removeTenant(
+    id: string,
+    mode: TenantRemovalMode,
+    force: boolean
+  ): Promise<TenantDto> {
+    try {
+      const removalService = this.getRemovalService();
+      const tenant = await removalService.removeTenant(id, mode, force);
+
+      return toTenantDto(tenant as TenantRecord);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Tenant removal failed.';
+      throw new InternalServerErrorException(message);
+    }
+  }
+
   private getProvisioningService(): TenantProvisioningService {
     if (!this.provisioningService) {
       this.provisioningService = new TenantProvisioningService();
     }
 
     return this.provisioningService;
+  }
+
+  private getRemovalService(): TenantRemovalService {
+    if (!this.removalService) {
+      this.removalService = new TenantRemovalService();
+    }
+
+    return this.removalService;
   }
 }
