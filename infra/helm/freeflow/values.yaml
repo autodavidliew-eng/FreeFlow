@@ -21,23 +21,23 @@ components:
       API_URL: http://freeflow-api:3001
     config: {}
     secretEnv: {}
-    existingSecret: ""
+    existingSecret: ''
     serviceAccount:
       create: true
-      name: ""
+      name: ''
       annotations: {}
     probes:
       enabled: true
       liveness:
-        path: /
+        path: /healthz
         initialDelaySeconds: 15
         periodSeconds: 20
       readiness:
-        path: /
+        path: /readyz
         initialDelaySeconds: 5
         periodSeconds: 10
       startup:
-        path: /
+        path: /healthz
         failureThreshold: 20
         periodSeconds: 5
     resources:
@@ -70,23 +70,23 @@ components:
     env: {}
     config: {}
     secretEnv: {}
-    existingSecret: ""
+    existingSecret: ''
     serviceAccount:
       create: true
-      name: ""
+      name: ''
       annotations: {}
     probes:
       enabled: true
       liveness:
-        path: /health
+        path: /healthz
         initialDelaySeconds: 15
         periodSeconds: 20
       readiness:
-        path: /health
+        path: /readyz
         initialDelaySeconds: 5
         periodSeconds: 10
       startup:
-        path: /health
+        path: /healthz
         failureThreshold: 20
         periodSeconds: 5
     resources:
@@ -119,23 +119,23 @@ components:
     env: {}
     config: {}
     secretEnv: {}
-    existingSecret: ""
+    existingSecret: ''
     serviceAccount:
       create: true
-      name: ""
+      name: ''
       annotations: {}
     probes:
       enabled: true
       liveness:
-        path: /health
+        path: /healthz
         initialDelaySeconds: 15
         periodSeconds: 20
       readiness:
-        path: /health
+        path: /readyz
         initialDelaySeconds: 5
         periodSeconds: 10
       startup:
-        path: /health
+        path: /healthz
         failureThreshold: 20
         periodSeconds: 5
     resources:
@@ -168,23 +168,23 @@ components:
     env: {}
     config: {}
     secretEnv: {}
-    existingSecret: ""
+    existingSecret: ''
     serviceAccount:
       create: true
-      name: ""
+      name: ''
       annotations: {}
     probes:
       enabled: true
       liveness:
-        path: /health
+        path: /healthz
         initialDelaySeconds: 15
         periodSeconds: 20
       readiness:
-        path: /health
+        path: /readyz
         initialDelaySeconds: 5
         periodSeconds: 10
       startup:
-        path: /health
+        path: /healthz
         failureThreshold: 20
         periodSeconds: 5
     resources:
@@ -217,23 +217,23 @@ components:
     env: {}
     config: {}
     secretEnv: {}
-    existingSecret: ""
+    existingSecret: ''
     serviceAccount:
       create: true
-      name: ""
+      name: ''
       annotations: {}
     probes:
       enabled: true
       liveness:
-        path: /health
+        path: /healthz
         initialDelaySeconds: 15
         periodSeconds: 20
       readiness:
-        path: /health
+        path: /readyz
         initialDelaySeconds: 5
         periodSeconds: 10
       startup:
-        path: /health
+        path: /healthz
         failureThreshold: 20
         periodSeconds: 5
     resources:

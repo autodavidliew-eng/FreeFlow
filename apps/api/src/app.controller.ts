@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@freeflow/auth';
 import { PermissionGuard, RequirePermission } from '@freeflow/rbac';
-import type { HealthResponse } from '@freeflow/shared';
+import { HealthResponse } from '@freeflow/shared';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+
 import { AppService } from './app.service';
 
 @Controller()
@@ -20,6 +21,16 @@ export class AppController {
       service: 'api-gateway',
       timestamp: new Date().toISOString(),
     };
+  }
+
+  @Get('healthz')
+  getHealthz(): HealthResponse {
+    return this.getHealth();
+  }
+
+  @Get('readyz')
+  getReadyz(): HealthResponse {
+    return this.getHealth();
   }
 
   @UseGuards(JwtAuthGuard, PermissionGuard)

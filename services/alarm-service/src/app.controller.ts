@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
 import type { HealthResponse } from '@freeflow/shared';
-import { AppService } from './app.service';
+import { Controller, Get } from '@nestjs/common';
+
+import type { AppService } from './app.service';
 
 @Controller()
 export class AppController {
@@ -18,5 +19,15 @@ export class AppController {
       service: 'alarm-service',
       timestamp: new Date().toISOString(),
     };
+  }
+
+  @Get('healthz')
+  getHealthz(): HealthResponse {
+    return this.getHealth();
+  }
+
+  @Get('readyz')
+  getReadyz(): HealthResponse {
+    return this.getHealth();
   }
 }

@@ -1,16 +1,17 @@
-import { Controller, Get, Param } from '@nestjs/common';
 import type { HealthResponse } from '@freeflow/shared';
+import { Controller, Get, Param } from '@nestjs/common';
+
+import type { AppService } from './app.service';
+import type { AuditService } from './audit.service';
+import type { DashboardService } from './dashboard.service';
 import type { DashboardLayoutDto } from './dto/dashboard-layout.dto';
-import { AuditService } from './audit.service';
-import { AppService } from './app.service';
-import { DashboardService } from './dashboard.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly dashboardService: DashboardService,
-    private readonly auditService: AuditService,
+    private readonly auditService: AuditService
   ) {}
 
   @Get()
@@ -27,9 +28,19 @@ export class AppController {
     };
   }
 
+  @Get('healthz')
+  getHealthz(): HealthResponse {
+    return this.getHealth();
+  }
+
+  @Get('readyz')
+  getReadyz(): HealthResponse {
+    return this.getHealth();
+  }
+
   @Get('layout/:userId')
   async getLayoutForUser(
-    @Param('userId') userId: string,
+    @Param('userId') userId: string
   ): Promise<DashboardLayoutDto | null> {
     const layout = await this.dashboardService.getLayoutForUser(userId);
 
