@@ -2,7 +2,15 @@ name: CI
 
 on:
   pull_request:
-    branches: ["*"]
+    branches: ['*']
+  workflow_dispatch:
+    inputs:
+      run_e2e:
+        description: 'Run Playwright E2E'
+        type: boolean
+        default: false
+  schedule:
+    - cron: '0 3 * * *'
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -19,7 +27,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -32,8 +40,49 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Typecheck
+        run: pnpm typecheck
+
       - name: Unit tests (exclude testcontainers)
         run: pnpm --filter "!@freeflow/db-postgres" --filter "!@freeflow/db-mongo" test
 
       - name: Build
         run: pnpm build
+
+  e2e:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event.inputs.run_e2e == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web app
+        run: pnpm --filter @freeflow/web build
+
+      - name: Install Playwright browsers
+        run: pnpm --filter @freeflow/web exec playwright install --with-deps
+
+      - name: Start web app
+        run: pnpm --filter @freeflow/web start -- --port 3000 &
+
+      - name: Wait for web app
+        run: pnpm dlx wait-on http://localhost:3000
+
+      - name: Run Playwright tests
+        env:
+          SESSION_SECRET: 'ci-session-secret'
+        run: pnpm --filter @freeflow/web test:e2e
