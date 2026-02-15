@@ -12,6 +12,7 @@ const titleMap: Record<string, string> = {
   '/alarms': 'Alarms & Alerts',
   '/applications': 'Applications',
   '/inbox': 'Inbox',
+  '/miniapps/forms': 'Forms',
   '/profile': 'Profile',
 };
 

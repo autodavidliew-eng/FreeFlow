@@ -80,6 +80,14 @@ const appCatalog = [
     enabled: true,
   },
   {
+    appKey: 'mini.forms',
+    name: 'Forms',
+    icon: 'clipboard',
+    launchUrl: '/miniapps/forms',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
+  {
     appKey: 'operation-scheduler',
     name: 'Operation Scheduler',
     icon: 'calendar',

@@ -744,6 +744,72 @@ a {
   gap: 0.5rem;
 }
 
+.ff-forms-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.ff-form-message {
+  padding: 0.55rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+}
+
+.ff-form-message.is-error {
+  border-color: rgba(239, 113, 113, 0.6);
+  background: rgba(239, 113, 113, 0.12);
+  color: #f6c0c0;
+}
+
+.ff-form-message.is-success {
+  border-color: rgba(70, 210, 198, 0.45);
+  background: rgba(70, 210, 198, 0.12);
+  color: var(--ff-text);
+}
+
+.ff-form-panel {
+  min-height: 360px;
+}
+
+.ff-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ff-border);
+}
+
+.ff-form-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.ff-form-meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.ff-form-status {
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ff-form-body {
+  padding-top: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.ff-forms-loading {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 0;
+}
+
 .ff-alarm-item {
   display: flex;
   align-items: center;

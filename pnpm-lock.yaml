@@ -174,6 +174,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@formio/react':
+        specifier: ^6.0.0
+        version: 6.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@freeflow/rbac-config':
         specifier: workspace:*
         version: link:../../packages/rbac-config
@@ -1391,6 +1394,12 @@ packages:
   '@fastify/busboy@2.1.1':
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
+
+  '@formio/react@6.2.0':
+    resolution: {integrity: sha512-6ZwxpJ+liubluO4LOTs9Ya6Tr7WaVabfxi1m2aUVouwr5C/ZOapreyvJwr5eYuekGdolKvsAuS5Guiy+ZZI1jw==}
+    peerDependencies:
+      react: '>=17'
+      react-dom: '>=17'
 
   '@grpc/grpc-js@1.14.3':
     resolution: {integrity: sha512-Iq8QQQ/7X3Sac15oB6p0FmUg/klxQvXLeileoqrTRGJYLV+/9tubbr9ipz0GKHjmXVsgFPo/+W+2cA8eNcR+XA==}
@@ -3077,6 +3086,9 @@ packages:
 
   cookiejar@2.1.4:
     resolution: {integrity: sha512-LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==}
+
+  core-js@3.48.0:
+    resolution: {integrity: sha512-zpEHTy1fjTMZCKLHUZoVeylt9XrzaIN2rbPXEt0k+q7JE5CkCZdo6bNq55bn24a69CH7ErAVLKijxJja4fw+UQ==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -6750,6 +6762,15 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
+  '@formio/react@6.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@ungap/structured-clone': 1.3.0
+      core-js: 3.48.0
+      lodash: 4.17.23
+      prop-types: 15.8.1
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+
   '@grpc/grpc-js@1.14.3':
     dependencies:
       '@grpc/proto-loader': 0.8.0
@@ -8547,6 +8568,8 @@ snapshots:
   cookie@0.7.2: {}
 
   cookiejar@2.1.4: {}
+
+  core-js@3.48.0: {}
 
   core-util-is@1.0.3: {}
 

@@ -21,6 +21,7 @@ export const APP_KEYS = [
   'contractor',
   'electric-meter',
   'equipment-management',
+  'mini.forms',
   'operation-scheduler',
   'report',
   'rule-engine',
