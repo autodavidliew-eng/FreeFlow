@@ -29,11 +29,12 @@ Source prompt: `/home/vapt/Desktop/Vibe-code - FreeFlow Business Workflow MultiT
   - Added AsyncLocalStorage-backed tenant context.
   - Added tenant-aware Postgres, Mongo, and Qdrant factories.
   - Documented runtime resolution in `docs/multitenant-runtime-resolution.md`.
-- MT-5 (Integration Tests): **NOT STARTED**
+- MT-5 (Integration Tests): **DONE**
+  - Added Testcontainers-based isolation tests under `tests/multitenant/`.
 - Keycloak Admin Client Package: **DONE**
 
 ## Notes
 
 - Current architecture doc covers lifecycle states, master DB schema, naming helpers,
   and runtime tenant resolution strategy with ASCII diagrams.
-- Last updated: 2026-02-15. MT-4 implemented with middleware + factories.
+- Last updated: 2026-02-15. MT-5 integration tests added.
