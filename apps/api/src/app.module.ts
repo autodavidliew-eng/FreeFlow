@@ -5,19 +5,23 @@ import type { NestModule, MiddlewareConsumer } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AddonsModule } from './modules/addons/addons.module';
 import { AlarmsModule } from './modules/alarms/alarms.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { InboxModule } from './modules/inbox/inbox.module';
 import { TenantResolverMiddleware } from './modules/tenants/tenant-resolver.middleware';
 import { TenantsModule } from './modules/tenants/tenants.module';
+import { UiModule } from './modules/ui/ui.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
     DashboardModule,
+    AddonsModule,
     AlarmsModule,
     InboxModule,
     TenantsModule,
+    UiModule,
     UserModule,
   ],
   controllers: [AppController],

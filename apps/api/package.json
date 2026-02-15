@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@freeflow/auth": "workspace:*",
+    "@freeflow/authz-fga": "workspace:*",
     "@freeflow/db-master": "workspace:*",
     "@freeflow/db-mongo": "workspace:*",
     "@freeflow/db-postgres": "workspace:*",
