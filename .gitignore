@@ -44,6 +44,9 @@ Thumbs.db
 *.tmp
 .cache
 
+# Local UI references
+/ui-reference/
+
 # TypeScript incremental build info
 *.tsbuildinfo
 
