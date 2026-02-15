@@ -1,0 +1,43 @@
+[
+  { "user": "user:admin", "relation": "admin", "object": "tenant:acme" },
+  { "user": "user:operator", "relation": "member", "object": "tenant:acme" },
+  { "user": "user:viewer", "relation": "member", "object": "tenant:acme" },
+
+  { "user": "tenant:acme", "relation": "tenant", "object": "app:rule-engine" },
+  { "user": "tenant:acme", "relation": "tenant", "object": "app:report" },
+  {
+    "user": "tenant:acme",
+    "relation": "tenant",
+    "object": "dashboard:operations"
+  },
+  { "user": "tenant:acme", "relation": "tenant", "object": "alarm:main" },
+  { "user": "tenant:acme", "relation": "tenant", "object": "site:campus-1" },
+  { "user": "tenant:acme", "relation": "tenant", "object": "form:incident" },
+
+  { "user": "user:admin", "relation": "launch", "object": "app:rule-engine" },
+  { "user": "user:admin", "relation": "launch", "object": "app:report" },
+  { "user": "user:operator", "relation": "launch", "object": "app:report" },
+
+  {
+    "user": "user:admin",
+    "relation": "edit",
+    "object": "dashboard:operations"
+  },
+  {
+    "user": "user:operator",
+    "relation": "view",
+    "object": "dashboard:operations"
+  },
+  {
+    "user": "user:viewer",
+    "relation": "view",
+    "object": "dashboard:operations"
+  },
+
+  { "user": "user:admin", "relation": "manage", "object": "site:campus-1" },
+  { "user": "user:operator", "relation": "view", "object": "site:campus-1" },
+
+  { "user": "user:admin", "relation": "manage", "object": "form:incident" },
+  { "user": "user:operator", "relation": "submit", "object": "form:incident" },
+  { "user": "user:viewer", "relation": "view", "object": "form:incident" }
+]

@@ -1,0 +1,5 @@
+services:
+  openfga:
+    datastore:
+      engine: postgres
+      uri: postgres://freeflow:freeflow_dev_password@postgres:5432/openfga?sslmode=disable

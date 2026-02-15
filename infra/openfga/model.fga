@@ -1,0 +1,48 @@
+model
+  schema 1.1
+
+type user
+
+type tenant
+  relations
+    define member: [user]
+    define admin: [user]
+
+type app
+  relations
+    define tenant: [tenant]
+    define launch: [user, user:*]
+    define manage: [user, user:*]
+
+type dashboard
+  relations
+    define tenant: [tenant]
+    define view: [user, user:*]
+    define edit: [user, user:*]
+
+type task
+  relations
+    define tenant: [tenant]
+    define view: [user, user:*]
+    define assign: [user, user:*]
+    define complete: [user, user:*]
+
+type alarm
+  relations
+    define tenant: [tenant]
+    define view: [user, user:*]
+    define acknowledge: [user, user:*]
+    define resolve: [user, user:*]
+
+type site
+  relations
+    define tenant: [tenant]
+    define view: [user, user:*]
+    define manage: [user, user:*]
+
+type form
+  relations
+    define tenant: [tenant]
+    define view: [user, user:*]
+    define submit: [user, user:*]
+    define manage: [user, user:*]

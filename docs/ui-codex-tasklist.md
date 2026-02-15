@@ -5,8 +5,8 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 
 ## Status
 
-- Current phase: P4.1 (OpenFGA bootstrap)
-- Status: P3.3 completed
+- Current phase: P4.2 (OpenFGA client + guard)
+- Status: P4.1 completed
 - Last updated: 2026-02-15
 
 ## Phases
@@ -19,7 +19,7 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 - P3.1 — Master tenant database (registry): DONE
 - P3.2 — Provision tenant (create realm + DBs + seed + folders): DONE
 - P3.3 — Deprovision tenant (soft/hard delete): DONE
-- P4.1 — OpenFGA docker compose + bootstrap model
+- P4.1 — OpenFGA docker compose + bootstrap model: DONE
 - P4.2 — OpenFGA client + Nest guard/decorator
 - P5.1 — Widget catalog + layouts (DB config, JWT RBAC gate)
 - P5.2 — Dashboard page (render role-based widgets)

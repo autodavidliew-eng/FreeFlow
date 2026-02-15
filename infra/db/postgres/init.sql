@@ -38,6 +38,11 @@ SELECT 'CREATE DATABASE camunda' WHERE NOT EXISTS (
     SELECT FROM pg_database WHERE datname = 'camunda'
 )\gexec
 
+-- OpenFGA database
+SELECT 'CREATE DATABASE openfga' WHERE NOT EXISTS (
+    SELECT FROM pg_database WHERE datname = 'openfga'
+)\gexec
+
 \echo '✓ Databases created'
 
 -- ============================================================================
@@ -71,6 +76,14 @@ BEGIN
     ELSE
         RAISE NOTICE '→ User "camunda_user" already exists';
     END IF;
+
+    -- OpenFGA user (optional)
+    IF NOT EXISTS (SELECT FROM pg_user WHERE usename = 'openfga_user') THEN
+        CREATE USER openfga_user WITH PASSWORD 'openfga_dev_password';
+        RAISE NOTICE '✓ User "openfga_user" created';
+    ELSE
+        RAISE NOTICE '→ User "openfga_user" already exists';
+    END IF;
 END
 $$;
 
@@ -83,6 +96,8 @@ GRANT ALL PRIVILEGES ON DATABASE freeflow TO freeflow;
 GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak_user;
 GRANT ALL PRIVILEGES ON DATABASE keycloak TO freeflow; -- Allow app to read keycloak data if needed
 GRANT ALL PRIVILEGES ON DATABASE camunda TO camunda_user;
+GRANT ALL PRIVILEGES ON DATABASE openfga TO openfga_user;
+GRANT ALL PRIVILEGES ON DATABASE openfga TO freeflow;
 
 \echo '✓ Permissions granted'
 
