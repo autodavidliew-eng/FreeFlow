@@ -27,6 +27,33 @@ type LayoutSeed = {
 
 const prisma = new PrismaClient();
 
+const widgetCatalog = [
+  {
+    key: 'kpi-widget',
+    name: 'Key Metrics',
+    type: 'kpi',
+    defaultConfig: { emphasis: 'summary' },
+  },
+  {
+    key: 'chart-widget',
+    name: 'Load Distribution',
+    type: 'chart',
+    defaultConfig: { series: ['Energy', 'Water'] },
+  },
+  {
+    key: 'alarm-widget',
+    name: 'Active Alarms',
+    type: 'alarm-list',
+    defaultConfig: { severities: ['high', 'medium', 'low'] },
+  },
+  {
+    key: 'admin-widget',
+    name: 'Admin Control',
+    type: 'admin',
+    defaultConfig: { actions: ['export', 'configure'] },
+  },
+];
+
 const baseLayout: LayoutSeed = {
   name: 'Operations Dashboard',
   layout: {
@@ -66,6 +93,40 @@ const baseLayout: LayoutSeed = {
   },
 };
 
+const viewerLayout: LayoutSeed = {
+  name: 'Operations Dashboard',
+  layout: {
+    version: 1,
+    sections: [
+      {
+        id: 'metrics',
+        title: 'Today',
+        layout: 'stack',
+        widgets: [
+          {
+            instanceId: 'kpi-primary',
+            widgetId: 'kpi-widget',
+            size: 'full',
+          },
+        ],
+      },
+      {
+        id: 'ops-overview',
+        title: 'Operational Overview',
+        layout: 'grid',
+        columns: 2,
+        widgets: [
+          {
+            instanceId: 'chart-load',
+            widgetId: 'chart-widget',
+            size: 'half',
+          },
+        ],
+      },
+    ],
+  },
+};
+
 const users: SeedUser[] = [
   {
     externalId: 'user-admin',
@@ -87,7 +148,11 @@ const users: SeedUser[] = [
   },
 ];
 
-function buildWidgetConfigs(layout: LayoutSeed['layout'], userId: string, dashboardLayoutId: string) {
+function buildWidgetConfigs(
+  layout: LayoutSeed['layout'],
+  userId: string,
+  dashboardLayoutId: string
+) {
   const widgets = layout.sections.flatMap((section) =>
     section.widgets.map((widget) => ({
       userId,
@@ -96,7 +161,7 @@ function buildWidgetConfigs(layout: LayoutSeed['layout'], userId: string, dashbo
       instanceId: widget.instanceId,
       size: widget.size ?? null,
       options: {},
-    })),
+    }))
   );
 
   return widgets;
@@ -139,7 +204,7 @@ async function seedUser(user: SeedUser) {
   const widgetConfigs = buildWidgetConfigs(
     baseLayout.layout,
     storedUser.id,
-    dashboard.id,
+    dashboard.id
   );
 
   if (widgetConfigs.length > 0) {
@@ -147,7 +212,54 @@ async function seedUser(user: SeedUser) {
   }
 }
 
+async function seedWidgetCatalog() {
+  for (const entry of widgetCatalog) {
+    await prisma.widgetCatalog.upsert({
+      where: { key: entry.key },
+      update: {
+        name: entry.name,
+        type: entry.type,
+        defaultConfig: entry.defaultConfig,
+      },
+      create: {
+        key: entry.key,
+        name: entry.name,
+        type: entry.type,
+        defaultConfig: entry.defaultConfig,
+      },
+    });
+  }
+}
+
+async function seedRoleLayouts() {
+  const layouts = [
+    { role: 'Admin', seed: baseLayout },
+    { role: 'Operator', seed: baseLayout },
+    { role: 'Viewer', seed: viewerLayout },
+  ];
+
+  for (const entry of layouts) {
+    await prisma.roleDashboardLayout.upsert({
+      where: { role: entry.role },
+      update: {
+        name: entry.seed.name,
+        version: entry.seed.layout.version,
+        layout: entry.seed.layout,
+      },
+      create: {
+        role: entry.role,
+        name: entry.seed.name,
+        version: entry.seed.layout.version,
+        layout: entry.seed.layout,
+      },
+    });
+  }
+}
+
 async function main() {
+  await seedWidgetCatalog();
+  await seedRoleLayouts();
+
   for (const user of users) {
     await seedUser(user);
   }

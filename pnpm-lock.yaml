@@ -86,6 +86,9 @@ importers:
       '@freeflow/rbac':
         specifier: workspace:*
         version: link:../../packages/rbac
+      '@freeflow/rbac-config':
+        specifier: workspace:*
+        version: link:../../packages/rbac-config
       '@freeflow/shared':
         specifier: workspace:*
         version: link:../../packages/shared

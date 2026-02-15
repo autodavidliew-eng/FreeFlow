@@ -35,6 +35,7 @@ export const WIDGET_KEYS = [
   'kpi-widget',
   'alarm-widget',
   'chart-widget',
+  'admin-widget',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
 
@@ -57,7 +58,7 @@ export const ROLE_ACCESS: Record<RoleKey, RoleAccess> = {
   Operator: {
     menus: allMenus.filter((key) => key !== 'vendor'),
     apps: allApps.filter((key) => key !== 'system-configuration'),
-    widgets: allWidgets,
+    widgets: allWidgets.filter((key) => key !== 'admin-widget'),
   },
   Viewer: {
     menus: ['dashboard', 'alarms', 'applications', 'report'],

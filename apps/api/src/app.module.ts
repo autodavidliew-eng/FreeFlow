@@ -1,4 +1,5 @@
 import { JwtAuthGuard } from '@freeflow/auth';
+import { FgaGuard } from '@freeflow/authz-fga';
 import { PermissionGuard, PermissionsService } from '@freeflow/rbac';
 import { Module } from '@nestjs/common';
 import type { NestModule, MiddlewareConsumer } from '@nestjs/common';
@@ -25,7 +26,13 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtAuthGuard, PermissionGuard, PermissionsService],
+  providers: [
+    AppService,
+    JwtAuthGuard,
+    PermissionGuard,
+    PermissionsService,
+    FgaGuard,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

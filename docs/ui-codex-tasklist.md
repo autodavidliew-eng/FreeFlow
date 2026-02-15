@@ -5,8 +5,8 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 
 ## Status
 
-- Current phase: P5.1 (Widget catalog + layouts)
-- Status: P4.2 completed
+- Current phase: P5.2 (Dashboard page)
+- Status: P5.1 completed
 - Last updated: 2026-02-15
 
 ## Phases
@@ -21,7 +21,7 @@ Screenshots: `/home/vapt/Desktop/screenshots.zip`
 - P3.3 — Deprovision tenant (soft/hard delete): DONE
 - P4.1 — OpenFGA docker compose + bootstrap model: DONE
 - P4.2 — OpenFGA client + Nest guard/decorator: DONE
-- P5.1 — Widget catalog + layouts (DB config, JWT RBAC gate)
+- P5.1 — Widget catalog + layouts (DB config, JWT RBAC gate): DONE
 - P5.2 — Dashboard page (render role-based widgets)
 - P6.1 — Alarms page UI (filter + table)
 - P6.2 — OpenFGA alarm access (site-based)
