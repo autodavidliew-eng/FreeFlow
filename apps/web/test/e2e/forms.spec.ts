@@ -77,11 +77,12 @@ async function setSessionCookie(page: Page, roles: string[]) {
   };
 
   const value = signValue(JSON.stringify(session), sessionSecret);
+  const cookieDomain = new URL(baseURL).hostname;
   await page.context().addCookies([
     {
       name: 'ff_session',
       value,
-      url: baseURL,
+      domain: cookieDomain,
       httpOnly: true,
       sameSite: 'Lax',
       path: '/',

@@ -14,7 +14,7 @@ test.describe('Portal shell', () => {
 
   test('navigation and menu toggle', async ({ page }) => {
     await setSessionCookie(page, ['Admin']);
-    await page.goto('/applications');
+    await page.goto('/dashboard');
 
     const sideNav = page.getByTestId('side-nav');
     await expect(sideNav).toBeVisible();
@@ -26,7 +26,7 @@ test.describe('Portal shell', () => {
     await toggle.click();
     await expect(sideNav).not.toHaveClass(/is-collapsed/);
 
-    await page.getByRole('link', { name: 'Alarm / Alert' }).click();
+    await sideNav.getByRole('link', { name: 'Alarm / Alert' }).click();
     await expect(page).toHaveURL(/\/alarms/);
   });
 });
@@ -42,11 +42,12 @@ async function setSessionCookie(page: Page, roles: string[]) {
   };
 
   const value = signValue(JSON.stringify(session), sessionSecret);
+  const cookieDomain = new URL(baseURL).hostname;
   await page.context().addCookies([
     {
       name: 'ff_session',
       value,
-      url: baseURL,
+      domain: cookieDomain,
       httpOnly: true,
       sameSite: 'Lax',
       path: '/',

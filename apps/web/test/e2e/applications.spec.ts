@@ -55,11 +55,21 @@ test.describe('Applications', () => {
     );
 
     const handoffRequest = page.waitForRequest('**/api/addons/handoff');
+    const appsResponse = page.waitForResponse('**/api/addons/apps');
 
     await page.goto('/applications');
-    await expect(page.getByText('Report')).toBeVisible();
-    await expect(page.getByText('Rule Engine')).not.toBeVisible();
-    await page.getByRole('button', { name: /report/i }).click();
+    const response = await appsResponse;
+    expect(response.status()).toBe(200);
+
+    const appsGrid = page.locator('.ff-apps-grid');
+    const reportCard = appsGrid.locator('.ff-app-card', {
+      hasText: 'Report',
+    });
+    await expect(reportCard).toBeVisible();
+    await expect(
+      appsGrid.locator('.ff-app-card', { hasText: 'Rule Engine' })
+    ).toHaveCount(0);
+    await reportCard.click();
 
     const request = await handoffRequest;
     expect(request.method()).toBe('POST');
@@ -80,11 +90,12 @@ async function setSessionCookie(page: Page, roles: string[]) {
   };
 
   const value = signValue(JSON.stringify(session), sessionSecret);
+  const cookieDomain = new URL(baseURL).hostname;
   await page.context().addCookies([
     {
       name: 'ff_session',
       value,
-      url: baseURL,
+      domain: cookieDomain,
       httpOnly: true,
       sameSite: 'Lax',
       path: '/',
