@@ -32,6 +32,8 @@ export async function GET(request: Request) {
   await setSessionCookie(
     {
       accessToken: token.access_token,
+      idToken: token.id_token,
+      refreshToken: token.refresh_token,
       expiresAt,
       roles,
     },

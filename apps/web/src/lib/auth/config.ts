@@ -29,7 +29,7 @@ export function getAuthConfig(): AuthConfig {
     clientId: process.env.KEYCLOAK_ID ?? missing('KEYCLOAK_ID'),
     redirectUri: process.env.KEYCLOAK_REDIRECT_URI ?? `${appUrl}/auth/callback`,
     postLogoutRedirectUri:
-      process.env.KEYCLOAK_POST_LOGOUT_REDIRECT_URI ?? `${appUrl}/`,
+      process.env.KEYCLOAK_POST_LOGOUT_REDIRECT_URI ?? `${appUrl}/auth/login`,
     sessionSecret: process.env.SESSION_SECRET ?? missing('SESSION_SECRET'),
     sessionCookieName: 'ff_session',
     pkceVerifierCookieName: 'ff_pkce_verifier',

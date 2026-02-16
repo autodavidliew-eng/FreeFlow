@@ -12,5 +12,5 @@ export async function GET(request: Request) {
     return NextResponse.redirect(logoutUrl);
   }
 
-  return NextResponse.redirect(new URL('/', request.url));
+  return NextResponse.redirect(new URL('/auth/login', request.url));
 }

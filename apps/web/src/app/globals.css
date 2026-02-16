@@ -394,6 +394,11 @@ a {
   grid-template-columns: 86px 1fr;
 }
 
+.ff-shell.ff-shell--no-nav {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
 .ff-sidenav {
   background: hsl(var(--md-sys-color-surface-container));
   border: 1px solid hsl(var(--md-sys-color-outline));
@@ -472,6 +477,10 @@ a {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.ff-content--full {
+  width: 100%;
 }
 
 .ff-user-menu {

@@ -8,19 +8,28 @@ import { UserMenu } from './UserMenu';
 export type TopBarProps = {
   onMenuToggle?: () => void;
   title?: string;
+  showMenuToggle?: boolean;
+  showUserMenu?: boolean;
 };
 
-export function TopBar({ onMenuToggle, title = 'Dashboard' }: TopBarProps) {
+export function TopBar({
+  onMenuToggle,
+  title = 'Dashboard',
+  showMenuToggle = true,
+  showUserMenu = true,
+}: TopBarProps) {
   return (
     <header className="ff-topbar">
       <div className="ff-topbar__left">
-        <IconButton
-          onClick={onMenuToggle}
-          aria-label="Toggle navigation"
-          data-testid="topbar-menu"
-        >
-          <span className="ff-icon">☰</span>
-        </IconButton>
+        {showMenuToggle ? (
+          <IconButton
+            onClick={onMenuToggle}
+            aria-label="Toggle navigation"
+            data-testid="topbar-menu"
+          >
+            <span className="ff-icon">☰</span>
+          </IconButton>
+        ) : null}
         <div className="ff-brand">
           <div className="ff-brand__badge">SSA</div>
           <div>
@@ -32,10 +41,12 @@ export function TopBar({ onMenuToggle, title = 'Dashboard' }: TopBarProps) {
       <div className="ff-topbar__center">
         <span className="ff-page-chip">{title}</span>
       </div>
-      <div className="ff-topbar__right">
-        <QuickIcons />
-        <UserMenu />
-      </div>
+      {showUserMenu ? (
+        <div className="ff-topbar__right">
+          <QuickIcons />
+          <UserMenu />
+        </div>
+      ) : null}
     </header>
   );
 }
