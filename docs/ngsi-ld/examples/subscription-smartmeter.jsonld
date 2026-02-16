@@ -1,0 +1,21 @@
+{
+  "id": "urn:ngsi-ld:Subscription:alpha:emeter-001",
+  "type": "Subscription",
+  "entities": [
+    {
+      "type": "SmartMeterMeasurement"
+    }
+  ],
+  "q": "meter==urn:ngsi-ld:SmartMeter:alpha:emeter-001",
+  "notification": {
+    "endpoint": {
+      "uri": "http://ngsi-consumer:8092/notify/ngsi-ld",
+      "accept": "application/ld+json"
+    }
+  },
+  "throttling": 1,
+  "@context": [
+    "http://localhost:8090/context/freeflow-energy.jsonld",
+    "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld"
+  ]
+}

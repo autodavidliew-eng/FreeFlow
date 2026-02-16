@@ -1,0 +1,9 @@
+{
+  "contexts": [
+    {
+      "name": "freeflow-energy",
+      "path": "/context/freeflow-energy.jsonld",
+      "description": "FreeFlow energy and smart meter terms"
+    }
+  ]
+}

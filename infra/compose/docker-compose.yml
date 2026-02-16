@@ -184,6 +184,94 @@ services:
     networks:
       - freeflow
 
+  # Scorpio NGSI-LD Broker (all-in-one runner)
+  scorpio:
+    image: scorpiobroker/all-in-one-runner:latest
+    container_name: freeflow-scorpio
+    restart: unless-stopped
+    ports:
+      - '9090:9090'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://localhost:9090/ngsi-ld/v1/entities || exit 1',
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+    networks:
+      - freeflow
+
+  # NGSI-LD Context Server
+  context-server:
+    image: node:20-bullseye
+    container_name: freeflow-context-server
+    restart: unless-stopped
+    profiles:
+      - ngsi
+    working_dir: /repo/services/context-server
+    command: bash -lc "corepack enable && pnpm dev"
+    environment:
+      PORT: 8090
+      HOST: 0.0.0.0
+    ports:
+      - '8090:8090'
+    volumes:
+      - ../../:/repo
+    networks:
+      - freeflow
+
+  # NGSI-LD Ingestor
+  ngsi-ingestor:
+    image: node:20-bullseye
+    container_name: freeflow-ngsi-ingestor
+    restart: unless-stopped
+    profiles:
+      - ngsi
+    working_dir: /repo/services/ngsi-ingestor
+    command: bash -lc "corepack enable && pnpm dev"
+    environment:
+      PORT: 8091
+      HOST: 0.0.0.0
+      SCORPIO_URL: http://scorpio:9090
+      CONTEXT_URL: http://context-server:8090/context/freeflow-energy.jsonld
+      DEFAULT_TENANT: alpha
+      DEFAULT_METER_ID: emeter-001
+      DEFAULT_SITE_ID: site-001
+      SAMPLE_DATA_PATH: /repo/data/samples/smartmeter_week_5min.csv
+    ports:
+      - '8091:8091'
+    volumes:
+      - ../../:/repo
+    depends_on:
+      - scorpio
+      - context-server
+    networks:
+      - freeflow
+
+  # NGSI-LD Consumer
+  ngsi-consumer:
+    image: node:20-bullseye
+    container_name: freeflow-ngsi-consumer
+    restart: unless-stopped
+    profiles:
+      - ngsi
+    working_dir: /repo/services/ngsi-consumer
+    command: bash -lc "corepack enable && pnpm dev"
+    environment:
+      PORT: 8092
+      HOST: 0.0.0.0
+      DATABASE_URL: postgresql://freeflow:freeflow_dev_password@postgres:5432/freeflow?schema=public
+    ports:
+      - '8092:8092'
+    volumes:
+      - ../../:/repo
+    depends_on:
+      - postgres
+    networks:
+      - freeflow
+
   # ==========================================
   # OPTIONAL SERVICES (via profiles)
   # ==========================================

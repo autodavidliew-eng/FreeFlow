@@ -81,6 +81,20 @@ model AppCatalog {
   @@index([enabled])
 }
 
+model SmartMeterMeasurement {
+  id        String   @id @default(uuid())
+  tenant    String
+  meterId   String
+  ts        DateTime
+  powerW    Float
+  energyKWh Float
+  rawJson   Json
+  createdAt DateTime @default(now())
+
+  @@unique([tenant, meterId, ts])
+  @@index([tenant, meterId, ts])
+}
+
 model RoleDashboardLayout {
   id        String   @id @default(uuid())
   role      String   @unique
