@@ -1,4 +1,6 @@
+import { PermissionGuard, PermissionsService } from '@freeflow/rbac';
 import { Module } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 
 import { TenantContextService } from './tenant-context';
 import {
@@ -21,6 +23,9 @@ import { TenantsController } from './tenants.controller';
     TenantPostgresFactory,
     TenantMongoFactory,
     TenantQdrantFactory,
+    PermissionGuard,
+    PermissionsService,
+    Reflector,
   ],
   exports: [
     TenantResolverService,

@@ -1,11 +1,12 @@
+'use client';
+
 import type { ButtonHTMLAttributes } from 'react';
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'filled' | 'tonal' | 'outline' | 'text';
-}
+};
 
 export function Button({
-  children,
   className,
   variant = 'filled',
   type = 'button',
@@ -27,11 +28,9 @@ export function Button({
 
   return (
     <button
+      {...props}
       type={type}
       className={classes.filter(Boolean).join(' ')}
-      {...props}
-    >
-      {children}
-    </button>
+    />
   );
 }

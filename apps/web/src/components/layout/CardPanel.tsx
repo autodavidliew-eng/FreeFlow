@@ -13,14 +13,14 @@ export function CardPanel({
   className,
   variant = 'default',
 }: CardPanelProps) {
-  const classes = ['ff-card-panel'];
+  const classes = ['m3-card', 'ff-card-panel'];
 
   if (variant === 'soft') {
-    classes.push('is-soft');
+    classes.push('m3-card--tonal', 'is-soft');
   }
 
   if (variant === 'outline') {
-    classes.push('is-outline');
+    classes.push('m3-card--outline', 'is-outline');
   }
 
   if (className) {

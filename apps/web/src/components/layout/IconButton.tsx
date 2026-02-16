@@ -12,7 +12,12 @@ export function IconButton({
   type = 'button',
   ...props
 }: IconButtonProps) {
-  const classes = ['ff-icon-button', active ? 'is-active' : null, className]
+  const classes = [
+    'm3-icon-button',
+    'ff-icon-button',
+    active ? 'is-active' : null,
+    className,
+  ]
     .filter(Boolean)
     .join(' ');
 

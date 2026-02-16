@@ -1,6 +1,7 @@
 'use client';
 
 import type { AlarmSeverity } from '../../lib/alarms/types';
+import { Input } from '../layout/Input';
 
 import { SeverityFilter } from './SeverityFilter';
 
@@ -21,7 +22,7 @@ export function AlarmsToolbar({
     <div className="ff-alarm-toolbar">
       <div className="ff-alarm-search">
         <label htmlFor="alarm-search">Search</label>
-        <input
+        <Input
           id="alarm-search"
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}

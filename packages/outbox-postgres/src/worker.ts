@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+
 import { OutboxProcessor } from './outbox.processor';
 import { OutboxWorkerModule } from './worker.module';
 
@@ -16,14 +17,16 @@ async function bootstrap() {
   const intervalMs = Number(process.env.OUTBOX_POLL_INTERVAL ?? 5000);
   const batchSize = Number(process.env.OUTBOX_BATCH_SIZE ?? 20);
 
-  logger.log(`Outbox worker started (interval=${intervalMs}ms, batch=${batchSize})`);
+  logger.log(
+    `Outbox worker started (interval=${intervalMs}ms, batch=${batchSize})`
+  );
 
-  while (true) {
+  for (;;) {
     try {
       const result = await processor.processBatch(batchSize);
       if (result.processed > 0) {
         logger.log(
-          `Outbox processed=${result.processed} published=${result.published} failed=${result.failed}`,
+          `Outbox processed=${result.processed} published=${result.published} failed=${result.failed}`
         );
       }
     } catch (error) {

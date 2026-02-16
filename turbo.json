@@ -8,7 +8,15 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": [
+        "MONGODB_URI",
+        "HOST",
+        "TS_NODE_IGNORE",
+        "TS_NODE_SKIP_IGNORE",
+        "MASTER_DATABASE_URL",
+        "QDRANT_URL"
+      ]
     },
     "test": {
       "dependsOn": ["build"],

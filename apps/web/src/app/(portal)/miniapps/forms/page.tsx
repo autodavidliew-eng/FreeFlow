@@ -5,9 +5,9 @@ import { PageContainer } from '../../../../components/layout/PageContainer';
 import { readSession } from '../../../../lib/auth/session';
 
 type FormsPageProps = {
-  searchParams?: {
+  searchParams?: Promise<{
     formId?: string;
-  };
+  }>;
 };
 
 export default async function FormsPage({ searchParams }: FormsPageProps) {
@@ -17,7 +17,8 @@ export default async function FormsPage({ searchParams }: FormsPageProps) {
     redirect('/auth/login');
   }
 
-  const formId = searchParams?.formId ?? 'inspection';
+  const resolvedSearchParams = await searchParams;
+  const formId = resolvedSearchParams?.formId ?? 'inspection';
 
   return (
     <PageContainer

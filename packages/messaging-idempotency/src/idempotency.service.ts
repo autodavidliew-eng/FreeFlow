@@ -6,8 +6,11 @@ import type { IdempotencyRecord } from './idempotency.types';
 @Injectable()
 export class IdempotencyService {
   private readonly logger = new Logger(IdempotencyService.name);
+  private readonly client: PrismaClient;
 
-  constructor(private readonly client: PrismaClient = prisma) {}
+  constructor() {
+    this.client = prisma;
+  }
 
   async register(record: IdempotencyRecord): Promise<boolean> {
     if (!record.eventId) {
