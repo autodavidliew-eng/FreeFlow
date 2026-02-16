@@ -190,11 +190,11 @@ services:
     container_name: freeflow-scorpio
     restart: unless-stopped
     environment:
-      DBHOST: postgres
+      DBHOST: scorpio-postgres
       DBPORT: 5432
-      DBUSER: freeflow
-      DBPASS: freeflow_dev_password
-      DBNAME: freeflow
+      DBUSER: scorpio
+      DBPASS: scorpio_dev_password
+      DBNAME: scorpio
     ports:
       - '9090:9090'
     healthcheck:
@@ -206,6 +206,25 @@ services:
       interval: 20s
       timeout: 5s
       retries: 10
+    networks:
+      - freeflow
+
+  # Scorpio PostGIS database
+  scorpio-postgres:
+    image: postgis/postgis:16-3.5
+    container_name: freeflow-scorpio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: scorpio
+      POSTGRES_USER: scorpio
+      POSTGRES_PASSWORD: scorpio_dev_password
+    volumes:
+      - scorpio_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U scorpio']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - freeflow
 
@@ -454,6 +473,8 @@ volumes:
     name: freeflow_keycloak_data
   openfga_data:
     name: freeflow_openfga_data
+  scorpio_postgres_data:
+    name: freeflow_scorpio_postgres_data
   # Camunda volumes
   elasticsearch_data:
     name: freeflow_elasticsearch_data

@@ -6,7 +6,7 @@ From repo root:
 
 ```bash
 cd infra/compose
-sudo docker compose up -d scorpio
+sudo docker compose up -d scorpio-postgres scorpio
 ```
 
 Scorpio will be available at:
@@ -26,4 +26,5 @@ SCORPIO_URL=http://localhost:9090 TENANT=alpha ./scripts/ngsi/scorpio-smoke.sh
 ```
 
 ## Notes
+
 - The compose healthcheck uses `wget`. If the image lacks it, replace the healthcheck with a TCP check or install `wget` in a custom image.
