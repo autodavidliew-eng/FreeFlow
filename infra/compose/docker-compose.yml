@@ -22,7 +22,9 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - freeflow
+      freeflow:
+        aliases:
+          - context-server
 
   # MongoDB Database
   mongodb:
@@ -44,7 +46,9 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - freeflow
+      freeflow:
+        aliases:
+          - scorpio
 
   # Redis Cache
   redis:
@@ -62,7 +66,9 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - freeflow
+      freeflow:
+        aliases:
+          - scorpio-postgres
 
   # RabbitMQ Message Broker
   rabbitmq:

@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/main.ts",
+    "dev": "bash -lc 'set -a; [ -f .env.local ] && source .env.local; [ -f .env ] && source .env; set +a; node -r ts-node/register/transpile-only -r tsconfig-paths/register src/main.ts'",
     "build": "nest build",
     "start": "node dist/main",
-    "start:dev": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/main.ts",
+    "start:dev": "bash -lc 'set -a; [ -f .env.local ] && source .env.local; [ -f .env ] && source .env; set +a; node -r ts-node/register/transpile-only -r tsconfig-paths/register src/main.ts'",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
