@@ -8,6 +8,12 @@ Scorpio requires the `NGSILD-Tenant` header for tenant isolation. In local dev, 
 node scripts/ngsi/scorpio-bootstrap-tenant.js
 ```
 
+Makefile shortcut (from `infra/compose`):
+
+```bash
+make ngsi-bootstrap
+```
+
 Environment overrides:
 - `SCORPIO_URL` (default: `http://localhost:9090`)
 - `TENANT` (default: `alpha`)

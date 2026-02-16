@@ -4,6 +4,7 @@ set -euo pipefail
 SCORPIO_URL=${SCORPIO_URL:-http://localhost:9090}
 TENANT=${TENANT:-alpha}
 INLINE_CONTEXT=${INLINE_CONTEXT:-0}
+AUTO_BOOTSTRAP=${AUTO_BOOTSTRAP:-1}
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 
 SMARTMETER_FILE="$ROOT_DIR/docs/ngsi-ld/examples/entity-smartmeter.jsonld"
@@ -80,6 +81,28 @@ JSON
   }
 }
 JSON
+fi
+
+if [[ -n "$TENANT" && "$AUTO_BOOTSTRAP" != "0" ]]; then
+  BOOTSTRAP_PAYLOAD=$(cat <<JSON
+{
+  "id": "urn:ngsi-ld:TenantSeed:${TENANT}:bootstrap",
+  "type": "TenantSeed",
+  "tenant": { "type": "Property", "value": "${TENANT}" },
+  "@context": {
+    "TenantSeed": "https://freeflow.example.com/ontology#TenantSeed",
+    "tenant": "https://freeflow.example.com/ontology#tenant",
+    "Property": "https://uri.etsi.org/ngsi-ld/Property"
+  }
+}
+JSON
+)
+
+  curl -s -o /dev/null -w "Bootstrap Tenant -> HTTP %{http_code}\n" \
+    -X POST "$SCORPIO_URL/ngsi-ld/v1/entities?options=update" \
+    -H "Content-Type: application/ld+json" \
+    -H "NGSILD-Tenant: $TENANT" \
+    --data-binary "$BOOTSTRAP_PAYLOAD" || true
 fi
 
 if [[ ! -f "$SMARTMETER_FILE" ]]; then

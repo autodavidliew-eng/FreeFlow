@@ -1,4 +1,4 @@
-.PHONY: help up down restart logs ps clean reset health shell-postgres shell-mongo shell-redis backup restore camunda formio all backup-postgres backup-mongodb restore-postgres restore-mongodb
+.PHONY: help up down restart logs ps clean reset health shell-postgres shell-mongo shell-redis backup restore camunda formio all backup-postgres backup-mongodb restore-postgres restore-mongodb ngsi-bootstrap
 
 # Default target
 .DEFAULT_GOAL := help
@@ -85,6 +85,10 @@ all: ## Start with all profiles enabled
 	@echo "$(BLUE)Starting all services...$(NC)"
 	docker compose --profile camunda --profile formio up -d
 	@make ps
+
+# NGSI-LD helpers
+ngsi-bootstrap: ## Bootstrap NGSI-LD tenant (default: alpha)
+	@cd ../.. && node scripts/ngsi/scorpio-bootstrap-tenant.js
 
 # Service-specific operations
 shell-postgres: ## Open PostgreSQL shell

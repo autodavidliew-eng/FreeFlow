@@ -28,7 +28,7 @@ node scripts/ngsi/scorpio-bootstrap-tenant.js
 Optional env overrides:
 
 ```bash
-SCORPIO_URL=http://localhost:9090 TENANT=alpha ./scripts/ngsi/scorpio-smoke.sh
+SCORPIO_URL=http://localhost:9090 TENANT=alpha AUTO_BOOTSTRAP=1 ./scripts/ngsi/scorpio-smoke.sh
 ```
 
 ## Notes
