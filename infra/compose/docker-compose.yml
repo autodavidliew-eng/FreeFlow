@@ -186,9 +186,15 @@ services:
 
   # Scorpio NGSI-LD Broker (all-in-one runner)
   scorpio:
-    image: scorpiobroker/all-in-one-runner:latest
+    image: scorpiobroker/all-in-one-runner:java-latest
     container_name: freeflow-scorpio
     restart: unless-stopped
+    environment:
+      DBHOST: postgres
+      DBPORT: 5432
+      DBUSER: freeflow
+      DBPASS: freeflow_dev_password
+      DBNAME: freeflow
     ports:
       - '9090:9090'
     healthcheck:
