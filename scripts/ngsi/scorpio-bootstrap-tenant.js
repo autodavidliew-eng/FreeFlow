@@ -26,6 +26,11 @@ async function main() {
     body: JSON.stringify(payload),
   });
 
+  if (response.status === 409) {
+    console.log(`Tenant bootstrap already exists for ${TENANT}`);
+    return;
+  }
+
   if (!response.ok) {
     const text = await response.text();
     throw new Error(`Tenant bootstrap failed: ${response.status} ${text}`);
