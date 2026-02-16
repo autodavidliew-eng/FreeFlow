@@ -3,10 +3,10 @@
 const SCORPIO_URL = process.env.SCORPIO_URL || 'http://localhost:9090';
 const TENANT = process.env.TENANT || 'alpha';
 const CONTEXT_URL =
-  process.env.CONTEXT_URL || 'http://localhost:8090/context/freeflow-energy.jsonld';
+  process.env.CONTEXT_URL || 'http://context-server:8090/context/freeflow-energy.jsonld';
 const CORE_CONTEXT_URL =
   process.env.CORE_CONTEXT_URL ||
-  'http://localhost:8090/context/ngsi-ld-core-context.jsonld';
+  'http://context-server:8090/context/ngsi-ld-core-context.jsonld';
 const CONSUMER_URL = process.env.CONSUMER_URL || 'http://localhost:8092/notify/ngsi-ld';
 const METER_ID = process.env.METER_ID || 'emeter-001';
 const subscription = {

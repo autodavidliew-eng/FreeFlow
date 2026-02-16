@@ -26,6 +26,15 @@ Environment overrides:
 node scripts/ngsi/scorpio-delete-subscription.js --id urn:ngsi-ld:Subscription:alpha:emeter-001
 ```
 
+## Docker compose note
+When Scorpio runs in Docker, use the `context-server` hostname so the broker can resolve the context:
+
+```bash
+CONTEXT_URL=http://context-server:8090/context/freeflow-energy.jsonld \
+CORE_CONTEXT_URL=http://context-server:8090/context/ngsi-ld-core-context.jsonld \
+node scripts/ngsi/scorpio-create-smartmeter-subscription.js
+```
+
 ## Curl equivalent
 
 ```bash
