@@ -38,6 +38,11 @@ async function main() {
     body: JSON.stringify(subscription),
   });
 
+  if (response.status === 409) {
+    console.log(`Subscription already exists for ${TENANT}/${METER_ID}`);
+    return;
+  }
+
   if (!response.ok) {
     const text = await response.text();
     throw new Error(`Failed to create subscription: ${response.status} ${text}`);
