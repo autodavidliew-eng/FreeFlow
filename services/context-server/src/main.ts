@@ -28,6 +28,17 @@ app.get('/context/freeflow-energy.jsonld', async (_req, res) => {
   }
 });
 
+app.get('/context/ngsi-ld-core-context.jsonld', async (_req, res) => {
+  try {
+    const filePath = path.join(contextDir, 'ngsi-ld-core-context.jsonld');
+    const json = await readJson(filePath);
+    res.setHeader('Content-Type', 'application/ld+json');
+    res.json(json);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load core context' });
+  }
+});
+
 app.get('/context/index.json', async (_req, res) => {
   try {
     const filePath = path.join(contextDir, 'index.json');

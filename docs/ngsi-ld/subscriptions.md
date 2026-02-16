@@ -3,20 +3,27 @@
 ## Create subscription (script)
 
 ```bash
-pnpm exec ts-node scripts/ngsi/scorpio-create-smartmeter-subscription.ts
+node scripts/ngsi/scorpio-create-smartmeter-subscription.js
+```
+
+If you see `Tenant not found`, bootstrap the tenant first:
+
+```bash
+node scripts/ngsi/scorpio-bootstrap-tenant.js
 ```
 
 Environment overrides:
 - `SCORPIO_URL`
 - `TENANT`
 - `CONTEXT_URL`
+- `CORE_CONTEXT_URL`
 - `CONSUMER_URL`
 - `METER_ID`
 
 ## Delete subscription (script)
 
 ```bash
-pnpm exec ts-node scripts/ngsi/scorpio-delete-subscription.ts --id urn:ngsi-ld:Subscription:alpha:emeter-001
+node scripts/ngsi/scorpio-delete-subscription.js --id urn:ngsi-ld:Subscription:alpha:emeter-001
 ```
 
 ## Curl equivalent

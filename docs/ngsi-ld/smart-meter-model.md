@@ -35,7 +35,7 @@ Recommended:
 ```
 "@context": [
   "http://localhost:8090/context/freeflow-energy.jsonld",
-  "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld"
+  "http://localhost:8090/context/ngsi-ld-core-context.jsonld"
 ]
 ```
 

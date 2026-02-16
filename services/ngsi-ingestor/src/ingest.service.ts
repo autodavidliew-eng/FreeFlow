@@ -4,8 +4,6 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse/sync';
 
-const CORE_CONTEXT = 'https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.9.jsonld';
-
 export type SmartMeterReading = {
   ts: string;
   powerW: number;
@@ -19,6 +17,7 @@ export class IngestService {
   private readonly client: NgsiLdClient;
   private readonly defaultTenant: string;
   private readonly contextUrl: string;
+  private readonly coreContextUrl: string;
   private readonly defaultMeterId: string;
   private readonly defaultSiteId: string;
   private readonly samplePath: string;
@@ -27,6 +26,9 @@ export class IngestService {
     this.defaultTenant = process.env.DEFAULT_TENANT || 'alpha';
     this.contextUrl =
       process.env.CONTEXT_URL || 'http://localhost:8090/context/freeflow-energy.jsonld';
+    this.coreContextUrl =
+      process.env.CORE_CONTEXT_URL ||
+      'http://localhost:8090/context/ngsi-ld-core-context.jsonld';
     this.defaultMeterId = process.env.DEFAULT_METER_ID || 'emeter-001';
     this.defaultSiteId = process.env.DEFAULT_SITE_ID || 'site-001';
     this.samplePath =
@@ -48,7 +50,7 @@ export class IngestService {
       meterId: { type: 'Property', value: reading.meterId },
       tenant: { type: 'Property', value: scopedTenant },
       siteId: { type: 'Property', value: reading.siteId },
-      '@context': [this.contextUrl, CORE_CONTEXT],
+      '@context': [this.contextUrl, this.coreContextUrl],
     };
 
     const measurement = {
@@ -76,7 +78,7 @@ export class IngestService {
         type: 'Property',
         value: scopedTenant,
       },
-      '@context': [this.contextUrl, CORE_CONTEXT],
+      '@context': [this.contextUrl, this.coreContextUrl],
     };
 
     await this.client.upsertEntity(smartMeter, { tenant: scopedTenant });

@@ -4,6 +4,11 @@
       "name": "freeflow-energy",
       "path": "/context/freeflow-energy.jsonld",
       "description": "FreeFlow energy and smart meter terms"
+    },
+    {
+      "name": "ngsi-ld-core",
+      "path": "/context/ngsi-ld-core-context.jsonld",
+      "description": "Local NGSI-LD core terms for offline dev"
     }
   ]
 }

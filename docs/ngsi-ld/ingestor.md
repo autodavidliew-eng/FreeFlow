@@ -9,6 +9,7 @@ The NGSI-LD ingestor service converts smart-meter readings into NGSI-LD entities
 ## Environment
 - `SCORPIO_URL` (default: `http://localhost:9090`)
 - `CONTEXT_URL` (default: `http://localhost:8090/context/freeflow-energy.jsonld`)
+- `CORE_CONTEXT_URL` (default: `http://localhost:8090/context/ngsi-ld-core-context.jsonld`)
 - `DEFAULT_TENANT` (default: `alpha`)
 - `DEFAULT_METER_ID` (default: `emeter-001`)
 - `DEFAULT_SITE_ID` (default: `site-001`)

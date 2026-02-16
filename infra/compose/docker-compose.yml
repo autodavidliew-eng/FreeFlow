@@ -261,6 +261,7 @@ services:
       HOST: 0.0.0.0
       SCORPIO_URL: http://scorpio:9090
       CONTEXT_URL: http://context-server:8090/context/freeflow-energy.jsonld
+      CORE_CONTEXT_URL: http://context-server:8090/context/ngsi-ld-core-context.jsonld
       DEFAULT_TENANT: alpha
       DEFAULT_METER_ID: emeter-001
       DEFAULT_SITE_ID: site-001

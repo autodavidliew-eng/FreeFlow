@@ -4,6 +4,7 @@ FreeFlow hosts JSON-LD contexts for NGSI-LD entities at a dedicated context serv
 
 ## Endpoints
 - `GET /context/freeflow-energy.jsonld`
+- `GET /context/ngsi-ld-core-context.jsonld`
 - `GET /context/index.json`
 
 ## Local dev

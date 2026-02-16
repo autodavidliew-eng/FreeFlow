@@ -3,7 +3,7 @@
 const SCORPIO_URL = process.env.SCORPIO_URL || 'http://localhost:9090';
 const TENANT = process.env.TENANT || 'alpha';
 
-function getArg(name: string) {
+function getArg(name) {
   const index = process.argv.indexOf(`--${name}`);
   if (index !== -1 && process.argv[index + 1]) {
     return process.argv[index + 1];

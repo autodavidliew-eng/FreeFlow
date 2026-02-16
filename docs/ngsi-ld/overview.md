@@ -21,6 +21,7 @@ IoT Devices -> ngsi-ingestor -> Scorpio NGSI-LD Broker -> ngsi-consumer -> Postg
 
 ## Custom context strategy
 - FreeFlow hosts a custom JSON-LD context at `/context/freeflow-energy.jsonld`.
+- FreeFlow hosts a local NGSI-LD core context at `/context/ngsi-ld-core-context.jsonld` for offline dev.
 - All entities/subscriptions include `@context` in the payload and use `Content-Type: application/ld+json`.
 
 ## Key APIs

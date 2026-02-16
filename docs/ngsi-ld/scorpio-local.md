@@ -16,7 +16,13 @@ Scorpio will be available at:
 ## Smoke test
 
 ```bash
-./scripts/ngsi/scorpio-smoke.sh
+INLINE_CONTEXT=1 ./scripts/ngsi/scorpio-smoke.sh
+```
+
+## Tenant bootstrap
+
+```bash
+node scripts/ngsi/scorpio-bootstrap-tenant.js
 ```
 
 Optional env overrides:
