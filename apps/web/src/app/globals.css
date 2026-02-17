@@ -399,6 +399,98 @@ a {
   gap: 0;
 }
 
+.ff-chart-shell--line {
+  height: 260px;
+}
+
+.ff-chart-loading,
+.ff-chart-error,
+.ff-chart-empty {
+  padding: 1.5rem;
+  color: var(--muted);
+}
+
+.ff-access-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ff-access-panel {
+  padding: 1.5rem;
+}
+
+.ff-access-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ff-access-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.ff-access-role {
+  border: 1px solid hsl(var(--md-sys-color-outline));
+  background: hsl(var(--md-sys-color-surface-container-high));
+  color: hsl(var(--md-sys-color-on-surface));
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-size: 0.9rem;
+}
+
+.ff-access-role.is-active {
+  background: hsl(var(--md-sys-color-primary));
+  color: hsl(var(--md-sys-color-on-primary));
+  border-color: transparent;
+}
+
+.ff-access-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.ff-access-list__title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.ff-access-list__items {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.ff-access-item {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid hsl(var(--md-sys-color-outline-variant));
+  background: hsl(var(--md-sys-color-surface-container));
+}
+
+.ff-access-item__name {
+  font-size: 0.95rem;
+}
+
+.ff-access-item__key {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.ff-access-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .ff-sidenav {
   background: hsl(var(--md-sys-color-surface-container));
   border: 1px solid hsl(var(--md-sys-color-outline));

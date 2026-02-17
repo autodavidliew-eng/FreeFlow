@@ -37,7 +37,9 @@ describe('rbac-config role mapping', () => {
     const admin = ROLE_ACCESS.Admin;
     expect(admin.menus).toEqual(MENU_KEYS);
     expect(admin.apps).toEqual(APP_KEYS);
-    expect(admin.widgets).toEqual(WIDGET_KEYS);
+    expect(admin.widgets).toEqual(
+      WIDGET_KEYS.filter((key) => key !== 'emeter-weekly-widget')
+    );
   });
 
   it('resolves access by merging known roles only', () => {

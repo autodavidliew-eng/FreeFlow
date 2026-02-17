@@ -1,5 +1,6 @@
 import type { AuthenticatedUser } from '@freeflow/auth';
 
+import type { RoleAccessService } from '../../access/role-access.service';
 import type { TenantContextService } from '../../tenants/tenant-context';
 import type { TenantPostgresFactory } from '../../tenants/tenant-data.factory';
 import { AddonsService } from '../addons.service';
@@ -52,7 +53,11 @@ describe('AddonsService', () => {
       require: jest.fn(),
     } as unknown as TenantContextService;
 
-    const service = new AddonsService(tenantFactory, tenantContext);
+    const roleAccess = {
+      getAllowedApps: jest.fn().mockResolvedValue(['electric-meter', 'report']),
+    } as unknown as RoleAccessService;
+
+    const service = new AddonsService(tenantFactory, tenantContext, roleAccess);
 
     const user: AuthenticatedUser = {
       sub: 'viewer-1',

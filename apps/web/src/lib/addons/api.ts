@@ -9,7 +9,7 @@ export const getApiBaseUrl = () => {
 export async function forwardApiRequest(
   path: string,
   options: {
-    method?: 'GET' | 'POST';
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
     token: string;
     body?: unknown;
   }

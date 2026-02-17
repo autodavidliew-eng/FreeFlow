@@ -12,6 +12,7 @@ const titleMap: Record<string, string> = {
   '/dashboard': 'Dashboard',
   '/alarms': 'Alarms & Alerts',
   '/applications': 'Applications',
+  '/apps/access-control': 'Access Control',
   '/inbox': 'Inbox',
   '/miniapps/forms': 'Forms',
   '/profile': 'Profile',

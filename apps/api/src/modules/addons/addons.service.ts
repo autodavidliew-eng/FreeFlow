@@ -1,5 +1,5 @@
 import type { AuthenticatedUser } from '@freeflow/auth';
-import { getAllowedApps, type AppKey } from '@freeflow/rbac-config';
+import type { AppKey } from '@freeflow/rbac-config';
 import {
   ForbiddenException,
   Injectable,
@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { SignJWT } from 'jose';
 
+import { RoleAccessService } from '../access/role-access.service';
 import { TenantContextService } from '../tenants/tenant-context';
 import { TenantPostgresFactory } from '../tenants/tenant-data.factory';
 
@@ -22,12 +23,13 @@ const HANDOFF_TTL_SECONDS = 120;
 export class AddonsService {
   constructor(
     private readonly tenantPostgres: TenantPostgresFactory,
-    private readonly tenantContext: TenantContextService
+    private readonly tenantContext: TenantContextService,
+    private readonly roleAccess: RoleAccessService
   ) {}
 
   async getApps(user: AuthenticatedUser): Promise<AppCatalogResponseDto> {
     const roles = resolveRoles(user);
-    const allowedAppKeys = getAllowedApps(roles);
+    const allowedAppKeys = await this.roleAccess.getAllowedApps(roles);
 
     if (allowedAppKeys.length === 0) {
       return { items: [], total: 0 };
@@ -61,9 +63,9 @@ export class AddonsService {
     payload: AddonHandoffRequestDto
   ): Promise<AddonHandoffResponseDto> {
     const roles = resolveRoles(user);
-    const allowedApps = new Set(getAllowedApps(roles));
+    const allowedApps = new Set(await this.roleAccess.getAllowedApps(roles));
 
-    if (!allowedApps.has(payload.appKey as AppKey)) {
+    if (!allowedApps.has(payload.appKey)) {
       throw new ForbiddenException('App not allowed by role.');
     }
 
@@ -120,7 +122,7 @@ type AppPrismaClient = {
       where: { appKey: AppKey };
     }) => Promise<AppCatalogRecord | null>;
     findMany: (args: {
-      where: { appKey: { in: AppKey[] }; enabled?: boolean };
+      where: { appKey: { in: string[] }; enabled?: boolean };
       orderBy: { appKey: 'asc' | 'desc' };
     }) => Promise<AppCatalogRecord[]>;
   };

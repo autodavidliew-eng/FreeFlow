@@ -1,15 +1,12 @@
 import type { AuthenticatedUser } from '@freeflow/auth';
-import {
-  getAllowedWidgets,
-  ROLE_KEYS,
-  type RoleKey,
-} from '@freeflow/rbac-config';
+import { ROLE_KEYS, type RoleKey } from '@freeflow/rbac-config';
 import {
   BadRequestException,
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
 
+import { RoleAccessService } from '../access/role-access.service';
 import { TenantPostgresFactory } from '../tenants/tenant-data.factory';
 
 import type {
@@ -21,13 +18,16 @@ import type { WidgetCatalogResponseDto } from './dto/widget-catalog.dto';
 
 @Injectable()
 export class UiService {
-  constructor(private readonly tenantPostgres: TenantPostgresFactory) {}
+  constructor(
+    private readonly tenantPostgres: TenantPostgresFactory,
+    private readonly roleAccess: RoleAccessService
+  ) {}
 
   async getWidgetCatalog(
     user: AuthenticatedUser
   ): Promise<WidgetCatalogResponseDto> {
     const roles = resolveRoles(user);
-    const allowedWidgetKeys = getAllowedWidgets(roles);
+    const allowedWidgetKeys = await this.roleAccess.getAllowedWidgets(roles);
 
     if (allowedWidgetKeys.length === 0) {
       return { items: [], total: 0 };
@@ -55,7 +55,9 @@ export class UiService {
   ): Promise<DashboardLayoutDto> {
     const roles = resolveRoles(user);
     const primaryRole = resolvePrimaryRole(roles);
-    const allowedWidgetKeys = new Set<string>(getAllowedWidgets(roles));
+    const allowedWidgetKeys = new Set<string>(
+      await this.roleAccess.getAllowedWidgets(roles)
+    );
 
     if (!primaryRole) {
       return { version: 1, sections: [] };
@@ -99,7 +101,9 @@ export class UiService {
     }
 
     const roles = resolveRoles(user);
-    const allowedWidgetKeys = new Set<string>(getAllowedWidgets(roles));
+    const allowedWidgetKeys = new Set<string>(
+      await this.roleAccess.getAllowedWidgets(roles)
+    );
     const layout = payload.layout as DashboardLayoutDto;
     const sections = Array.isArray(layout.sections) ? layout.sections : [];
 

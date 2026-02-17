@@ -19,8 +19,10 @@
     "@formio/js": "5.3.1-refb-rc.0",
     "@formio/react": "^6.0.0",
     "@freeflow/rbac-config": "workspace:*",
+    "chart.js": "^4.5.1",
     "next": "^15.1.0",
     "react": "^19.0.0",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.0.0",
     "server-only": "^0.0.1",
     "zod": "^3.22.4"

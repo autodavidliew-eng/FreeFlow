@@ -2,6 +2,10 @@ import {
   AlarmListWidget,
   ALARM_WIDGET_ID,
 } from '../../components/widgets/AlarmListWidget';
+import {
+  EmeterWeeklyWidget,
+  EMETER_WEEKLY_WIDGET_ID,
+} from '../../components/widgets/EmeterWeeklyWidget';
 import { KpiWidget, KPI_WIDGET_ID } from '../../components/widgets/KpiWidget';
 import {
   LineChartWidget,
@@ -24,6 +28,13 @@ export const widgetRegistry: WidgetRegistry = {
     description: 'Chart view of daily energy and water usage.',
     component: LineChartWidget,
     defaultSize: 'half',
+  },
+  [EMETER_WEEKLY_WIDGET_ID]: {
+    id: EMETER_WEEKLY_WIDGET_ID,
+    displayName: 'Emeter Weekly Trend',
+    description: 'Seven-day energy consumption overview.',
+    component: EmeterWeeklyWidget,
+    defaultSize: 'full',
   },
   [ALARM_WIDGET_ID]: {
     id: ALARM_WIDGET_ID,

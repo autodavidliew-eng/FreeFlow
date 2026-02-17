@@ -1,11 +1,26 @@
 ## Progress status
 
-Last updated: 2026-02-14  
-Current task: Phase 11 → P11.4 (Release retrospective)  
+Last updated: 2026-02-17  
+Current task: Emeter weekly widget + RBAC assignment app (E1)  
 Status: Completed  
-Next task: TBD (roadmap complete)
+Next task: Manual validation in browser (admin/operator/viewer flows)
 
-Latest update: Progress saved on 2026-02-14.
+Latest update: Emeter weekly widget + access-control app delivered (2026-02-17).
+
+## E1 — Emeter Weekly Widget + Role-based Access Assignment
+
+**Objective:** Add an operator-only emeter weekly chart, make widget/app access tenant-configurable via a role-based access-control app.
+
+**Tasks:**
+
+- [x] E1.1 Review existing widget registry, RBAC config, and dashboard layout sources.
+- [x] E1.2 Add tenant DB tables for role→widget/app access + seed catalog entries.
+- [x] E1.3 Build access-control API + UI to assign widgets/apps by role.
+- [x] E1.4 Build emeter weekly chart widget + API endpoint.
+- [x] E1.5 Wire dynamic role access into widget catalog + app catalog filtering.
+- [x] E1.6 Seed Alpha tenant users (admin/operator/viewer) with roles.
+- [x] E1.7 Run tenant DB migration + seed to apply access-control schema.
+- [x] E1.8 Publish architecture + usage docs for the feature set.
 
 ## Session Context (Handoff)
 

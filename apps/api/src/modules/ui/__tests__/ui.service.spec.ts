@@ -1,5 +1,6 @@
 import type { AuthenticatedUser } from '@freeflow/auth';
 
+import type { RoleAccessService } from '../../access/role-access.service';
 import type { TenantPostgresFactory } from '../../tenants/tenant-data.factory';
 import { UiService } from '../ui.service';
 
@@ -49,7 +50,13 @@ describe('UiService', () => {
       getClient: () => prisma,
     } as unknown as TenantPostgresFactory;
 
-    const service = new UiService(tenantFactory);
+    const roleAccess = {
+      getAllowedWidgets: jest
+        .fn()
+        .mockResolvedValue(['kpi-widget', 'chart-widget']),
+    } as unknown as RoleAccessService;
+
+    const service = new UiService(tenantFactory, roleAccess);
 
     const user: AuthenticatedUser = {
       sub: 'viewer-1',

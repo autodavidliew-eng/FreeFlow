@@ -29,6 +29,7 @@ export const APP_KEYS = [
   'user',
   'water-meter',
   'system-configuration',
+  'access-control',
 ] as const;
 export type AppKey = (typeof APP_KEYS)[number];
 
@@ -36,6 +37,7 @@ export const WIDGET_KEYS = [
   'kpi-widget',
   'alarm-widget',
   'chart-widget',
+  'emeter-weekly-widget',
   'admin-widget',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
@@ -54,11 +56,13 @@ export const ROLE_ACCESS: Record<RoleKey, RoleAccess> = {
   Admin: {
     menus: allMenus,
     apps: allApps,
-    widgets: allWidgets,
+    widgets: allWidgets.filter((key) => key !== 'emeter-weekly-widget'),
   },
   Operator: {
     menus: allMenus.filter((key) => key !== 'vendor'),
-    apps: allApps.filter((key) => key !== 'system-configuration'),
+    apps: allApps.filter(
+      (key) => key !== 'system-configuration' && key !== 'access-control'
+    ),
     widgets: allWidgets.filter((key) => key !== 'admin-widget'),
   },
   Viewer: {

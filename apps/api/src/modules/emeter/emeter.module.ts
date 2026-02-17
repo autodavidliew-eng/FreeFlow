@@ -3,12 +3,12 @@ import { Module } from '@nestjs/common';
 import { AccessModule } from '../access/access.module';
 import { TenantsModule } from '../tenants/tenants.module';
 
-import { AddonsController } from './addons.controller';
-import { AddonsService } from './addons.service';
+import { EmeterController } from './emeter.controller';
+import { EmeterService } from './emeter.service';
 
 @Module({
   imports: [TenantsModule, AccessModule],
-  controllers: [AddonsController],
-  providers: [AddonsService],
+  controllers: [EmeterController],
+  providers: [EmeterService],
 })
-export class AddonsModule {}
+export class EmeterModule {}

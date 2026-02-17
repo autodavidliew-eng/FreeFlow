@@ -55,6 +55,12 @@ export const fallbackWidgetCatalog: WidgetCatalogItem[] = [
     defaultConfig: { series: ['Energy', 'Water'] },
   },
   {
+    key: 'emeter-weekly-widget',
+    name: 'Emeter Weekly',
+    type: 'chart',
+    defaultConfig: { meterId: 'emeter-001', rangeDays: 7 },
+  },
+  {
     key: 'alarm-widget',
     name: 'Active Alarms',
     type: 'alarm-list',
@@ -97,6 +103,19 @@ export const fallbackDashboardLayout: DashboardLayout = {
           instanceId: 'alarm-list',
           widgetId: 'alarm-widget',
           size: 'half',
+        },
+      ],
+    },
+    {
+      id: 'energy-weekly',
+      title: 'Energy Trend',
+      layout: 'stack',
+      widgets: [
+        {
+          instanceId: 'emeter-weekly',
+          widgetId: 'emeter-weekly-widget',
+          size: 'full',
+          options: { meterId: 'emeter-001' },
         },
       ],
     },

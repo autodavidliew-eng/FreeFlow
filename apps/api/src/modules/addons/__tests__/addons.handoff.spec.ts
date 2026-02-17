@@ -2,6 +2,7 @@ import type { AuthenticatedUser } from '@freeflow/auth';
 import { ForbiddenException } from '@nestjs/common';
 import { jwtVerify } from 'jose';
 
+import type { RoleAccessService } from '../../access/role-access.service';
 import type { TenantContextService } from '../../tenants/tenant-context';
 import type { TenantPostgresFactory } from '../../tenants/tenant-data.factory';
 import { AddonsService } from '../addons.service';
@@ -50,7 +51,10 @@ describe('AddonsService handoff', () => {
   });
 
   it('throws when RBAC forbids the app key', async () => {
-    const service = new AddonsService(tenantFactory, tenantContext);
+    const roleAccess = {
+      getAllowedApps: jest.fn().mockResolvedValue([]),
+    } as unknown as RoleAccessService;
+    const service = new AddonsService(tenantFactory, tenantContext, roleAccess);
     const user: AuthenticatedUser = {
       sub: 'viewer-1',
       email: 'viewer@freeflow.dev',
@@ -74,7 +78,10 @@ describe('AddonsService handoff', () => {
   });
 
   it('returns a short-lived token when allowed', async () => {
-    const service = new AddonsService(tenantFactory, tenantContext);
+    const roleAccess = {
+      getAllowedApps: jest.fn().mockResolvedValue(['system-configuration']),
+    } as unknown as RoleAccessService;
+    const service = new AddonsService(tenantFactory, tenantContext, roleAccess);
     const user: AuthenticatedUser = {
       sub: 'admin-1',
       email: 'admin@freeflow.dev',

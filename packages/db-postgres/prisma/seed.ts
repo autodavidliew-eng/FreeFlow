@@ -20,6 +20,7 @@ type LayoutSeed = {
         instanceId: string;
         widgetId: string;
         size?: 'full' | 'half' | 'third';
+        options?: Record<string, unknown>;
       }>;
     }>;
   };
@@ -39,6 +40,12 @@ const widgetCatalog = [
     name: 'Load Distribution',
     type: 'chart',
     defaultConfig: { series: ['Energy', 'Water'] },
+  },
+  {
+    key: 'emeter-weekly-widget',
+    name: 'Emeter Weekly',
+    type: 'chart',
+    defaultConfig: { meterId: 'emeter-001', rangeDays: 7 },
   },
   {
     key: 'alarm-widget',
@@ -143,6 +150,14 @@ const appCatalog = [
     integrationMode: 'embedded',
     enabled: true,
   },
+  {
+    appKey: 'access-control',
+    name: 'Access Control',
+    icon: 'shield',
+    launchUrl: '/apps/access-control',
+    integrationMode: 'embedded',
+    enabled: true,
+  },
 ];
 
 const baseLayout: LayoutSeed = {
@@ -180,6 +195,19 @@ const baseLayout: LayoutSeed = {
           },
         ],
       },
+      {
+        id: 'energy-weekly',
+        title: 'Energy Trend',
+        layout: 'stack',
+        widgets: [
+          {
+            instanceId: 'emeter-weekly',
+            widgetId: 'emeter-weekly-widget',
+            size: 'full',
+            options: { meterId: 'emeter-001' },
+          },
+        ],
+      },
     ],
   },
 };
@@ -211,6 +239,19 @@ const viewerLayout: LayoutSeed = {
             instanceId: 'chart-load',
             widgetId: 'chart-widget',
             size: 'half',
+          },
+        ],
+      },
+      {
+        id: 'energy-weekly',
+        title: 'Energy Trend',
+        layout: 'stack',
+        widgets: [
+          {
+            instanceId: 'emeter-weekly',
+            widgetId: 'emeter-weekly-widget',
+            size: 'full',
+            options: { meterId: 'emeter-001' },
           },
         ],
       },
@@ -370,10 +411,76 @@ async function seedRoleLayouts() {
   }
 }
 
+async function seedRoleAccess() {
+  const roleWidgetAccess = [
+    {
+      role: 'Admin',
+      widgets: ['kpi-widget', 'chart-widget', 'alarm-widget', 'admin-widget'],
+    },
+    {
+      role: 'Operator',
+      widgets: [
+        'kpi-widget',
+        'chart-widget',
+        'alarm-widget',
+        'emeter-weekly-widget',
+      ],
+    },
+    {
+      role: 'Viewer',
+      widgets: ['kpi-widget', 'chart-widget'],
+    },
+  ];
+
+  const roleAppAccess = [
+    {
+      role: 'Admin',
+      apps: appCatalog.map((entry) => entry.appKey),
+    },
+    {
+      role: 'Operator',
+      apps: appCatalog
+        .map((entry) => entry.appKey)
+        .filter(
+          (key) => !['system-configuration', 'access-control'].includes(key)
+        ),
+    },
+    {
+      role: 'Viewer',
+      apps: ['report', 'water-meter', 'electric-meter'],
+    },
+  ];
+
+  for (const entry of roleWidgetAccess) {
+    await prisma.roleWidgetAccess.deleteMany({ where: { role: entry.role } });
+    const rows = entry.widgets.map((widgetKey) => ({
+      role: entry.role,
+      widgetKey,
+      actions: ['view'],
+    }));
+    if (rows.length > 0) {
+      await prisma.roleWidgetAccess.createMany({ data: rows });
+    }
+  }
+
+  for (const entry of roleAppAccess) {
+    await prisma.roleAppAccess.deleteMany({ where: { role: entry.role } });
+    const rows = entry.apps.map((appKey) => ({
+      role: entry.role,
+      appKey,
+      actions: ['launch'],
+    }));
+    if (rows.length > 0) {
+      await prisma.roleAppAccess.createMany({ data: rows });
+    }
+  }
+}
+
 async function main() {
   await seedWidgetCatalog();
   await seedAppCatalog();
   await seedRoleLayouts();
+  await seedRoleAccess();
 
   for (const user of users) {
     await seedUser(user);

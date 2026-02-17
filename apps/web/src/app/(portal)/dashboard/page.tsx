@@ -1,8 +1,4 @@
-import {
-  ROLE_KEYS,
-  getAllowedWidgets,
-  type RoleKey,
-} from '@freeflow/rbac-config';
+import { ROLE_KEYS, type RoleKey } from '@freeflow/rbac-config';
 import { redirect } from 'next/navigation';
 
 import { WidgetRenderer } from '../../../components/dashboard/WidgetRenderer';
@@ -27,12 +23,7 @@ export default async function DashboardPage() {
   const { layout, catalog, source } = await getDashboardData(
     session.accessToken
   );
-  const allowedByRole = new Set<string>(getAllowedWidgets(roles));
-  const catalogKeys = new Set(catalog.map((item) => item.key));
-  const allowedWidgets =
-    catalogKeys.size > 0
-      ? new Set(Array.from(allowedByRole).filter((key) => catalogKeys.has(key)))
-      : allowedByRole;
+  const allowedWidgets = new Set(catalog.map((item) => item.key));
 
   const hasWidgets = layout.sections.some((section) =>
     section.widgets.some((widget) => allowedWidgets.has(widget.widgetId))

@@ -1,14 +1,16 @@
 import { JwtAuthGuard } from '@freeflow/auth';
 import { FgaGuard } from '@freeflow/authz-fga';
 import { PermissionGuard, PermissionsService } from '@freeflow/rbac';
-import { Module } from '@nestjs/common';
+import { Module, RequestMethod } from '@nestjs/common';
 import type { NestModule, MiddlewareConsumer } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AccessModule } from './modules/access/access.module';
 import { AddonsModule } from './modules/addons/addons.module';
 import { AlarmsModule } from './modules/alarms/alarms.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { EmeterModule } from './modules/emeter/emeter.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { InboxModule } from './modules/inbox/inbox.module';
 import { TenantResolverMiddleware } from './modules/tenants/tenant-resolver.middleware';
@@ -18,9 +20,11 @@ import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
+    AccessModule,
     DashboardModule,
     AddonsModule,
     AlarmsModule,
+    EmeterModule,
     FormsModule,
     InboxModule,
     TenantsModule,
@@ -38,6 +42,8 @@ import { UserModule } from './modules/user/user.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(TenantResolverMiddleware).forRoutes('*');
+    consumer
+      .apply(TenantResolverMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
